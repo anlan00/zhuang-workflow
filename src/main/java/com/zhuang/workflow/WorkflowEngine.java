@@ -1,0 +1,104 @@
+package com.zhuang.workflow;
+
+import java.util.List;
+import java.util.Map;
+
+import com.zhuang.workflow.models.NextTaskInfoModel;
+import com.zhuang.workflow.models.UserInfoModel;
+
+/**
+ * 工作流引擎接口
+ * 
+ * @author zwb
+ *
+ */
+public interface WorkflowEngine {
+	/**
+	 * 启动新的流程实例
+	 * 
+	 * @param processDefinitionKey
+	 *            流程定义Key
+	 * @param userId
+	 *            用户ID
+	 * @param businessKey
+	 *            业务表主键
+	 * @param formData
+	 *            业务表单数据
+	 * @return
+	 */
+	String startNew(String processDefinitionKey, String userId, String businessKey, Map<String, Object> formData);
+
+	/**
+	 * 保存
+	 * 
+	 * @param taskId
+	 *            任务ID
+	 * @param comment
+	 *            备注（审批意见）
+	 * @param formData
+	 *            业务表单数据
+	 */
+	void save(String taskId, String comment, Map<String, Object> formData);
+
+	/**
+	 * 运转流程实例
+	 * 
+	 * @param taskId
+	 *            任务ID
+	 * @param nextUsers
+	 *            下一步处理人
+	 * @param comment
+	 *            备注（审批意见）
+	 * @param formData
+	 *            业务表单数据
+	 */
+	void run(String taskId, List<String> nextUsers, String comment, Map<String, Object> formData);
+
+	/**
+	 * 提交
+	 * 
+	 * @param taskId
+	 *            任务ID
+	 * @param nextUsers
+	 *            下一步处理人
+	 * @param comment
+	 *            备注（审批意见）
+	 * @param formData
+	 *            业务表单数据
+	 */
+	void submit(String taskId, List<String> nextUsers, String comment, Map<String, Object> formData);
+
+	/**
+	 * 退回
+	 * 
+	 * @param taskId
+	 *            任务ID
+	 * @param comment
+	 *            备注（审批意见）
+	 * @param formData
+	 *            业务表单数据
+	 */
+	void back(String taskId, String comment, Map<String, Object> formData);
+
+	/**
+	 * 驳回
+	 * 
+	 * @param taskId
+	 *            任务ID
+	 * @param comment
+	 *            备注（审批意见）
+	 * @param formData
+	 *            业务表单数据
+	 */
+	void reject(String taskId, String comment, Map<String, Object> formData);
+
+	/**
+	 * 计算下一步处理人
+	 * @param taskId
+	 * @param formData
+	 * @return
+	 */
+	NextTaskInfoModel retrieveNextTaskInfo(String taskId, Map<String, Object> formData);
+	
+	Map<String, Object> retrieveFormData(String taskId);
+}
