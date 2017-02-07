@@ -26,7 +26,7 @@ public class ActivitiWorkflowQueryManagerTest {
 		Map<String, Object> map =new HashMap<String, Object>();
 		//map.put(ProcessMainVariableNames.PROC_TITLE, "%20170112");
 		PageModel<FlowInfoModel> pageModel = WorkflowBeansFactory.getWorkflowQueryManager()
-				.getMyTodoListPage("user1",1, 10, map );
+				.getMyTodoListPage("zzwwbb",1, 10, map );
 		
 		System.out.println(pageModel.getList().size());
 		System.out.println(pageModel.getTotalRows());

@@ -12,7 +12,7 @@
     <sequenceFlow id="alot" sourceRef="condition" targetRef="manager2">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${amount>1000}]]></conditionExpression>
     </sequenceFlow>
-    <userTask id="financeManager" name="财务经理审批"></userTask>
+    <userTask id="financeManager" name="财务经理审批" activiti:assignee="$role:00001"></userTask>
     <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
     <sequenceFlow id="flow7" sourceRef="manager1" targetRef="exclusivegateway1"></sequenceFlow>
     <sequenceFlow id="flow8" sourceRef="manager2" targetRef="exclusivegateway1"></sequenceFlow>
