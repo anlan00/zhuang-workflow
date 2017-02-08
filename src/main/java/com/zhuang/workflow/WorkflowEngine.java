@@ -91,6 +91,18 @@ public interface WorkflowEngine {
 	 *            业务表单数据
 	 */
 	void reject(String taskId, String comment, Map<String, Object> formData);
+	
+	 /**
+	 * 删除
+	 * @param taskId
+	 *            任务ID
+	 * @param comment
+	 *            备注（审批意见）
+	 * @param formData
+	 *            业务表单数据
+	 */
+	void delete(String taskId, String comment, Map<String, Object> formData);
+	
 
 	/**
 	 * 计算下一步处理人

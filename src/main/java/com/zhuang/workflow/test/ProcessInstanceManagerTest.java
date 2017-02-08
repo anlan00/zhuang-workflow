@@ -9,7 +9,7 @@ public class ProcessInstanceManagerTest {
 	@Test
 	public void testDeleteProcessInstanceByTaskId() {
 		
-		WorkflowBeansFactory.getProcessInstanceManager().deleteProcessInstanceByTaskId("282529");
+		WorkflowBeansFactory.getProcessInstanceManager().deleteProcessInstanceByTaskId("282529","");
 		System.out.println("success!");
 	}
 	

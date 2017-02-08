@@ -33,6 +33,7 @@ import com.zhuang.workflow.NextTaskUsersHandler;
 import com.zhuang.workflow.WorkflowActionListener;
 import com.zhuang.workflow.WorkflowEngineContext;
 import com.zhuang.workflow.activiti.ProcessDefinitionManager;
+import com.zhuang.workflow.activiti.ProcessInstanceManager;
 import com.zhuang.workflow.activiti.ProcessMainVariableNames;
 import com.zhuang.workflow.activiti.ProcessVariablesManager;
 import com.zhuang.workflow.activiti.UserTaskManager;
@@ -74,6 +75,9 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 	@Autowired
 	private ProcessVariablesManager processVariablesManager;
+
+	@Autowired
+	private ProcessInstanceManager processInstanceManager;
 	
 	@Autowired
 	private UserTaskManager userTaskManager;
@@ -288,6 +292,12 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 	}
 
+	public void delete(String taskId, String comment, Map<String, Object> formData) {
+
+		processInstanceManager.deleteProcessInstanceByTaskId(taskId, comment);
+
+	}
+	
 	public void run(String taskId, List<String> nextUsers, String comment, Map<String, Object> formData) {
 
 		formData = ensureFormDataNotNull(formData);
@@ -482,5 +492,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 		return taskDefModel;
 	}
+
+
 
 }

@@ -34,10 +34,10 @@ public class ProcessInstanceManager {
 		
 	}
 
-	public void deleteProcessInstanceByTaskId(String taskId) {
+	public void deleteProcessInstanceByTaskId(String taskId,String deleteReason) {
 		
 		String processInstanceId=taskService.createTaskQuery().taskId(taskId).singleResult().getProcessInstanceId();
-		runtimeService.deleteProcessInstance(processInstanceId,"");
+		runtimeService.deleteProcessInstance(processInstanceId,deleteReason);
 		
 	}
 }
