@@ -1,6 +1,8 @@
 package com.zhuang.workflow.activiti;
 
 import org.activiti.engine.HistoryService;
+import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.history.HistoricTaskInstance;
@@ -11,6 +13,14 @@ public class ProcessInstanceManager {
 	@Autowired
 	HistoryService historyService;
 
+
+	@Autowired
+	private RuntimeService runtimeService;
+
+	@Autowired
+	private TaskService taskService;
+
+	
 	public String getApplyUserId(String taskId) {
 		
 		HistoricTaskInstance historicTaskInstance =historyService.createHistoricTaskInstanceQuery().taskId(taskId).singleResult();
@@ -23,5 +33,11 @@ public class ProcessInstanceManager {
 		return historicProcessInstance.getStartUserId();
 		
 	}
-	
+
+	public void deleteProcessInstanceByTaskId(String taskId) {
+		
+		String processInstanceId=taskService.createTaskQuery().taskId(taskId).singleResult().getProcessInstanceId();
+		runtimeService.deleteProcessInstance(processInstanceId,"");
+		
+	}
 }
