@@ -91,4 +91,10 @@ public class TaskInfoModel {
 	public TaskInfoModel() {
 		
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "key:"+key+"|"+"name:"+name+"|"+"userId:"+userId+"|"+"userName:"+userName+"|";
+	}
 }

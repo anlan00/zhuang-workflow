@@ -1,6 +1,7 @@
 package com.zhuang.workflow.test;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
@@ -9,6 +10,7 @@ import com.zhuang.workflow.WorkflowBeansFactory;
 import com.zhuang.workflow.activiti.ProcessMainVariableNames;
 import com.zhuang.workflow.commons.PageModel;
 import com.zhuang.workflow.models.FlowInfoModel;
+import com.zhuang.workflow.models.TaskInfoModel;
 
 public class ActivitiWorkflowQueryManagerTest {
 	
@@ -65,6 +67,25 @@ public class ActivitiWorkflowQueryManagerTest {
 		}
 	
 		System.out.println("<<<<<<<testGetMyDoneListPage");
+		
+	}
+
+	
+	@Test
+	public  void testGetHistoryTaskInfoList() {
+		
+		
+		List<TaskInfoModel> taskInfoModels = WorkflowBeansFactory.getWorkflowQueryManager()
+				.getHistoryTaskInfoList("292509");
+		
+		
+		for (TaskInfoModel taskInfoModel :taskInfoModels) {
+
+			System.out.println(taskInfoModel.toString()); 	
+		
+		}
+	
+		System.out.println("success!");
 		
 	}
 

@@ -138,7 +138,18 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 
 	}
 
-	public List<TaskInfoModel> getHistoryTaskInfoList(String instanceId) {
+	public List<TaskInfoModel> getHistoryTaskInfoList(String taskId) {
+		
+		HistoricTaskInstance historicTaskInstance = historyService.createHistoricTaskInstanceQuery().taskId(taskId).singleResult();
+		
+		String instanceId=historicTaskInstance.getProcessInstanceId();
+		
+		List<TaskInfoModel> taskInfoModels=getHistoryTaskInfoListByInstanceId(instanceId);
+
+		return taskInfoModels;
+	}
+
+	private List<TaskInfoModel> getHistoryTaskInfoListByInstanceId(String instanceId) {
 		List<TaskInfoModel> taskInfoModels= new ArrayList<TaskInfoModel>();
 		
 		List<HistoricTaskInstance> historicTaskInstances = historyService.createHistoricTaskInstanceQuery()
@@ -149,7 +160,8 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 			TaskInfoModel taskInfoModel=new TaskInfoModel();
 			
 			taskInfoModel.setId(historicTaskInstance.getId());
-			taskInfoModel.setKey(historicTaskInstance.getName());
+			taskInfoModel.setKey(historicTaskInstance.getTaskDefinitionKey());
+			taskInfoModel.setName(historicTaskInstance.getName());
 			taskInfoModel.setUserId(historicTaskInstance.getAssignee());
 			taskInfoModel.setUserName(userManagementService.getUser(taskInfoModel.getUserId()).getUserName());
 			taskInfoModel.setStartTime(historicTaskInstance.getStartTime());
@@ -160,7 +172,7 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 
 		return taskInfoModels;
 	}
-
+	
 	private void setTaskQueryConditions(TaskInfoQuery taskInfoQuery, Map<String, Object> conditions) {
 		
 		if (conditions != null) {
