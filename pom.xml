@@ -27,7 +27,6 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>4.3.5.RELEASE</version>
-			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
