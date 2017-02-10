@@ -153,7 +153,7 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 		List<TaskInfoModel> taskInfoModels= new ArrayList<TaskInfoModel>();
 		
 		List<HistoricTaskInstance> historicTaskInstances = historyService.createHistoricTaskInstanceQuery()
-				.processInstanceId(instanceId).orderByTaskCreateTime().desc().list();
+				.processInstanceId(instanceId).orderByTaskCreateTime().list();
 		
 		for (HistoricTaskInstance historicTaskInstance : historicTaskInstances) {
 		
