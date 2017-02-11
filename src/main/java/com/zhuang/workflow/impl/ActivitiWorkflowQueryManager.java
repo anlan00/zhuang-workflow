@@ -13,6 +13,7 @@ import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricTaskInstanceQuery;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskInfoQuery;
 import org.activiti.engine.task.TaskQuery;
@@ -166,7 +167,11 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 			taskInfoModel.setUserName(userManagementService.getUser(taskInfoModel.getUserId()).getUserName());
 			taskInfoModel.setStartTime(historicTaskInstance.getStartTime());
 			taskInfoModel.setEndTime(historicTaskInstance.getEndTime());
-			
+			List<Comment> comments = taskService.getTaskComments(historicTaskInstance.getId());
+			if(comments.size()>0)
+			{
+				taskInfoModel.setComment(comments.get(0).getFullMessage());
+			}
 			taskInfoModels.add(taskInfoModel);
 		}
 
