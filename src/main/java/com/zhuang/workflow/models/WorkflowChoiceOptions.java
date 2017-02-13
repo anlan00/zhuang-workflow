@@ -4,6 +4,8 @@ public class WorkflowChoiceOptions {
 
 	private static final String STOREKEY = "choice";
 
+	public static final String DELETE = "刪除";
+
 	public static final String BACK = "退回";
 
 	public static final String REJECT = "驳回";

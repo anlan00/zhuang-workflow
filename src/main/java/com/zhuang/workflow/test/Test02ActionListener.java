@@ -10,47 +10,55 @@ public class Test02ActionListener implements WorkflowActionListener {
 
 	public void beforSubmit(WorkflowEngineContext context) {
 
-		System.out.println("beforSubmit.......");
+		System.out.println("beforSubmit--------------------");
 	}
 
 	public void afterSubmit(WorkflowEngineContext context) {
 
-		System.out.println("afterSubmit.......");
+		System.out.println("afterSubmit--------------------");
 	}
 
 
 	public void beforBack(WorkflowEngineContext context) {
-		// TODO Auto-generated method stub
+		System.out.println("beforBack--------------------");
 		
 	}
 
 	public void afterBack(WorkflowEngineContext context) {
-		// TODO Auto-generated method stub
+		System.out.println("afterBack--------------------");
 		
 	}
 
 	public void beforReject(WorkflowEngineContext context) {
-		// TODO Auto-generated method stub
+		System.out.println("beforReject--------------------");
 		
 	}
 
 	public void afterReject(WorkflowEngineContext context) {
-		// TODO Auto-generated method stub
+		System.out.println("afterReject--------------------");
 		
 	}
 
 	public void onSave(WorkflowEngineContext context) {
-		// TODO Auto-generated method stub
+		System.out.println("onSave--------------------");
 		
 	}
 
 	public void onRetrieveNextTaskUsers(List<UserInfoModel> nextTaskUsers, WorkflowEngineContext context) {
-		// TODO Auto-generated method stub
+		System.out.println("onRetrieveNextTaskUsers--------------------");
 		
 	}
 
 	public void onRetrieveFormData(WorkflowEngineContext context) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("onRetrieveFormData--------------------");
+			
+	}
+
+	public void beforDelete(WorkflowEngineContext context) {
+		System.out.println("beforDelete--------------------");
+	}
+
+	public void afterDelete(WorkflowEngineContext context) {
+		System.out.println("afterDelete--------------------");		
 	}
 }

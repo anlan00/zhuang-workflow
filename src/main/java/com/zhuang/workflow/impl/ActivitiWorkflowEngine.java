@@ -294,8 +294,28 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 	public void delete(String taskId, String comment, Map<String, Object> formData) {
 
+		formData = ensureFormDataNotNull(formData);
+
+		setChoiceToFormData(formData, WorkflowChoiceOptions.DELETE);
+
+		WorkflowActionListener workflowActionListener = getWorkflowActionListenerByTaskId(taskId);
+
+		WorkflowEngineContext workflowEngineContext = new ActivitiWorkflowEngineContext(this);
+		workflowEngineContext.setTaskId(taskId);
+		workflowEngineContext.setComment(comment);
+		workflowEngineContext.setFormData(formData);
+		workflowEngineContext.setCurrentTaskDef(getCurrentTaskDef(taskId));
+
+		if (workflowActionListener != null) {
+			workflowActionListener.beforDelete(workflowEngineContext);
+		}
+
 		processInstanceManager.deleteProcessInstanceByTaskId(taskId, comment);
 
+		if (workflowActionListener != null) {
+			workflowActionListener.afterDelete(workflowEngineContext);
+		}		
+		
 	}
 	
 	public void run(String taskId, List<String> nextUsers, String comment, Map<String, Object> formData) {

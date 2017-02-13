@@ -51,6 +51,19 @@ public interface WorkflowActionListener {
 	void afterReject(WorkflowEngineContext context);
 
 	/**
+	 * 刪除前调用
+	 * @param context
+	 */
+	void beforDelete(WorkflowEngineContext context);
+	
+	/**
+	 * 刪除后调用
+	 * @param context
+	 */
+	void afterDelete(WorkflowEngineContext context);
+
+	
+	/**
 	 * 保存操作
 	 * @param context
 	 */
