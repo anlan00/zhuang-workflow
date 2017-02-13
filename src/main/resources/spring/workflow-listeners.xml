@@ -17,7 +17,7 @@
 	<bean id="workflowActionListeners" class="java.util.HashMap">
 		<constructor-arg>
 			<map>
-				<entry key="test02" value-ref="test02ActionListener"></entry>
+				<entry key="test01" value-ref="test02ActionListener"></entry>
 			</map>
 		</constructor-arg>
 	</bean>

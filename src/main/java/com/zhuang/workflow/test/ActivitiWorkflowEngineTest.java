@@ -38,7 +38,7 @@ public class ActivitiWorkflowEngineTest {
 		users.add("z003");*/
 		Map<String, Object> map=new HashMap<String, Object>();
 		map.put("env_amount", 1189);
-		WorkflowBeansFactory.getWorkflowEngine().submit("242504",users, "同意", map);
+		WorkflowBeansFactory.getWorkflowEngine().submit("307507",users, "同意", map);
 
 		System.out.println("success!");
 
@@ -73,6 +73,22 @@ public class ActivitiWorkflowEngineTest {
 		System.out.println("success!");
 
 	}
+	
+	@Test
+	public void testDelete() {
+
+		List<String> users = new ArrayList<String>();
+		users.add("user3");
+	/*	users.add("z002");
+		users.add("z003");*/
+		Map<String, Object> map=new HashMap<String, Object>();
+		map.put("env:amount", 89);
+		WorkflowBeansFactory.getWorkflowEngine().delete("315007", "删除", map);
+
+		System.out.println("success!");
+
+	}
+	
 	
 	@Test
 	public void testRetrieveNextTaskUsers() {
