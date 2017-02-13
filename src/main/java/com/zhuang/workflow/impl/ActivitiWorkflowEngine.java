@@ -193,8 +193,6 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 		formData = ensureFormDataNotNull(formData);
 
-		setChoiceToFormData(formData, WorkflowChoiceOptions.SUBMIT);
-
 		WorkflowActionListener workflowActionListener = getWorkflowActionListenerByTaskId(taskId);
 
 		WorkflowEngineContext workflowEngineContext = new ActivitiWorkflowEngineContext(this);
@@ -204,99 +202,36 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		workflowEngineContext.setFormData(formData);
 		workflowEngineContext.setCurrentTaskDef(getCurrentTaskDef(taskId));
 		workflowEngineContext.setNextTaskDef(getNextTaskDef(taskId, getEnvVarFromFormData(formData)));
-
+		workflowEngineContext.setChoice(getChoiceFromFormData(formData));
+		
 		if (workflowActionListener != null) {
-			workflowActionListener.beforSubmit(workflowEngineContext);
+			if (workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.SUBMIT)) {
+				workflowActionListener.beforSubmit(workflowEngineContext);
+			} else if (workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.BACK)) {
+				workflowActionListener.beforBack(workflowEngineContext);
+			} else if (workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.REJECT)) {
+				workflowActionListener.beforReject(workflowEngineContext);
+			}
+			
 		}
 
 		run(taskId, nextUsers, comment, formData);
 
 		if (workflowActionListener != null) {
-			workflowActionListener.afterSubmit(workflowEngineContext);
+			if (workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.SUBMIT)) {
+				workflowActionListener.afterSubmit(workflowEngineContext);
+			} else if (workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.BACK)) {
+				workflowActionListener.afterBack(workflowEngineContext);
+			} else if (workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.REJECT)) {
+				workflowActionListener.afterReject(workflowEngineContext);
+			}
 		}
-	}
-
-	public void back(String taskId, String comment, Map<String, Object> formData) {
-
-		formData = ensureFormDataNotNull(formData);
-
-		setChoiceToFormData(formData, WorkflowChoiceOptions.BACK);
-
-		WorkflowActionListener workflowActionListener = getWorkflowActionListenerByTaskId(taskId);
-
-		// 计算退回节的处理人
-		TaskDefinition taskDefinition = processDefinitionManager.getNextTaskDefinition(taskId,
-				getEnvVarFromFormData(formData));
-
-		HistoricTaskInstance historicTaskInstance = historyService.createHistoricTaskInstanceQuery()
-				.taskDefinitionKey(taskDefinition.getKey()).orderByTaskCreateTime().desc().list().get(0);
-
-		List<String> nextUsers = new ArrayList<String>();
-		nextUsers.add(historicTaskInstance.getAssignee());
-
-		WorkflowEngineContext workflowEngineContext = new ActivitiWorkflowEngineContext(this);
-		workflowEngineContext.setTaskId(taskId);
-		workflowEngineContext.setComment(comment);
-		workflowEngineContext.setNextUsers(nextUsers);
-		workflowEngineContext.setFormData(formData);
-		workflowEngineContext.setCurrentTaskDef(getCurrentTaskDef(taskId));
-		workflowEngineContext.setNextTaskDef(getNextTaskDef(taskId, getEnvVarFromFormData(formData)));
-
-		if (workflowActionListener != null) {
-			workflowActionListener.beforBack(workflowEngineContext);
-		}
-
-		run(taskId, nextUsers, comment, formData);
-
-		if (workflowActionListener != null) {
-			workflowActionListener.afterBack(workflowEngineContext);
-		}
-
-	}
-
-	public void reject(String taskId, String comment, Map<String, Object> formData) {
-
-		formData = ensureFormDataNotNull(formData);
-
-		setChoiceToFormData(formData, WorkflowChoiceOptions.REJECT);
-
-		WorkflowActionListener workflowActionListener = getWorkflowActionListenerByTaskId(taskId);
-
-		// 计算退回节的处理人
-		TaskDefinition taskDefinition = processDefinitionManager.getNextTaskDefinition(taskId,
-				getEnvVarFromFormData(formData));
-
-		HistoricTaskInstance historicTaskInstance = historyService.createHistoricTaskInstanceQuery()
-				.taskDefinitionKey(taskDefinition.getKey()).orderByTaskCreateTime().desc().list().get(0);
-
-		List<String> nextUsers = new ArrayList<String>();
-		nextUsers.add(historicTaskInstance.getAssignee());
-
-		WorkflowEngineContext workflowEngineContext = new ActivitiWorkflowEngineContext(this);
-		workflowEngineContext.setTaskId(taskId);
-		workflowEngineContext.setComment(comment);
-		workflowEngineContext.setNextUsers(nextUsers);
-		workflowEngineContext.setFormData(formData);
-		workflowEngineContext.setCurrentTaskDef(getCurrentTaskDef(taskId));
-		workflowEngineContext.setNextTaskDef(getNextTaskDef(taskId, getEnvVarFromFormData(formData)));
-
-		if (workflowActionListener != null) {
-			workflowActionListener.beforReject(workflowEngineContext);
-		}
-
-		run(taskId, nextUsers, comment, formData);
-
-		if (workflowActionListener != null) {
-			workflowActionListener.afterReject(workflowEngineContext);
-		}
-
+		
 	}
 
 	public void delete(String taskId, String comment, Map<String, Object> formData) {
 
 		formData = ensureFormDataNotNull(formData);
-
-		setChoiceToFormData(formData, WorkflowChoiceOptions.DELETE);
 
 		WorkflowActionListener workflowActionListener = getWorkflowActionListenerByTaskId(taskId);
 
@@ -463,10 +398,9 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		}
 	}
 
-	private void setChoiceToFormData(Map<String, Object> formData, String choice) {
+	private String getChoiceFromFormData(Map<String, Object> formData) {
 
-		formData.put(ACTIVITI_ENV_VAR_KEY_PREFIX + WorkflowChoiceOptions.getStoreKey(), choice);
-
+		return formData.get(ACTIVITI_ENV_VAR_KEY_PREFIX + WorkflowChoiceOptions.getStoreKey()).toString();
 	}
 
 	private Map<String, Object> ensureFormDataNotNull(Map<String, Object> formData) {

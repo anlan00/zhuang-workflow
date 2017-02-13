@@ -22,6 +22,8 @@ public abstract class WorkflowEngineContext {
 	
 	protected TaskDefModel nextTaskDef;
 	
+	protected String choice;	
+	
 	public String getTaskId() {
 		return taskId;
 	}
@@ -82,5 +84,14 @@ public abstract class WorkflowEngineContext {
 	{
 		this.workflowEngine=workflowEngine;
 	}
+
+	public String getChoice() {
+		return choice;
+	}
+
+	public void setChoice(String choice) {
+		this.choice = choice;
+	}
+
 	
 }

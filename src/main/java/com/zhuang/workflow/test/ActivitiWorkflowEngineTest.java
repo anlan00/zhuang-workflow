@@ -38,42 +38,13 @@ public class ActivitiWorkflowEngineTest {
 		users.add("z003");*/
 		Map<String, Object> map=new HashMap<String, Object>();
 		map.put("env_amount", 1189);
-		WorkflowBeansFactory.getWorkflowEngine().submit("307507",users, "同意", map);
+		map.put("env_choice", "提交");
+		WorkflowBeansFactory.getWorkflowEngine().submit("325007",users, "同意", map);
 
 		System.out.println("success!");
 
 	}
 
-	@Test
-	public void testBack() {
-
-		List<String> users = new ArrayList<String>();
-		users.add("user3");
-	/*	users.add("z002");
-		users.add("z003");*/
-		Map<String, Object> map=new HashMap<String, Object>();
-		//map.put("env:amount", 89);
-		WorkflowBeansFactory.getWorkflowEngine().back("185006", "退回", map);
-
-		System.out.println("success!");
-
-	}
-
-	@Test
-	public void testReject() {
-
-		List<String> users = new ArrayList<String>();
-		users.add("user3");
-	/*	users.add("z002");
-		users.add("z003");*/
-		Map<String, Object> map=new HashMap<String, Object>();
-		map.put("env:amount", 89);
-		WorkflowBeansFactory.getWorkflowEngine().reject("172504", "驳回", map);
-
-		System.out.println("success!");
-
-	}
-	
 	@Test
 	public void testDelete() {
 
@@ -88,8 +59,7 @@ public class ActivitiWorkflowEngineTest {
 		System.out.println("success!");
 
 	}
-	
-	
+		
 	@Test
 	public void testRetrieveNextTaskUsers() {
 
