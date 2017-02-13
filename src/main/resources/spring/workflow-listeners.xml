@@ -11,13 +11,13 @@
 		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.0.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
-	<bean id="test02ActionListener" class="com.zhuang.workflow.test.Test02ActionListener">	
+	<bean id="test01ActionListener" class="com.zhuang.workflow.test.Test01ActionListener">	
 	</bean>
 	
 	<bean id="workflowActionListeners" class="java.util.HashMap">
 		<constructor-arg>
 			<map>
-				<entry key="test01" value-ref="test02ActionListener"></entry>
+				<entry key="test01" value-ref="test01ActionListener"></entry>
 			</map>
 		</constructor-arg>
 	</bean>

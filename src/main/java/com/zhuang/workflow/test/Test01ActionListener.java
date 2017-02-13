@@ -6,16 +6,16 @@ import com.zhuang.workflow.WorkflowActionListener;
 import com.zhuang.workflow.WorkflowEngineContext;
 import com.zhuang.workflow.models.UserInfoModel;
 
-public class Test02ActionListener implements WorkflowActionListener {
+public class Test01ActionListener implements WorkflowActionListener {
 
 	public void beforSubmit(WorkflowEngineContext context) {
 
-		System.out.println("beforSubmit--------------------");
+		System.out.println("beforSubmit--------------------"+context.getChoice());
 	}
 
 	public void afterSubmit(WorkflowEngineContext context) {
 
-		System.out.println("afterSubmit--------------------");
+		System.out.println("afterSubmit--------------------"+context.getChoice());
 	}
 
 
