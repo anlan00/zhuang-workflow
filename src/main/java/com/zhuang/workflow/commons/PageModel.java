@@ -33,7 +33,7 @@ public class PageModel<T> {
 		this.totalRows = totalRows;
 		this.pageNo = pageNo;
 		this.pageSize = pageSize;
-		int totalPages = new Double(Math.ceil(totalRows / pageSize)).intValue();
+		int totalPages = new Double(Math.ceil((double)totalRows / (double)pageSize)).intValue();
 		this.totalPages = totalPages;
 		
 		this.pageStartRow = pageSize * (pageNo - 1) + 1;
