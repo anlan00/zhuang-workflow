@@ -84,7 +84,8 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 			flowInfoModel.setApplyUserId(historicProcessInstance.getStartUserId());
 			flowInfoModel.setApplyUser(userManagementService.getUser(flowInfoModel.getApplyUserId()).getUserName());
 			flowInfoModel.setApplyTime(historicProcessInstance.getStartTime());
-
+			flowInfoModel.setDefKey(historicProcessInstance.getProcessDefinitionId());
+			
 			Map<String, Object> processVariables = runtimeService.getVariables(task.getExecutionId());
 			fillFlowInfoModel(flowInfoModel, processVariables);
 			flowInfoList.add(flowInfoModel);
@@ -129,7 +130,8 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 			flowInfoModel.setApplyUserId(historicProcessInstance.getStartUserId());
 			flowInfoModel.setApplyUser(userManagementService.getUser(flowInfoModel.getApplyUserId()).getUserName());
 			flowInfoModel.setApplyTime(historicProcessInstance.getStartTime());
-
+			flowInfoModel.setDefKey(historicProcessInstance.getProcessDefinitionId());
+			
 			Map<String, Object> processVariables = processVariablesManager.getProcessVariablesByTaskId(historicTaskInstance.getId());
 			fillFlowInfoModel(flowInfoModel, processVariables);
 			flowInfoList.add(flowInfoModel);

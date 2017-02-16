@@ -22,7 +22,7 @@ public class FlowInfoModel {
 	
 	private String type;
 
-	
+	private String defKey;
 	
 	public String getTaskId() {
 		return taskId;
@@ -88,6 +88,15 @@ public class FlowInfoModel {
 		this.type = type;
 	}
 	
+	
+	public String getDefKey() {
+		return defKey;
+	}
+
+	public void setDefKey(String defKey) {
+		this.defKey = defKey;
+	}
+
 	@Test
 	public String toString() {
 		return "taskId:"+taskId+"|"
