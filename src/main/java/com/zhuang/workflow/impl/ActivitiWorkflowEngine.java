@@ -1,6 +1,7 @@
 package com.zhuang.workflow.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.apache.log4j.or.ThreadGroupRenderer;
+import org.aspectj.apache.bcel.generic.NEW;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhuang.workflow.AbstractWorkflowEngine;
@@ -149,6 +151,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 				.processDefinitionKey(processDefinitionKey).latestVersion().singleResult();
 
 		envVariables.put(ProcessMainVariableNames.PROC_TYPE, processDefinition.getName());
+		envVariables.put(ProcessMainVariableNames.PROC_CREATE_TIME, new Date());
 
 		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey, businessKey,
 				envVariables);

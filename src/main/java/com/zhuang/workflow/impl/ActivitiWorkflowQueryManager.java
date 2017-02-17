@@ -1,6 +1,7 @@
 package com.zhuang.workflow.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -82,7 +83,7 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 					.processInstanceId(task.getProcessInstanceId()).singleResult();
 			flowInfoModel.setApplyUserId(historicProcessInstance.getStartUserId());
 			flowInfoModel.setApplyUser(userManagementService.getUser(flowInfoModel.getApplyUserId()).getUserName());
-			flowInfoModel.setApplyTime(historicProcessInstance.getStartTime());
+			//flowInfoModel.setApplyTime(historicProcessInstance.getStartTime());
 			flowInfoModel.setDefKey(historicProcessInstance.getProcessDefinitionId());
 			
 			Map<String, Object> processVariables = runtimeService.getVariables(task.getExecutionId());
@@ -127,7 +128,7 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 					.processInstanceId(historicTaskInstance.getProcessInstanceId()).singleResult();
 			flowInfoModel.setApplyUserId(historicProcessInstance.getStartUserId());
 			flowInfoModel.setApplyUser(userManagementService.getUser(flowInfoModel.getApplyUserId()).getUserName());
-			flowInfoModel.setApplyTime(historicProcessInstance.getStartTime());
+			//flowInfoModel.setApplyTime(historicProcessInstance.getStartTime());
 			flowInfoModel.setDefKey(historicProcessInstance.getProcessDefinitionId());
 			
 			Map<String, Object> processVariables = processVariablesManager.getProcessVariablesByTaskId(historicTaskInstance.getId());
@@ -208,6 +209,9 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 		}
 		if (processVariables.containsKey(ProcessMainVariableNames.PROC_TYPE)) {
 			flowInfoModel.setType(processVariables.get(ProcessMainVariableNames.PROC_TYPE).toString());
+		}
+		if (processVariables.containsKey(ProcessMainVariableNames.PROC_CREATE_TIME)) {
+			flowInfoModel.setCreateTime((Date)processVariables.get(ProcessMainVariableNames.PROC_CREATE_TIME));
 		}
 	}
 

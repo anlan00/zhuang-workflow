@@ -16,7 +16,7 @@ public class FlowInfoModel {
 	
 	private String applyUserId;
 	
-	private Date applyTime;
+	private Date createTime;
 	
 	private String currentActivityName;
 	
@@ -64,12 +64,12 @@ public class FlowInfoModel {
 		this.applyUserId = applyUserId;
 	}
 
-	public Date getApplyTime() {
-		return applyTime;
+	public Date getCreateTime() {
+		return createTime;
 	}
 
-	public void setApplyTime(Date applyTime) {
-		this.applyTime = applyTime;
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 
 	public String getCurrentActivityName() {
@@ -105,6 +105,6 @@ public class FlowInfoModel {
 				+"currentActivityName:"+currentActivityName+"|"
 				+"applyUser:"+applyUser+"|"
 				+"applyUserId:"+applyUserId+"|"
-				+"applyTime:"+applyTime+"|";
+				+"applyTime:"+createTime+"|";
 	}
 }
