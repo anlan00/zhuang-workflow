@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.zhuang.workflow.commons.PageModel;
 import com.zhuang.workflow.models.FlowInfoModel;
+import com.zhuang.workflow.models.ProcDefModel;
 import com.zhuang.workflow.models.TaskInfoModel;
 
 /**
@@ -51,5 +52,11 @@ public interface WorkflowQueryManager {
 	 * @return
 	 */
 	List<TaskInfoModel> getHistoryTaskInfoList(String instanceId);
+
+	/***
+	 * 获取流程定义信息列表
+	 * @return
+	 */
+	List<ProcDefModel> getProcDefList();
 	
 }

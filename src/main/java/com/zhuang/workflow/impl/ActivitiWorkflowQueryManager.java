@@ -15,6 +15,7 @@ import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricTaskInstanceQuery;
+import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
@@ -29,6 +30,7 @@ import com.zhuang.workflow.activiti.ProcessMainVariableNames;
 import com.zhuang.workflow.activiti.ProcessVariablesManager;
 import com.zhuang.workflow.commons.PageModel;
 import com.zhuang.workflow.models.FlowInfoModel;
+import com.zhuang.workflow.models.ProcDefModel;
 import com.zhuang.workflow.models.TaskInfoModel;
 import com.zhuang.workflow.services.UserManagementService;
 
@@ -259,6 +261,22 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 		if (processVariables.containsKey(ProcessMainVariableNames.PROC_CREATE_TIME)) {
 			flowInfoModel.setCreateTime((Date)processVariables.get(ProcessMainVariableNames.PROC_CREATE_TIME));
 		}
+	}
+
+	public List<ProcDefModel> getProcDefList() {
+
+		List<ProcDefModel> procDefModels=new ArrayList<ProcDefModel>();
+		
+		List<ProcessDefinition> processDefinitions = processDefinitionManager.getProcessDefinitionList();
+	
+		for (ProcessDefinition processDefinition : processDefinitions) {
+			ProcDefModel procDefModel=new ProcDefModel();
+			procDefModel.setKey(processDefinition.getKey());
+			procDefModel.setName(processDefinition.getName());
+			procDefModels.add(procDefModel);
+		}
+		
+		return procDefModels;
 	}
 
 }

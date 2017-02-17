@@ -18,6 +18,7 @@ import org.activiti.engine.impl.pvm.PvmActivity;
 import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.impl.task.TaskDefinition;
+import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -202,4 +203,11 @@ public class ProcessDefinitionManager {
 
 	}
 
+	public List<ProcessDefinition>  getProcessDefinitionList() {
+		List<ProcessDefinition> processDefinitions = repositoryService.createProcessDefinitionQuery()
+				.active()
+				.latestVersion()
+				.list();
+		return processDefinitions;
+	}
 }
