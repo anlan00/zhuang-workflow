@@ -68,9 +68,7 @@
 	<bean id="workflowQueryManager" class="com.zhuang.workflow.impl.ActivitiWorkflowQueryManager"></bean>
 
 	<bean id="userManagementService"
-		class="com.zhuang.workflow.services.impl.BingoUserManagementService"></bean>
-
-
+		class="com.zhuang.workflow.services.impl.DefaultUserManagementService"></bean>
 
 
 	<bean id="activitiTestBean" class="com.zhuang.workflow.test.ActivitiTestBean">
