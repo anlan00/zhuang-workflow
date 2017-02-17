@@ -19,11 +19,19 @@ public class NextTaskInfoModel {
 	}
 
 	public String getTaskName() {
+		
 		return taskName;
 	}
 
 	public void setTaskName(String taskName) {
-		this.taskName = taskName;
+		
+		if(taskKey.equals("_endTask_"))
+		{
+			this.taskName = "结束";
+		}else
+		{
+			this.taskName = taskName;
+		}
 	}
 
 	public List<UserInfoModel> getUsers() {

@@ -26,14 +26,20 @@ public class ProcessDefinitionManagerTest {
 		
 	}
 	
-
 	@Test
 	public void testIsFirstTask() {
 		
 		System.out.println(WorkflowBeansFactory.getProcessDefinitionManager().isFirstTask("212506"));
 		
 	}
-	
+
+	@Test
+	public void testIsEndTask() {
+		
+		System.out.println(WorkflowBeansFactory.getProcessDefinitionManager().isEndTask("370003"));
+		
+	}
+
 	@Test
 	public void testGetProcessDefinitionList()
 	{
@@ -44,4 +50,5 @@ public class ProcessDefinitionManagerTest {
 		
 		System.out.println("success!");
 	}
+	
 }

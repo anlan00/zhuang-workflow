@@ -12,6 +12,9 @@ import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
+import org.activiti.engine.impl.el.JuelExpression;
+import org.activiti.engine.impl.javax.el.ExpressionFactory;
+import org.activiti.engine.impl.javax.el.ValueExpression;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.PvmActivity;
@@ -107,29 +110,10 @@ public class ProcessDefinitionManager {
 		return null;
 	}
 
-	public boolean isFirstTask(String taskId) {
-
-		boolean result = false;
-
-		ActivityImpl activityImpl = getActivityImpl(taskId);
-
-		List<PvmTransition> incomingTransitions = activityImpl.getIncomingTransitions();
-
-		for (PvmTransition pvmTransition : incomingTransitions) {
-
-			PvmActivity pvmActivity = pvmTransition.getSource();
-
-			if (pvmActivity.getProperty("type").equals("startEvent")) {
-				result = true;
-				break;
-			}
-		}
-
-		return result;
-	}
-
 	private TaskDefinition getNextTaskDefinition(ActivityImpl activityImpl, Map<String, Object> params) {
 
+		TaskDefinition result = null;
+		
 		List<PvmTransition> outgoingTransitions = activityImpl.getOutgoingTransitions();
 
 		if (outgoingTransitions.size() == 1) {
@@ -140,33 +124,35 @@ public class ProcessDefinitionManager {
 
 				List<PvmTransition> gatewayOutgoingTransitions = outActi.getOutgoingTransitions();
 
-				TaskDefinition taskDefinition = getNextTaskDefinition(gatewayOutgoingTransitions, params);
-
-				if (taskDefinition != null) {
-					return taskDefinition;
-				}
+				result = getNextTaskDefinition(gatewayOutgoingTransitions, params);
 
 			} else if ("userTask".equals(outActi.getProperty("type"))) {
+				
+				result = ((UserTaskActivityBehavior) ((ActivityImpl) outActi).getActivityBehavior()).getTaskDefinition();
 
-				return ((UserTaskActivityBehavior) ((ActivityImpl) outActi).getActivityBehavior()).getTaskDefinition();
-
-			} else {
-
+			} else if("endEvent".equals(outActi.getProperty("type"))) {
+				
+				
+				result=new TaskDefinition(null);
+				
+				result.setKey("_endTask_");
+				
+				//ValueExpression valueExpression=ExpressionFactory.newInstance().createValueExpression("结束", String.class);
+				
+				result.setNameExpression(new JuelExpression(null, "结束"));
+				
+			}
+			else {
 				System.out.println(outActi.getProperty("type"));
-
 			}
 
 		} else if(outgoingTransitions.size()>1){
 
-			TaskDefinition taskDefinition = getNextTaskDefinition(outgoingTransitions, params);
+			result = getNextTaskDefinition(outgoingTransitions, params);
 
-			if (taskDefinition != null) {
-				return taskDefinition;
-			}
-
-		}
-		
-		return null;
+		}		
+		//System.out.println(result.getNameExpression().getExpressionText());
+		return result;
 
 	}
 
@@ -223,6 +209,48 @@ public class ProcessDefinitionManager {
 		return result;
 	}
 
+	public boolean isFirstTask(String taskId) {
+
+		boolean result = false;
+
+		ActivityImpl activityImpl = getActivityImpl(taskId);
+
+		List<PvmTransition> incomingTransitions = activityImpl.getIncomingTransitions();
+
+		for (PvmTransition pvmTransition : incomingTransitions) {
+
+			PvmActivity pvmActivity = pvmTransition.getSource();
+
+			if (pvmActivity.getProperty("type").equals("startEvent")) {
+				result = true;
+				break;
+			}
+		}
+
+		return result;
+	}
+
+	public boolean isEndTask(String taskId) {
+
+		boolean result = false;
+
+		ActivityImpl activityImpl = getActivityImpl(taskId);
+
+		List<PvmTransition> incomingTransitions = activityImpl.getOutgoingTransitions();
+
+		for (PvmTransition pvmTransition : incomingTransitions) {
+
+			PvmActivity pvmActivity = pvmTransition.getDestination();
+
+			if (pvmActivity.getProperty("type").equals("endEvent")) {
+				result = true;
+				break;
+			}
+		}
+
+		return result;
+	}
+	
 	public List<ProcessDefinition> getProcessDefinitionList() {
 		List<ProcessDefinition> processDefinitions = repositoryService.createProcessDefinitionQuery().active()
 				.latestVersion().list();

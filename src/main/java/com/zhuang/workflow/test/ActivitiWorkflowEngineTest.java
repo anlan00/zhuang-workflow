@@ -65,8 +65,12 @@ public class ActivitiWorkflowEngineTest {
 
 		Map<String, Object> formData = new HashMap<String, Object>();
 		formData.put("env_amount", 11);
-		NextTaskInfoModel nextTaskInfoModel = WorkflowBeansFactory.getWorkflowEngine().retrieveNextTaskInfo("350133", formData);
+		// 370003 375012
+		NextTaskInfoModel nextTaskInfoModel = WorkflowBeansFactory.getWorkflowEngine().retrieveNextTaskInfo("370003", formData);
 
+		System.out.println(nextTaskInfoModel.getTaskKey());
+		System.out.println(nextTaskInfoModel.getTaskName());
+		
 		for (UserInfoModel userInfoModel : nextTaskInfoModel.getUsers()) {
 			System.out.println(userInfoModel.toString());
 		}
