@@ -196,7 +196,7 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 				Object objProcTitle = conditions.get(ProcessMainVariableNames.PROC_TITLE);
 				if (objProcTitle != null && objProcTitle.toString().trim() != "") {
 					taskInfoQuery.processVariableValueLike(ProcessMainVariableNames.PROC_TITLE,
-							conditions.get(ProcessMainVariableNames.PROC_TITLE).toString());
+							"%" +conditions.get(ProcessMainVariableNames.PROC_TITLE).toString() +"%");
 				}
 			}
 
