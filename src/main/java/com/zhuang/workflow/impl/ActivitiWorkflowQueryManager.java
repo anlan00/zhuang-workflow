@@ -54,7 +54,6 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 
 		//总记录查询
 		TaskQuery taskQuery = taskService.createTaskQuery().taskCandidateOrAssigned(userId);
-		long totalRows = taskQuery.count();
 
 		List<FlowInfoModel> flowInfoList = new ArrayList<FlowInfoModel>();
 
@@ -64,7 +63,7 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 		//设置排序
 		taskQuery.orderByTaskCreateTime().desc();
 		
-		PageModel<FlowInfoModel> result = new PageModel<FlowInfoModel>(pageNo, pageSize, new Long(totalRows).intValue(),
+		PageModel<FlowInfoModel> result = new PageModel<FlowInfoModel>(pageNo, pageSize, new Long(taskQuery.count()).intValue(),
 				flowInfoList);
 		
 		//得到分页记录
@@ -100,7 +99,6 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 		//总记录查询
 		HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
 				.taskAssignee(userId).finished();
-		long totalRows = historicTaskInstanceQuery.count();
 		
 		List<FlowInfoModel> flowInfoList = new ArrayList<FlowInfoModel>();
 
@@ -110,7 +108,7 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 		//设置排序
 		historicTaskInstanceQuery.orderByTaskCreateTime().desc();
 		
-		PageModel<FlowInfoModel> result = new PageModel<FlowInfoModel>(pageNo, pageSize, new Long(totalRows).intValue(),
+		PageModel<FlowInfoModel> result = new PageModel<FlowInfoModel>(pageNo, pageSize, new Long(historicTaskInstanceQuery.count()).intValue(),
 				flowInfoList);
 
 		//得到分页记录
