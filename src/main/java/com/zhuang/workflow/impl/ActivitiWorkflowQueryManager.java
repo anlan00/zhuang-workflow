@@ -87,7 +87,7 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 			flowInfoModel.setApplyUserId(historicProcessInstance.getStartUserId());
 			flowInfoModel.setApplyUser(userManagementService.getUser(flowInfoModel.getApplyUserId()).getUserName());
 			//flowInfoModel.setApplyTime(historicProcessInstance.getStartTime());
-			flowInfoModel.setDefKey(historicProcessInstance.getProcessDefinitionId());
+			//flowInfoModel.setDefKey(historicProcessInstance.getProcessDefinitionId());
 			
 			Map<String, Object> processVariables = runtimeService.getVariables(task.getExecutionId());
 			fillFlowInfoModel(flowInfoModel, processVariables);
@@ -132,7 +132,7 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 			flowInfoModel.setApplyUserId(historicProcessInstance.getStartUserId());
 			flowInfoModel.setApplyUser(userManagementService.getUser(flowInfoModel.getApplyUserId()).getUserName());
 			//flowInfoModel.setApplyTime(historicProcessInstance.getStartTime());
-			flowInfoModel.setDefKey(historicProcessInstance.getProcessDefinitionId());
+			//flowInfoModel.setDefKey(historicProcessInstance.getProcessDefinitionId());
 			
 			Map<String, Object> processVariables = processVariablesManager.getProcessVariablesByTaskId(historicTaskInstance.getId());
 			fillFlowInfoModel(flowInfoModel, processVariables);
@@ -186,6 +186,14 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 		
 		if (conditions != null) {
 
+			if (conditions.containsKey(ProcessMainVariableNames.PROC_DEF_KEY)) {
+				Object objProcDefKey = conditions.get(ProcessMainVariableNames.PROC_DEF_KEY);
+				if (objProcDefKey != null && objProcDefKey.toString().trim() != "") {
+					taskInfoQuery.processVariableValueEquals(ProcessMainVariableNames.PROC_DEF_KEY,
+							objProcDefKey);
+				}
+			}
+			
 			if (conditions.containsKey(ProcessMainVariableNames.PROC_TYPE)) {
 				Object objProcType = conditions.get(ProcessMainVariableNames.PROC_TYPE);
 				if (objProcType != null && objProcType.toString().trim() != "") {
@@ -239,6 +247,9 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 	}
 
 	private void fillFlowInfoModel(FlowInfoModel flowInfoModel, Map<String, Object> processVariables) {
+		if (processVariables.containsKey(ProcessMainVariableNames.PROC_DEF_KEY)) {
+			flowInfoModel.setDefKey(processVariables.get(ProcessMainVariableNames.PROC_DEF_KEY).toString());
+		}
 		if (processVariables.containsKey(ProcessMainVariableNames.PROC_TITLE)) {
 			flowInfoModel.setTitle(processVariables.get(ProcessMainVariableNames.PROC_TITLE).toString());
 		}

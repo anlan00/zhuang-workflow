@@ -150,7 +150,10 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
 				.processDefinitionKey(processDefinitionKey).latestVersion().singleResult();
 
+		envVariables.put(ProcessMainVariableNames.PROC_DEF_KEY, processDefinition.getKey());
+		
 		envVariables.put(ProcessMainVariableNames.PROC_TYPE, processDefinition.getName());
+		
 		envVariables.put(ProcessMainVariableNames.PROC_CREATE_TIME, new Date());
 
 		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey, businessKey,
