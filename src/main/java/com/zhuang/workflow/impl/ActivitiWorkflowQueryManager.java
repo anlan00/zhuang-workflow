@@ -180,6 +180,28 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 			}
 			taskInfoModels.add(taskInfoModel);
 		}
+		
+		if(taskInfoModels.size()>0)
+		{
+			TaskInfoModel lastTask=taskInfoModels.get(taskInfoModels.size()-1);
+			boolean isEndTask = processDefinitionManager.isEndTask(lastTask.getId());
+			if(isEndTask)
+			{
+				TaskInfoModel taskInfoModel=new TaskInfoModel();
+				
+				taskInfoModel.setId("");
+				taskInfoModel.setKey("");
+				taskInfoModel.setName("结束");
+				taskInfoModel.setUserId("system");
+				taskInfoModel.setUserName("系统");
+				taskInfoModel.setStartTime(lastTask.getEndTime());
+				taskInfoModel.setEndTime(lastTask.getEndTime());
+				taskInfoModel.setComment("系统自动处理");
+				
+				taskInfoModels.add(taskInfoModel);
+		
+			}
+		}
 
 		return taskInfoModels;
 	}
