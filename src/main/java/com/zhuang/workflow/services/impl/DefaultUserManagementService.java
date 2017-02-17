@@ -12,7 +12,11 @@ public class DefaultUserManagementService implements UserManagementService{
 		UserInfoModel userInfoModel=new UserInfoModel();
 		userInfoModel.setUserId(userId);
 		
-		if(userId.equals("zwb"))
+		if(userId==null)
+		{
+			userInfoModel.setUserName("");
+			
+		} else if(userId.equals("zwb"))
 		{
 			userInfoModel.setUserName("庄伟斌");
 			
