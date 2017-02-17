@@ -20,6 +20,7 @@ import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.impl.task.TaskDefinition;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.task.Task;
+import org.aspectj.apache.bcel.generic.AALOAD;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhuang.workflow.exceptions.HistoricTaskNotFoundException;
@@ -42,31 +43,33 @@ public class ProcessDefinitionManager {
 
 	public ProcessDefinitionEntity getProcessDefinitionEntityByTaskId(String taskId) {
 
-		HistoricTaskInstance historicTaskInstance = historyService.createHistoricTaskInstanceQuery().taskId(taskId).singleResult();
+		HistoricTaskInstance historicTaskInstance = historyService.createHistoricTaskInstanceQuery().taskId(taskId)
+				.singleResult();
 
 		ProcessDefinitionEntity def = (ProcessDefinitionEntity) (((RepositoryServiceImpl) repositoryService)
 				.getDeployedProcessDefinition(historicTaskInstance.getProcessDefinitionId()));
 
 		return def;
 	}
-	
+
 	public ProcessDefinitionEntity getProcessDefinitionEntityByKey(String proDefkey) {
-	
-		ProcessDefinitionEntity def = (ProcessDefinitionEntity) repositoryService.createProcessDefinitionQuery().processDefinitionKey(proDefkey).latestVersion().singleResult();	
+
+		ProcessDefinitionEntity def = (ProcessDefinitionEntity) repositoryService.createProcessDefinitionQuery()
+				.processDefinitionKey(proDefkey).latestVersion().singleResult();
 		return def;
 	}
 
 	public ActivityImpl getActivityImpl(String taskId) {
 
-		HistoricTaskInstance historicTaskInstance = historyService.createHistoricTaskInstanceQuery().taskId(taskId).singleResult();
-		
+		HistoricTaskInstance historicTaskInstance = historyService.createHistoricTaskInstanceQuery().taskId(taskId)
+				.singleResult();
+
 		if (historicTaskInstance == null) {
 			throw new HistoricTaskNotFoundException("taskId:" + taskId);
 		}
-		
+
 		ProcessDefinitionEntity def = (ProcessDefinitionEntity) (((RepositoryServiceImpl) repositoryService)
 				.getDeployedProcessDefinition(historicTaskInstance.getProcessDefinitionId()));
-
 
 		String activitiId = historicTaskInstance.getTaskDefinitionKey();
 
@@ -74,11 +77,11 @@ public class ProcessDefinitionManager {
 
 		for (ActivityImpl activityImpl : activitiList) {
 
-			if (activitiId.equals(activityImpl.getId())) {//当前任务
+			if (activitiId.equals(activityImpl.getId())) {// 当前任务
 				return activityImpl;
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -105,89 +108,44 @@ public class ProcessDefinitionManager {
 	}
 
 	public boolean isFirstTask(String taskId) {
-		
-		boolean result=false;
-		
+
+		boolean result = false;
+
 		ActivityImpl activityImpl = getActivityImpl(taskId);
-		
+
 		List<PvmTransition> incomingTransitions = activityImpl.getIncomingTransitions();
-		
+
 		for (PvmTransition pvmTransition : incomingTransitions) {
-			
+
 			PvmActivity pvmActivity = pvmTransition.getSource();
-			
-			if(pvmActivity.getProperty("type").equals("startEvent"))
-			{
-				result=true;
+
+			if (pvmActivity.getProperty("type").equals("startEvent")) {
+				result = true;
 				break;
 			}
 		}
-		
+
 		return result;
 	}
-	
+
 	private TaskDefinition getNextTaskDefinition(ActivityImpl activityImpl, Map<String, Object> params) {
 
 		List<PvmTransition> outgoingTransitions = activityImpl.getOutgoingTransitions();
 
-		for (PvmTransition outTransi : outgoingTransitions) {
+		if (outgoingTransitions.size() == 1) {
 
-			PvmActivity outActi = outTransi.getDestination();
+			PvmActivity outActi = outgoingTransitions.get(0).getDestination();
 
 			if ("exclusiveGateway".equals(outActi.getProperty("type"))) {
 
 				List<PvmTransition> gatewayOutgoingTransitions = outActi.getOutgoingTransitions();
 
-				if (gatewayOutgoingTransitions.size() == 1) {
+				TaskDefinition taskDefinition = getNextTaskDefinition(gatewayOutgoingTransitions, params);
 
-					ActivityImpl tempActivityImpl = (ActivityImpl) gatewayOutgoingTransitions.get(0).getDestination();
-
-					if ("userTask".equals(tempActivityImpl.getProperty("type"))) {
-						return ((UserTaskActivityBehavior) tempActivityImpl.getActivityBehavior()).getTaskDefinition();
-
-					} else {
-						return getNextTaskDefinition(tempActivityImpl, params);
-					}
-
-				} else if (gatewayOutgoingTransitions.size() > 1) {
-
-					PvmTransition correctGwOutTransi = null;
-					PvmTransition defaultGwOutTransi = null;
-
-					
-					for (PvmTransition gwOutTransi : gatewayOutgoingTransitions) {
-
-						Object conditionText = gwOutTransi.getProperty("conditionText");
-
-						if(conditionText==null)
-						{
-							defaultGwOutTransi=gwOutTransi;
-						}
-						
-						if (conditionText != null
-								&& ActivitiJUELUtil.evaluateBooleanResult(conditionText.toString(), params)) {
-
-							correctGwOutTransi = gwOutTransi;
-						}
-					}
-
-					if(correctGwOutTransi==null)
-					{
-						correctGwOutTransi = defaultGwOutTransi;
-					}
-					
-					if (correctGwOutTransi != null) {
-						ActivityImpl tempActivityImpl = (ActivityImpl) correctGwOutTransi.getDestination();
-						if ("userTask".equals(tempActivityImpl.getProperty("type"))) {
-							return ((UserTaskActivityBehavior) tempActivityImpl.getActivityBehavior())
-									.getTaskDefinition();
-
-						} else {
-							return getNextTaskDefinition(tempActivityImpl, params);
-						}
-					}
-
+				if (taskDefinition != null) {
+					return taskDefinition;
 				}
+
 			} else if ("userTask".equals(outActi.getProperty("type"))) {
 
 				return ((UserTaskActivityBehavior) ((ActivityImpl) outActi).getActivityBehavior()).getTaskDefinition();
@@ -197,17 +155,77 @@ public class ProcessDefinitionManager {
 				System.out.println(outActi.getProperty("type"));
 
 			}
-		}
 
+		} else if(outgoingTransitions.size()>1){
+
+			TaskDefinition taskDefinition = getNextTaskDefinition(outgoingTransitions, params);
+
+			if (taskDefinition != null) {
+				return taskDefinition;
+			}
+
+		}
+		
 		return null;
 
 	}
 
-	public List<ProcessDefinition>  getProcessDefinitionList() {
-		List<ProcessDefinition> processDefinitions = repositoryService.createProcessDefinitionQuery()
-				.active()
-				.latestVersion()
-				.list();
+	private TaskDefinition getNextTaskDefinition(List<PvmTransition> outgoingTransitions,
+			Map<String, Object> params) {
+
+		TaskDefinition result = null;
+
+		if (outgoingTransitions.size() == 1) {
+
+			ActivityImpl tempActivityImpl = (ActivityImpl) outgoingTransitions.get(0).getDestination();
+
+			if ("userTask".equals(tempActivityImpl.getProperty("type"))) {
+				return ((UserTaskActivityBehavior) tempActivityImpl.getActivityBehavior()).getTaskDefinition();
+
+			} else {
+				return getNextTaskDefinition(tempActivityImpl, params);
+			}
+
+		} else if (outgoingTransitions.size() > 1) {
+
+			PvmTransition correctGwOutTransi = null;
+			PvmTransition defaultGwOutTransi = null;
+
+			for (PvmTransition gwOutTransi : outgoingTransitions) {
+
+				Object conditionText = gwOutTransi.getProperty("conditionText");
+
+				if (conditionText == null) {
+					defaultGwOutTransi = gwOutTransi;
+				}
+
+				if (conditionText != null && ActivitiJUELUtil.evaluateBooleanResult(conditionText.toString(), params)) {
+
+					correctGwOutTransi = gwOutTransi;
+				}
+			}
+
+			if (correctGwOutTransi == null) {
+				correctGwOutTransi = defaultGwOutTransi;
+			}
+
+			if (correctGwOutTransi != null) {
+				ActivityImpl tempActivityImpl = (ActivityImpl) correctGwOutTransi.getDestination();
+				if ("userTask".equals(tempActivityImpl.getProperty("type"))) {
+					result = ((UserTaskActivityBehavior) tempActivityImpl.getActivityBehavior()).getTaskDefinition();
+
+				} else {
+					result = getNextTaskDefinition(tempActivityImpl, params);
+				}
+			}
+
+		}
+		return result;
+	}
+
+	public List<ProcessDefinition> getProcessDefinitionList() {
+		List<ProcessDefinition> processDefinitions = repositoryService.createProcessDefinitionQuery().active()
+				.latestVersion().list();
 		return processDefinitions;
 	}
 }
