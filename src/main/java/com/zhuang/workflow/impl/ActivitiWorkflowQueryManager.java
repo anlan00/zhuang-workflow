@@ -1,5 +1,7 @@
 package com.zhuang.workflow.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +20,7 @@ import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskInfoQuery;
 import org.activiti.engine.task.TaskQuery;
+import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhuang.workflow.WorkflowQueryManager;
@@ -187,7 +190,7 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 				Object objProcType = conditions.get(ProcessMainVariableNames.PROC_TYPE);
 				if (objProcType != null && objProcType.toString().trim() != "") {
 					taskInfoQuery.processVariableValueEquals(ProcessMainVariableNames.PROC_TYPE,
-							conditions.get(ProcessMainVariableNames.PROC_TYPE));
+							objProcType);
 				}
 			}
 
@@ -195,7 +198,39 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 				Object objProcTitle = conditions.get(ProcessMainVariableNames.PROC_TITLE);
 				if (objProcTitle != null && objProcTitle.toString().trim() != "") {
 					taskInfoQuery.processVariableValueLike(ProcessMainVariableNames.PROC_TITLE,
-							"%" +conditions.get(ProcessMainVariableNames.PROC_TITLE).toString() +"%");
+							"%" +objProcTitle.toString() +"%");
+				}
+			}
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			
+			String proCreateTimeStart=ProcessMainVariableNames.PROC_CREATE_TIME+"_START";
+			if (conditions.containsKey(proCreateTimeStart)) {
+				Object objProcCreateTimeStart = conditions.get(proCreateTimeStart);
+				if (objProcCreateTimeStart != null && objProcCreateTimeStart.toString().trim()!="") {
+					Date dProcCreateTimeStart=null;
+					try {
+						dProcCreateTimeStart = sdf.parse(objProcCreateTimeStart.toString()+" 00:00:00");
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					taskInfoQuery.processVariableValueGreaterThanOrEqual(ProcessMainVariableNames.PROC_CREATE_TIME,dProcCreateTimeStart);
+				}
+			}
+			
+			String proCreateTimeEnd=ProcessMainVariableNames.PROC_CREATE_TIME+"_END";
+			if (conditions.containsKey(proCreateTimeEnd)) {
+				Object objProcCreateTimeEnd = conditions.get(proCreateTimeEnd);
+				if (objProcCreateTimeEnd != null && objProcCreateTimeEnd.toString().trim()!="") {
+					Date dProcCreateTimeEnd=null;
+					try {
+						dProcCreateTimeEnd = sdf.parse(objProcCreateTimeEnd.toString()+" 23:59:59");
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					taskInfoQuery.processVariableValueLessThanOrEqual(ProcessMainVariableNames.PROC_CREATE_TIME,dProcCreateTimeEnd);
 				}
 			}
 
