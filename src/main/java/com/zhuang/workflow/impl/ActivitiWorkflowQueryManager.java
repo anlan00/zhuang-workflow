@@ -30,6 +30,7 @@ import com.zhuang.workflow.activiti.ProcessInstanceManager;
 import com.zhuang.workflow.activiti.ProcessMainVariableNames;
 import com.zhuang.workflow.activiti.ProcessVariablesManager;
 import com.zhuang.workflow.commons.PageModel;
+import com.zhuang.workflow.models.EndTaskVariableNames;
 import com.zhuang.workflow.models.FlowInfoModel;
 import com.zhuang.workflow.models.ProcDefModel;
 import com.zhuang.workflow.models.TaskInfoModel;
@@ -125,7 +126,7 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 			String currentActivityName="";
 			if(processInstanceManager.isProcessFinished(historicTaskInstance.getProcessInstanceId()))
 			{
-				currentActivityName="结束";
+				currentActivityName= EndTaskVariableNames.NAME;
 			}else
 			{
 
@@ -191,14 +192,14 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 				if (isEndTask) {
 					TaskInfoModel taskInfoModel = new TaskInfoModel();
 
-					taskInfoModel.setId("");
-					taskInfoModel.setKey("");
-					taskInfoModel.setName("结束");
-					taskInfoModel.setUserId("system");
-					taskInfoModel.setUserName("系统");
+					taskInfoModel.setId(EndTaskVariableNames.ID);
+					taskInfoModel.setKey(EndTaskVariableNames.KEY);
+					taskInfoModel.setName(EndTaskVariableNames.NAME);
+					taskInfoModel.setUserId(EndTaskVariableNames.USERID);
+					taskInfoModel.setUserName(EndTaskVariableNames.USERNAME);
 					taskInfoModel.setStartTime(lastTask.getEndTime());
 					taskInfoModel.setEndTime(lastTask.getEndTime());
-					taskInfoModel.setComment("系统自动处理");
+					taskInfoModel.setComment(EndTaskVariableNames.COMMENT);
 
 					taskInfoModels.add(taskInfoModel);
 

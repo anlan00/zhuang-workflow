@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhuang.workflow.exceptions.HistoricTaskNotFoundException;
 import com.zhuang.workflow.exceptions.RunningTaskNotFoundException;
+import com.zhuang.workflow.models.EndTaskVariableNames;
 import com.zhuang.workflow.util.ActivitiJUELUtil;
 
 public class ProcessDefinitionManager {
@@ -135,11 +136,11 @@ public class ProcessDefinitionManager {
 				
 				result=new TaskDefinition(null);
 				
-				result.setKey("_endTask_");
+				result.setKey(EndTaskVariableNames.KEY);
 				
 				//ValueExpression valueExpression=ExpressionFactory.newInstance().createValueExpression("结束", String.class);
 				
-				result.setNameExpression(new JuelExpression(null, "结束"));
+				result.setNameExpression(new JuelExpression(null, EndTaskVariableNames.NAME));
 				
 			}
 			else {
