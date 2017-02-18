@@ -33,13 +33,14 @@ public class ActivitiWorkflowEngineTest {
 	public void testSubmit() {
 
 		List<String> users = new ArrayList<String>();
-		users.add("zwb2");
+		users.add("zs");
+		users.add("ls");
 	/*	users.add("z002");
 		users.add("z003");*/
 		Map<String, Object> map=new HashMap<String, Object>();
 		map.put("env_amount", 1189);
 		map.put("env_choice", "提交");
-		WorkflowBeansFactory.getWorkflowEngine().submit("325007",users, "同意", map);
+		WorkflowBeansFactory.getWorkflowEngine().submit("420011","zwb",users, "同意", map);
 
 		System.out.println("success!");
 

@@ -205,7 +205,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 	}
 
-	public void submit(String taskId, List<String> nextUsers, String comment, Map<String, Object> formData) {
+	public void submit(String taskId,String userId, List<String> nextUsers, String comment, Map<String, Object> formData) {
 
 		formData = ensureFormDataNotNull(formData);
 
@@ -231,7 +231,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 			
 		}
 
-		run(taskId, nextUsers, comment, formData);
+		run(taskId,userId, nextUsers, comment, formData);
 
 		if (workflowActionListener != null) {
 			if (workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.SUBMIT)) {
@@ -269,7 +269,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		
 	}
 	
-	public void run(String taskId, List<String> nextUsers, String comment, Map<String, Object> formData) {
+	public void run(String taskId,String userId, List<String> nextUsers, String comment, Map<String, Object> formData) {
 
 		formData = ensureFormDataNotNull(formData);
 
@@ -281,6 +281,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 			taskService.addComment(taskId, task.getProcessInstanceId(), comment);
 		}
 
+		taskService.setAssignee(taskId, userId);
 		taskService.complete(taskId, envVariables);
 
 		setTaskUser(taskId, nextUsers);
@@ -408,6 +409,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 					for (String userId : users) {
 						taskService.addCandidateUser(nextTask.getId(), userId);
 					}
+					taskService.setAssignee(nextTask.getId(), null);
 				}
 			}
 

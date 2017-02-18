@@ -45,6 +45,8 @@ public interface WorkflowEngine {
 	 * 
 	 * @param taskId
 	 *            任务ID
+	 * @param userId
+	 *            用户ID
 	 * @param nextUsers
 	 *            下一步处理人
 	 * @param comment
@@ -52,13 +54,15 @@ public interface WorkflowEngine {
 	 * @param formData
 	 *            业务表单数据
 	 */
-	void run(String taskId, List<String> nextUsers, String comment, Map<String, Object> formData);
+	void run(String taskId,String userId, List<String> nextUsers, String comment, Map<String, Object> formData);
 
 	/**
 	 * 提交
 	 * 
 	 * @param taskId
 	 *            任务ID
+	 * @param userId
+	 *            用户ID
 	 * @param nextUsers
 	 *            下一步处理人
 	 * @param comment
@@ -66,7 +70,7 @@ public interface WorkflowEngine {
 	 * @param formData
 	 *            业务表单数据
 	 */
-	void submit(String taskId, List<String> nextUsers, String comment, Map<String, Object> formData);
+	void submit(String taskId,String userId, List<String> nextUsers, String comment, Map<String, Object> formData);
 
 	 /**
 	 * 删除
