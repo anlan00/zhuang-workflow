@@ -118,15 +118,6 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 			flowInfoModel.setTaskId(historicTaskInstance.getId());
 			flowInfoModel.setCurrentActivityName(historicTaskInstance.getName());
 
-			HistoricProcessInstanceQuery historicProcessInstanceQuery = historyService
-					.createHistoricProcessInstanceQuery();
-			HistoricProcessInstance historicProcessInstance = historicProcessInstanceQuery
-					.processInstanceId(historicTaskInstance.getProcessInstanceId()).singleResult();
-			flowInfoModel.setCreateUserId(historicProcessInstance.getStartUserId());
-			flowInfoModel.setCreateUser(userManagementService.getUser(flowInfoModel.getCreateUserId()).getUserName());
-			//flowInfoModel.setApplyTime(historicProcessInstance.getStartTime());
-			//flowInfoModel.setDefKey(historicProcessInstance.getProcessDefinitionId());
-			
 			Map<String, Object> processVariables = processVariablesManager.getProcessVariablesByTaskId(historicTaskInstance.getId());
 			fillFlowInfoModel(flowInfoModel, processVariables);
 			flowInfoList.add(flowInfoModel);
