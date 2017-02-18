@@ -12,9 +12,9 @@ public class FlowInfoModel {
 	
 	private String title;
 	
-	private String applyUser;
+	private String createUser;
 	
-	private String applyUserId;
+	private String createUserId;
 	
 	private Date createTime;
 	
@@ -48,20 +48,20 @@ public class FlowInfoModel {
 		this.title = title;
 	}
 
-	public String getApplyUser() {
-		return applyUser;
+	public String getCreateUser() {
+		return createUser;
 	}
 
-	public void setApplyUser(String applyUser) {
-		this.applyUser = applyUser;
+	public void setCreateUser(String applyUser) {
+		this.createUser = applyUser;
 	}
 
-	public String getApplyUserId() {
-		return applyUserId;
+	public String getCreateUserId() {
+		return createUserId;
 	}
 
-	public void setApplyUserId(String applyUserId) {
-		this.applyUserId = applyUserId;
+	public void setCreateUserId(String applyUserId) {
+		this.createUserId = applyUserId;
 	}
 
 	public Date getCreateTime() {
@@ -103,8 +103,8 @@ public class FlowInfoModel {
 				+"title:"+title+"|"
 				+"type:"+type+"|"
 				+"currentActivityName:"+currentActivityName+"|"
-				+"applyUser:"+applyUser+"|"
-				+"applyUserId:"+applyUserId+"|"
+				+"applyUser:"+createUser+"|"
+				+"applyUserId:"+createUserId+"|"
 				+"applyTime:"+createTime+"|";
 	}
 }

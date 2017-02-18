@@ -45,6 +45,7 @@ import com.zhuang.workflow.models.TaskDefModel;
 import com.zhuang.workflow.models.TaskInfoModel;
 import com.zhuang.workflow.models.UserInfoModel;
 import com.zhuang.workflow.models.WorkflowChoiceOptions;
+import com.zhuang.workflow.services.UserManagementService;
 
 public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
@@ -83,6 +84,9 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 	
 	@Autowired
 	private UserTaskManager userTaskManager;
+	
+	@Autowired
+	private UserManagementService userManagementService;
 	
 	public static final String ACTIVITI_ENV_VAR_KEY_PREFIX = "env_";
 
@@ -156,6 +160,11 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		
 		envVariables.put(ProcessMainVariableNames.PROC_CREATE_TIME, new Date());
 
+		envVariables.put(ProcessMainVariableNames.PROC_CREATE_USERID, userId);
+		
+		UserInfoModel userInfoModel = userManagementService.getUser(userId);
+		envVariables.put(ProcessMainVariableNames.PROC_CREATE_USER, userInfoModel.getUserName());
+		
 		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey, businessKey,
 				envVariables);
 

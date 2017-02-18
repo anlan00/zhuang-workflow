@@ -82,15 +82,6 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 			flowInfoModel.setTaskId(task.getId());
 			flowInfoModel.setCurrentActivityName(task.getName());
 
-			HistoricProcessInstanceQuery historicProcessInstanceQuery = historyService
-					.createHistoricProcessInstanceQuery();
-			HistoricProcessInstance historicProcessInstance = historicProcessInstanceQuery
-					.processInstanceId(task.getProcessInstanceId()).singleResult();
-			flowInfoModel.setApplyUserId(historicProcessInstance.getStartUserId());
-			flowInfoModel.setApplyUser(userManagementService.getUser(flowInfoModel.getApplyUserId()).getUserName());
-			//flowInfoModel.setApplyTime(historicProcessInstance.getStartTime());
-			//flowInfoModel.setDefKey(historicProcessInstance.getProcessDefinitionId());
-			
 			Map<String, Object> processVariables = runtimeService.getVariables(task.getExecutionId());
 			fillFlowInfoModel(flowInfoModel, processVariables);
 			flowInfoList.add(flowInfoModel);
@@ -131,8 +122,8 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 					.createHistoricProcessInstanceQuery();
 			HistoricProcessInstance historicProcessInstance = historicProcessInstanceQuery
 					.processInstanceId(historicTaskInstance.getProcessInstanceId()).singleResult();
-			flowInfoModel.setApplyUserId(historicProcessInstance.getStartUserId());
-			flowInfoModel.setApplyUser(userManagementService.getUser(flowInfoModel.getApplyUserId()).getUserName());
+			flowInfoModel.setCreateUserId(historicProcessInstance.getStartUserId());
+			flowInfoModel.setCreateUser(userManagementService.getUser(flowInfoModel.getCreateUserId()).getUserName());
 			//flowInfoModel.setApplyTime(historicProcessInstance.getStartTime());
 			//flowInfoModel.setDefKey(historicProcessInstance.getProcessDefinitionId());
 			
@@ -234,6 +225,14 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 							"%" +objProcTitle.toString() +"%");
 				}
 			}
+			
+			if (conditions.containsKey(ProcessMainVariableNames.PROC_CREATE_USER)) {
+				Object objProcCreateUserName = conditions.get(ProcessMainVariableNames.PROC_CREATE_USER);
+				if (objProcCreateUserName != null && objProcCreateUserName.toString().trim() != "") {
+					taskInfoQuery.processVariableValueLike(ProcessMainVariableNames.PROC_CREATE_USER,
+							"%" +objProcCreateUserName.toString() +"%");
+				}
+			}
 
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			
@@ -272,6 +271,7 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 	}
 
 	private void fillFlowInfoModel(FlowInfoModel flowInfoModel, Map<String, Object> processVariables) {
+		
 		if (processVariables.containsKey(ProcessMainVariableNames.PROC_DEF_KEY)) {
 			flowInfoModel.setDefKey(processVariables.get(ProcessMainVariableNames.PROC_DEF_KEY).toString());
 		}
@@ -284,6 +284,13 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 		if (processVariables.containsKey(ProcessMainVariableNames.PROC_CREATE_TIME)) {
 			flowInfoModel.setCreateTime((Date)processVariables.get(ProcessMainVariableNames.PROC_CREATE_TIME));
 		}
+		if (processVariables.containsKey(ProcessMainVariableNames.PROC_CREATE_USERID)) {
+			flowInfoModel.setCreateUserId(processVariables.get(ProcessMainVariableNames.PROC_CREATE_USERID).toString());
+		}
+		if (processVariables.containsKey(ProcessMainVariableNames.PROC_CREATE_USER)) {
+			flowInfoModel.setCreateUser(processVariables.get(ProcessMainVariableNames.PROC_CREATE_USER).toString());
+		}
+
 	}
 
 	public List<ProcDefModel> getProcDefList() {
