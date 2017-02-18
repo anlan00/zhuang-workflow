@@ -76,7 +76,7 @@ public class ActivitiWorkflowQueryManagerTest {
 		
 		
 		List<TaskInfoModel> taskInfoModels = WorkflowBeansFactory.getWorkflowQueryManager()
-				.getHistoryTaskInfoList("292509");
+				.getHistoryTaskInfoList("417520");
 		
 		
 		for (TaskInfoModel taskInfoModel :taskInfoModels) {

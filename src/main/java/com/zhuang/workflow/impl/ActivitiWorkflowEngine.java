@@ -39,6 +39,7 @@ import com.zhuang.workflow.activiti.ProcessInstanceManager;
 import com.zhuang.workflow.activiti.ProcessMainVariableNames;
 import com.zhuang.workflow.activiti.ProcessVariablesManager;
 import com.zhuang.workflow.activiti.UserTaskManager;
+import com.zhuang.workflow.commons.CommonVariableNames;
 import com.zhuang.workflow.exceptions.HandlerNotFoundException;
 import com.zhuang.workflow.models.NextTaskInfoModel;
 import com.zhuang.workflow.models.TaskDefModel;
@@ -309,12 +310,12 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 			String configValue = taskDefinition.getAssigneeExpression().toString();
 
-			String[] arrConfigValue = configValue.split(":");
+			String[] arrConfigValue = configValue.split(CommonVariableNames.NAME_VALUE_SEPARATOR);
 			String handlerKey = arrConfigValue[0];
 			String handlerParams = arrConfigValue.length > 1 ? arrConfigValue[1] : null;
 
-			if (handlerKey.startsWith("$")) {
-				handlerKey = handlerKey.replace("$", "");
+			if (handlerKey.startsWith(CommonVariableNames.HANDLER_NAME_PREFIX)) {
+				handlerKey = handlerKey.replace(CommonVariableNames.HANDLER_NAME_PREFIX, "");
 				NextTaskUsersHandler nextTaskUsersHandler = nextTaskUsersHandlers.get(handlerKey);
 
 				if (nextTaskUsersHandler == null) {

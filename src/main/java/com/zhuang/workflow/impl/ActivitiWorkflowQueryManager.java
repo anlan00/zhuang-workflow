@@ -18,6 +18,7 @@ import org.activiti.engine.history.HistoricTaskInstanceQuery;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Comment;
+import org.activiti.engine.task.IdentityLink;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskInfoQuery;
 import org.activiti.engine.task.TaskQuery;
@@ -29,6 +30,7 @@ import com.zhuang.workflow.activiti.ProcessDefinitionManager;
 import com.zhuang.workflow.activiti.ProcessInstanceManager;
 import com.zhuang.workflow.activiti.ProcessMainVariableNames;
 import com.zhuang.workflow.activiti.ProcessVariablesManager;
+import com.zhuang.workflow.commons.CommonVariableNames;
 import com.zhuang.workflow.commons.PageModel;
 import com.zhuang.workflow.models.EndTaskVariableNames;
 import com.zhuang.workflow.models.FlowInfoModel;
@@ -172,8 +174,31 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 			taskInfoModel.setId(historicTaskInstance.getId());
 			taskInfoModel.setKey(historicTaskInstance.getTaskDefinitionKey());
 			taskInfoModel.setName(historicTaskInstance.getName());
+			
 			taskInfoModel.setUserId(historicTaskInstance.getAssignee());
 			taskInfoModel.setUserName(userManagementService.getUser(taskInfoModel.getUserId()).getUserName());
+
+
+			if(taskInfoModel.getUserId().startsWith(CommonVariableNames.HANDLER_NAME_PREFIX))
+			{
+				List<String> userIds=new ArrayList<String>();
+				List<String> userNames=new ArrayList<String>();
+				
+				List<IdentityLink> identityLinks = taskService.getIdentityLinksForTask(taskInfoModel.getId());
+
+				for (IdentityLink identityLink : identityLinks) {
+					if(!identityLink.getType().equals("candidate"))
+					{
+						continue;
+					}
+					
+					userIds.add(identityLink.getUserId());
+					userNames.add(userManagementService.getUser(identityLink.getUserId()).getUserName());
+				}
+				taskInfoModel.setUserId(String.join(",", userIds.toArray(new String[userIds.size()])));
+				taskInfoModel.setUserName(String.join(",", userNames.toArray(new String[userNames.size()])));
+			}
+			
 			taskInfoModel.setStartTime(historicTaskInstance.getStartTime());
 			taskInfoModel.setEndTime(historicTaskInstance.getEndTime());
 			List<Comment> comments = taskService.getTaskComments(historicTaskInstance.getId());
