@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhuang.workflow.WorkflowQueryManager;
 import com.zhuang.workflow.activiti.ProcessDefinitionManager;
+import com.zhuang.workflow.activiti.ProcessInstanceManager;
 import com.zhuang.workflow.activiti.ProcessMainVariableNames;
 import com.zhuang.workflow.activiti.ProcessVariablesManager;
 import com.zhuang.workflow.commons.PageModel;
@@ -51,6 +52,9 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 	@Autowired
 	private ProcessVariablesManager processVariablesManager;
 
+	@Autowired
+	private ProcessInstanceManager processInstanceManager;
+	
 	@Autowired
 	ProcessDefinitionManager processDefinitionManager;
 	
@@ -116,7 +120,23 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 
 			FlowInfoModel flowInfoModel = new FlowInfoModel();
 			flowInfoModel.setTaskId(historicTaskInstance.getId());
-			flowInfoModel.setCurrentActivityName(historicTaskInstance.getName());
+			
+			
+			String currentActivityName="";
+			if(processInstanceManager.isProcessFinished(historicTaskInstance.getProcessInstanceId()))
+			{
+				currentActivityName="结束";
+			}else
+			{
+
+			    List<Task> tasks =taskService.createTaskQuery().processInstanceId(historicTaskInstance.getProcessInstanceId()).list();
+				if(tasks.size()>0)
+				{
+					currentActivityName=tasks.get(0).getName();
+				}
+			}
+			
+			flowInfoModel.setCurrentActivityName(currentActivityName);
 
 			Map<String, Object> processVariables = processVariablesManager.getProcessVariablesByTaskId(historicTaskInstance.getId());
 			fillFlowInfoModel(flowInfoModel, processVariables);

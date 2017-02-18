@@ -6,6 +6,7 @@ import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.runtime.ProcessInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class ProcessInstanceManager {
@@ -20,7 +21,6 @@ public class ProcessInstanceManager {
 	@Autowired
 	private TaskService taskService;
 
-	
 	public String getApplyUserId(String taskId) {
 		
 		HistoricTaskInstance historicTaskInstance =historyService.createHistoricTaskInstanceQuery().taskId(taskId).singleResult();
@@ -39,5 +39,12 @@ public class ProcessInstanceManager {
 		String processInstanceId=taskService.createTaskQuery().taskId(taskId).singleResult().getProcessInstanceId();
 		runtimeService.deleteProcessInstance(processInstanceId,deleteReason);
 		
+	}
+
+	public boolean isProcessFinished(String processInstanceId) {
+		
+		ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+		return processInstance==null?true:false;
+	
 	}
 }
