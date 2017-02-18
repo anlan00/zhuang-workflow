@@ -52,16 +52,16 @@ public class FlowInfoModel {
 		return createUser;
 	}
 
-	public void setCreateUser(String applyUser) {
-		this.createUser = applyUser;
+	public void setCreateUser(String createUser) {
+		this.createUser = createUser;
 	}
 
 	public String getCreateUserId() {
 		return createUserId;
 	}
 
-	public void setCreateUserId(String applyUserId) {
-		this.createUserId = applyUserId;
+	public void setCreateUserId(String createUserId) {
+		this.createUserId = createUserId;
 	}
 
 	public Date getCreateTime() {
