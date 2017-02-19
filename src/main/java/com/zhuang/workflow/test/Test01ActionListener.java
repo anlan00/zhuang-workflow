@@ -55,7 +55,7 @@ public class Test01ActionListener implements WorkflowActionListener {
 		System.out.println("context.getCurrentTaskDef()"+context.getCurrentTaskDef());
 		if(context.getCurrentTaskDef().getKey().equals("mgr1") || context.getCurrentTaskDef().getKey().equals("mgr2"))
 		{
-			context.getFormData().put("toolbar_back", true);
+			context.getFormData().put(WorkflowChoiceOptions.BACK, true);
 		}
 	}
 
