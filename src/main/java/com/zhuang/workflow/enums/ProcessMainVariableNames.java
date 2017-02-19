@@ -1,4 +1,4 @@
-package com.zhuang.workflow.activiti;
+package com.zhuang.workflow.enums;
 
 public class ProcessMainVariableNames {
 

@@ -36,16 +36,16 @@ import com.zhuang.workflow.WorkflowActionListener;
 import com.zhuang.workflow.WorkflowEngineContext;
 import com.zhuang.workflow.activiti.ProcessDefinitionManager;
 import com.zhuang.workflow.activiti.ProcessInstanceManager;
-import com.zhuang.workflow.activiti.ProcessMainVariableNames;
+import com.zhuang.workflow.enums.ProcessMainVariableNames;
 import com.zhuang.workflow.activiti.ProcessVariablesManager;
 import com.zhuang.workflow.activiti.UserTaskManager;
-import com.zhuang.workflow.commons.CommonVariableNames;
+import com.zhuang.workflow.enums.CommonVariableNames;
 import com.zhuang.workflow.exceptions.HandlerNotFoundException;
 import com.zhuang.workflow.models.NextTaskInfoModel;
 import com.zhuang.workflow.models.TaskDefModel;
 import com.zhuang.workflow.models.TaskInfoModel;
 import com.zhuang.workflow.models.UserInfoModel;
-import com.zhuang.workflow.models.WorkflowChoiceOptions;
+import com.zhuang.workflow.enums.WorkflowChoiceOptions;
 import com.zhuang.workflow.services.UserManagementService;
 
 public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {

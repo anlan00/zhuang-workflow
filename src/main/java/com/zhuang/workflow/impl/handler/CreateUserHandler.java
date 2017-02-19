@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.zhuang.workflow.NextTaskUsersHandler;
 import com.zhuang.workflow.WorkflowEngineContext;
 import com.zhuang.workflow.activiti.ProcessInstanceManager;
-import com.zhuang.workflow.activiti.ProcessMainVariableNames;
+import com.zhuang.workflow.enums.ProcessMainVariableNames;
 import com.zhuang.workflow.models.UserInfoModel;
 import com.zhuang.workflow.services.UserManagementService;
 

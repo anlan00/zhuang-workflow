@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 import org.junit.Test;
 
 import com.zhuang.workflow.WorkflowBeansFactory;
-import com.zhuang.workflow.activiti.ProcessMainVariableNames;
+import com.zhuang.workflow.enums.ProcessMainVariableNames;
 import com.zhuang.workflow.models.NextTaskInfoModel;
 import com.zhuang.workflow.models.UserInfoModel;
 

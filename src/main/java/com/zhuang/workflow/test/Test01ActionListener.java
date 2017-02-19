@@ -5,7 +5,7 @@ import java.util.List;
 import com.zhuang.workflow.WorkflowActionListener;
 import com.zhuang.workflow.WorkflowEngineContext;
 import com.zhuang.workflow.models.UserInfoModel;
-import com.zhuang.workflow.models.WorkflowChoiceOptions;
+import com.zhuang.workflow.enums.WorkflowChoiceOptions;
 
 public class Test01ActionListener implements WorkflowActionListener {
 

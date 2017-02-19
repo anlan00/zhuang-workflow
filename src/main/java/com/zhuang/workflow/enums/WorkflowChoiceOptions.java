@@ -1,4 +1,4 @@
-package com.zhuang.workflow.models;
+package com.zhuang.workflow.enums;
 
 public class WorkflowChoiceOptions {
 

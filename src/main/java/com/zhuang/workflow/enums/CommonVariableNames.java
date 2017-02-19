@@ -1,4 +1,4 @@
-package com.zhuang.workflow.commons;
+package com.zhuang.workflow.enums;
 
 public class CommonVariableNames {
 

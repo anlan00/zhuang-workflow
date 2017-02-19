@@ -28,7 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhuang.workflow.exceptions.HistoricTaskNotFoundException;
 import com.zhuang.workflow.exceptions.RunningTaskNotFoundException;
-import com.zhuang.workflow.models.EndTaskVariableNames;
+import com.zhuang.workflow.enums.EndTaskVariableNames;
 import com.zhuang.workflow.util.ActivitiJUELUtil;
 
 public class ProcessDefinitionManager {
