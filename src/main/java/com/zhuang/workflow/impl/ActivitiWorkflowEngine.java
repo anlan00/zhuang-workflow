@@ -40,6 +40,7 @@ import com.zhuang.workflow.enums.ProcessMainVariableNames;
 import com.zhuang.workflow.activiti.ProcessVariablesManager;
 import com.zhuang.workflow.activiti.UserTaskManager;
 import com.zhuang.workflow.enums.CommonVariableNames;
+import com.zhuang.workflow.enums.FormDataVariableNames;
 import com.zhuang.workflow.exceptions.HandlerNotFoundException;
 import com.zhuang.workflow.models.NextTaskInfoModel;
 import com.zhuang.workflow.models.TaskDefModel;
@@ -355,13 +356,12 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		TaskDefModel currentTaskDefModel = getCurrentTaskDef(taskId);
 	    ProcessDefinition processDefinition=processDefinitionManager.getProcessDefinitionEntityByTaskId(taskId);
 		
-		formData.put("isFirstTask",processDefinitionManager.isFirstTask(taskId));
-		formData.put("currentTaskKey",currentTaskDefModel.getKey());
-		formData.put("currentTaskName",currentTaskDefModel.getName());
-		formData.put("isRunningTask", userTaskManager.isRunningTask(taskId));
-		formData.put("proDefKey", processDefinition.getKey());
-		formData.put("proDefName", processDefinition.getName());
-		
+		formData.put(FormDataVariableNames.IS_FIRST_TASK, processDefinitionManager.isFirstTask(taskId));
+		formData.put(FormDataVariableNames.CURRENT_TASK_KEY, currentTaskDefModel.getKey());
+		formData.put(FormDataVariableNames.CURRENT_TASK_NAME, currentTaskDefModel.getName());
+		formData.put(FormDataVariableNames.IS_RUNNING_TASK, userTaskManager.isRunningTask(taskId));
+		formData.put(FormDataVariableNames.PRO_DEF_KEY, processDefinition.getKey());
+		formData.put(FormDataVariableNames.PRO_DEF_NAME, processDefinition.getName());
 		
 		WorkflowActionListener workflowActionListener = getWorkflowActionListenerByTaskId(taskId);
 		if (workflowActionListener != null) {	
