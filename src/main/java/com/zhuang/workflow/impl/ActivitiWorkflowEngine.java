@@ -256,7 +256,9 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		workflowEngineContext.setComment(comment);
 		workflowEngineContext.setFormData(formData);
 		workflowEngineContext.setCurrentTaskDef(getCurrentTaskDef(taskId));
-
+		workflowEngineContext.setChoice(getChoiceFromFormData(formData));
+		
+		
 		if (workflowActionListener != null) {
 			workflowActionListener.beforDelete(workflowEngineContext);
 		}
@@ -304,9 +306,11 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		workflowEngineContext.setFormData(formData);
 		workflowEngineContext.setCurrentTaskDef(getCurrentTaskDef(taskId));
 		workflowEngineContext.setNextTaskDef(getNextTaskDef(taskId, getEnvVarFromFormData(formData)));
-
+		workflowEngineContext.setChoice(getChoiceFromFormData(formData));
+		
+		initNextTaskUsers(userInfoModels,taskId,workflowEngineContext);
+		
 		Expression expression = taskDefinition.getAssigneeExpression();
-
 		if (expression != null) {
 
 			String configValue = taskDefinition.getAssigneeExpression().toString();
@@ -324,7 +328,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 							"在“nextTaskUsersHandlers”中找不到key为“" + handlerKey + "”的NextTaskUsersHandler！");
 				} else {
 					workflowEngineContext.setComment(handlerParams);
-					userInfoModels = nextTaskUsersHandler.execute(workflowEngineContext);
+					userInfoModels.addAll(nextTaskUsersHandler.execute(workflowEngineContext));
 				}
 
 			}
@@ -390,6 +394,19 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		}
 	}
 
+
+	private void initNextTaskUsers(List<UserInfoModel> userInfoModels,String taskId, WorkflowEngineContext workflowEngineContext)
+	{
+		if(workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.BACK))
+		{
+			String nextTaskUser = userTaskManager.getTaskAssignee(userTaskManager.getProcessInstanceId(taskId), workflowEngineContext.getNextTaskDef().getKey());
+			if(nextTaskUser!=null)
+			{
+				UserInfoModel userInfoModel = userManagementService.getUser(nextTaskUser);
+				userInfoModels.add(userInfoModel);
+			}
+		}
+	}
 	
 	private void setTaskUser(String preTaskId, List<String> users) {
 		HistoricTaskInstance historicTaskInstance = historyService.createHistoricTaskInstanceQuery().taskId(preTaskId)
