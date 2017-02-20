@@ -17,6 +17,12 @@
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${amount>1000}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="flowsjl" sourceRef="userApply" targetRef="mgr1"></sequenceFlow>
+    <sequenceFlow id="flow12" sourceRef="mgr2" targetRef="userApply">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${choice=='退回'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow13" sourceRef="mgr1" targetRef="userApply">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${choice=='退回'}]]></conditionExpression>
+    </sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_test02">
     <bpmndi:BPMNPlane bpmnElement="test02" id="BPMNPlane_test02">
@@ -68,6 +74,16 @@
       <bpmndi:BPMNEdge bpmnElement="flowsjl" id="BPMNEdge_flowsjl">
         <omgdi:waypoint x="206.0" y="140.0"></omgdi:waypoint>
         <omgdi:waypoint x="312.0" y="115.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
+        <omgdi:waypoint x="260.0" y="211.0"></omgdi:waypoint>
+        <omgdi:waypoint x="214.0" y="210.0"></omgdi:waypoint>
+        <omgdi:waypoint x="153.0" y="168.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
+        <omgdi:waypoint x="260.0" y="87.0"></omgdi:waypoint>
+        <omgdi:waypoint x="217.0" y="86.0"></omgdi:waypoint>
+        <omgdi:waypoint x="153.0" y="113.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
