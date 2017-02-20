@@ -5,6 +5,7 @@ import java.util.List;
 import com.zhuang.workflow.WorkflowActionListener;
 import com.zhuang.workflow.WorkflowEngineContext;
 import com.zhuang.workflow.models.UserInfoModel;
+import com.zhuang.workflow.enums.FormDataVariableNames;
 import com.zhuang.workflow.enums.WorkflowChoiceOptions;
 
 public class Test01ActionListener implements WorkflowActionListener {
@@ -55,7 +56,10 @@ public class Test01ActionListener implements WorkflowActionListener {
 		System.out.println("context.getCurrentTaskDef()"+context.getCurrentTaskDef());
 		if(context.getCurrentTaskDef().getKey().equals("mgr1") || context.getCurrentTaskDef().getKey().equals("mgr2"))
 		{
-			context.getFormData().put(WorkflowChoiceOptions.BACK, true);
+			if((Boolean)context.getFormData().get(FormDataVariableNames.IS_RUNNING_TASK))
+			{
+				context.getFormData().put(WorkflowChoiceOptions.BACK, true);
+			}
 		}
 	}
 
