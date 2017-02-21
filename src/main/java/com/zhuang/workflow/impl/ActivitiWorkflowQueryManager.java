@@ -21,6 +21,7 @@ import org.activiti.engine.task.IdentityLink;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskInfoQuery;
 import org.activiti.engine.task.TaskQuery;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhuang.workflow.WorkflowQueryManager;
@@ -192,8 +193,9 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 					userIds.add(identityLink.getUserId());
 					userNames.add(userManagementService.getUser(identityLink.getUserId()).getUserName());
 				}
-				taskInfoModel.setUserId(String.join(",", userIds.toArray(new String[userIds.size()])));
-				taskInfoModel.setUserName(String.join(",", userNames.toArray(new String[userNames.size()])));
+				
+				taskInfoModel.setUserId(StringUtils.join(",", userIds.toArray(new String[userIds.size()])));
+				taskInfoModel.setUserName(StringUtils.join(",", userNames.toArray(new String[userNames.size()])));
 			}
 			
 			taskInfoModel.setStartTime(historicTaskInstance.getStartTime());
