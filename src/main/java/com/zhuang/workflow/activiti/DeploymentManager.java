@@ -28,7 +28,7 @@ public class DeploymentManager {
 	
 	public void deployByInputStream(String resourceName, InputStream inputStream) {
 		
-		repositoryService.createDeployment().addInputStream(resourceName, inputStream).deploy();
+		repositoryService.createDeployment().name(resourceName).addInputStream(resourceName, inputStream).deploy();
 		
 	}
 }
