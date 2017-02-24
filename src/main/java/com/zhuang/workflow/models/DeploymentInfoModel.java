@@ -4,11 +4,11 @@ import java.util.Date;
 
 public class DeploymentInfoModel {
 
-	private String id;
+	private String deployId;
 	
-	private String name;
+	private String deployName;
 
-	private String category;
+	private String deployCategory;
 	
 	private Date deployTime;
 	
@@ -20,32 +20,32 @@ public class DeploymentInfoModel {
 
 	private String procDefDescription;
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
-	}
-
 	public Date getDeployTime() {
 		return deployTime;
+	}
+
+	public String getDeployId() {
+		return deployId;
+	}
+
+	public void setDeployId(String deployId) {
+		this.deployId = deployId;
+	}
+
+	public String getDeployName() {
+		return deployName;
+	}
+
+	public void setDeployName(String deployName) {
+		this.deployName = deployName;
+	}
+
+	public String getDeployCategory() {
+		return deployCategory;
+	}
+
+	public void setDeployCategory(String deployCategory) {
+		this.deployCategory = deployCategory;
 	}
 
 	public void setDeployTime(Date deployTime) {

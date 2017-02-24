@@ -1,7 +1,10 @@
 package com.zhuang.workflow.impl;
 
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -10,11 +13,14 @@ import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.DeploymentQuery;
 import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.task.TaskInfoQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhuang.workflow.WorkflowDeployment;
 import com.zhuang.workflow.activiti.DeploymentManager;
 import com.zhuang.workflow.commons.PageModel;
+import com.zhuang.workflow.enums.DeploymentInfoNames;
+import com.zhuang.workflow.enums.ProcessMainVariableNames;
 import com.zhuang.workflow.models.DeploymentInfoModel;
 import com.zhuang.workflow.models.FlowInfoModel;
 
@@ -43,6 +49,10 @@ public class ActivitiWorkflowDeployment implements WorkflowDeployment{
 				deploymentInfoList);
 		
 		
+		
+		setDeploymentQueryConditions(deploymentQuery,conditions);
+	
+		
 		//得到分页记录
 		List<Deployment> deployments = deploymentQuery.listPage(result.getPageStartRow() - 1, result.getPageSize());
 
@@ -50,9 +60,9 @@ public class ActivitiWorkflowDeployment implements WorkflowDeployment{
 			
 			DeploymentInfoModel deploymentInfoModel=new DeploymentInfoModel();
 			
-			deploymentInfoModel.setId(deployment.getId());
-			deploymentInfoModel.setName(deployment.getName());
-			deploymentInfoModel.setCategory(deployment.getCategory());
+			deploymentInfoModel.setDeployId(deployment.getId());
+			deploymentInfoModel.setDeployName(deployment.getName());
+			deploymentInfoModel.setDeployCategory(deployment.getCategory());
 			deploymentInfoModel.setDeployTime(deployment.getDeploymentTime());
 			
 			
@@ -70,6 +80,26 @@ public class ActivitiWorkflowDeployment implements WorkflowDeployment{
 
 
 	
+	private void setDeploymentQueryConditions(DeploymentQuery deploymentQuery, Map<String, Object> conditions) {
+		
+		if (conditions != null) {
+			
+			if (conditions.containsKey(DeploymentInfoNames.PROC_DEF_KEY)) {
+				Object objProcDefKey = conditions.get(DeploymentInfoNames.PROC_DEF_KEY);
+				if (objProcDefKey != null && objProcDefKey.toString().trim() != "") {
+					deploymentQuery.processDefinitionKey(objProcDefKey.toString().trim());
+				}
+			}
 
+			if (conditions.containsKey(DeploymentInfoNames.DEPLOY_NAME)) {
+				Object objDeployName = conditions.get(DeploymentInfoNames.DEPLOY_NAME);
+				if (objDeployName != null && objDeployName.toString().trim() != "") {
+					deploymentQuery.deploymentNameLike("%" +objDeployName.toString() +"%");
+				}
+			}
+
+		}
+
+	}
 	
 }
