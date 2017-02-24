@@ -13,6 +13,10 @@ public class WorkflowBeansFactory {
 		return ApplicationContextUtil.GetApplicationContext().getBean("workflowEngine", WorkflowEngine.class);
 	}
 
+	public static WorkflowDeployment getWorkflowDeployment() {
+		return ApplicationContextUtil.GetApplicationContext().getBean("workflowDeployment", WorkflowDeployment.class);
+	}
+
 	public static DeploymentManager getDeploymentManager() {
 		return ApplicationContextUtil.GetApplicationContext().getBean("deploymentManager", DeploymentManager.class);
 
