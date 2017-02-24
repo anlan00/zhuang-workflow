@@ -337,8 +337,11 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 	
 		for (ProcessDefinition processDefinition : processDefinitions) {
 			ProcDefModel procDefModel=new ProcDefModel();
+			
 			procDefModel.setKey(processDefinition.getKey());
 			procDefModel.setName(processDefinition.getName());
+			procDefModel.setDescription(processDefinition.getDescription());
+			
 			procDefModels.add(procDefModel);
 		}
 		
