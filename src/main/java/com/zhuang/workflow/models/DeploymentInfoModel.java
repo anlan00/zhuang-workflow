@@ -1,6 +1,6 @@
 package com.zhuang.workflow.models;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class DeploymentInfoModel {
 
@@ -18,7 +18,7 @@ public class DeploymentInfoModel {
 
 	private int procDefVersion;
 
-	private int procDefDescription;
+	private String procDefDescription;
 
 	public String getId() {
 		return id;
@@ -76,14 +76,13 @@ public class DeploymentInfoModel {
 		this.procDefVersion = procDefVersion;
 	}
 
-	public int getProcDefDescription() {
+	public String getProcDefDescription() {
 		return procDefDescription;
 	}
 
-	public void setProcDefDescription(int procDefDescription) {
+	public void setProcDefDescription(String procDefDescription) {
 		this.procDefDescription = procDefDescription;
 	}
-	
 	
 	
 }
