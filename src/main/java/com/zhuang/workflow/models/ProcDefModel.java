@@ -22,5 +22,11 @@ public class ProcDefModel {
 		this.name = name;
 	}
 	
+	@Override
+	public String toString() {
+		
+		return "key"+getKey()+"|"+"name"+getName();
+		
+	}
 	
 }

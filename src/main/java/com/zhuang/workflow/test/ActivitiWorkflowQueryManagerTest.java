@@ -10,6 +10,7 @@ import com.zhuang.workflow.WorkflowBeansFactory;
 import com.zhuang.workflow.enums.ProcessMainVariableNames;
 import com.zhuang.workflow.commons.PageModel;
 import com.zhuang.workflow.models.FlowInfoModel;
+import com.zhuang.workflow.models.ProcDefModel;
 import com.zhuang.workflow.models.TaskInfoModel;
 
 public class ActivitiWorkflowQueryManagerTest {
@@ -89,4 +90,15 @@ public class ActivitiWorkflowQueryManagerTest {
 		
 	}
 
+	@Test
+	public void testGetProcDefList()
+	{
+		
+		List<ProcDefModel> procDefModels = WorkflowBeansFactory.getWorkflowQueryManager().getProcDefList();
+		
+		for (ProcDefModel procDefModel : procDefModels) {
+			System.out.println(procDefModel);
+		}
+		
+	}
 }
