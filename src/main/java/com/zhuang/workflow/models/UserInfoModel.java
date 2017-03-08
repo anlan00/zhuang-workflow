@@ -44,7 +44,8 @@ public class UserInfoModel {
 
 	@Override
 	public String toString() {
-		return "userId:" + userId + "|" + "userName:" + userName + "|";
+		return "UserInfoModel [userId=" + userId + ", userName=" + userName + ", deptId=" + deptId + ", deptName="
+				+ deptName + "]";
 	}
-	
+
 }

@@ -97,14 +97,11 @@ public class FlowInfoModel {
 		this.defKey = defKey;
 	}
 
-	@Test
+	@Override
 	public String toString() {
-		return "taskId:"+taskId+"|"
-				+"title:"+title+"|"
-				+"type:"+type+"|"
-				+"currentActivityName:"+currentActivityName+"|"
-				+"applyUser:"+createUser+"|"
-				+"applyUserId:"+createUserId+"|"
-				+"applyTime:"+createTime+"|";
+		return "FlowInfoModel [taskId=" + taskId + ", businessKey=" + businessKey + ", title=" + title + ", createUser="
+				+ createUser + ", createUserId=" + createUserId + ", createTime=" + createTime
+				+ ", currentActivityName=" + currentActivityName + ", type=" + type + ", defKey=" + defKey + "]";
 	}
+
 }

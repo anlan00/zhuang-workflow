@@ -36,9 +36,7 @@ public class ProcDefModel {
 
 	@Override
 	public String toString() {
-		
-		return "key"+getKey()+"|"+"name"+getName()+"|"+"description"+getDescription();
-		
+		return "ProcDefModel [key=" + key + ", name=" + name + ", description=" + description + "]";
 	}
 	
 }
