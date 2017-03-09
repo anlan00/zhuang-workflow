@@ -22,7 +22,7 @@ public class ActivitiWorkflowEngineTest {
 	/*	formData.put("env:env1111", 1111);
 		formData.put("env:env2222", 1111);*/
 		formData.put("env:"+ProcessMainVariableNames.PROC_TITLE,"bbbbbbbbbbbb");
-		System.out.println(WorkflowBeansFactory.getWorkflowEngine().startNew("test01", "user1","f001",formData));
+		System.out.println(WorkflowBeansFactory.getWorkflowEngine().startNew("CountersignTest", "user1","f001",formData));
 
 
 		System.out.println("success!");

@@ -102,18 +102,30 @@ public class ProcessDefinitionManager {
 
 	public TaskDefinition getNextTaskDefinition(String taskId, Map<String, Object> params) {
 
-		ActivityImpl activityImpl = getActivityImpl(taskId);
-
-		if (activityImpl != null) {
-			return getNextTaskDefinition(activityImpl, params);
+		ActivityImpl activityImpl=getNextActivityImpl(taskId, params);
+		
+		if(activityImpl!=null)
+		{
+			return ((UserTaskActivityBehavior) activityImpl.getActivityBehavior()).getTaskDefinition();	
 		}
 
 		return null;
 	}
+	
+	public ActivityImpl getNextActivityImpl(String taskId, Map<String, Object> params) {
 
-	private TaskDefinition getNextTaskDefinition(ActivityImpl activityImpl, Map<String, Object> params) {
+		ActivityImpl activityImpl = getActivityImpl(taskId);
 
-		TaskDefinition result = null;
+		if (activityImpl != null) {
+			return getNextActivityImpl(activityImpl, params);
+		}
+		
+		return null;
+	}
+	
+	private ActivityImpl getNextActivityImpl(ActivityImpl activityImpl, Map<String, Object> params) {
+
+		ActivityImpl result = null;
 		
 		List<PvmTransition> outgoingTransitions = activityImpl.getOutgoingTransitions();
 
@@ -125,15 +137,15 @@ public class ProcessDefinitionManager {
 
 				List<PvmTransition> gatewayOutgoingTransitions = outActi.getOutgoingTransitions();
 
-				result = getNextTaskDefinition(gatewayOutgoingTransitions, params);
+				result = getNextActivityImpl(gatewayOutgoingTransitions, params);
 
 			} else if ("userTask".equals(outActi.getProperty("type"))) {
 				
-				result = ((UserTaskActivityBehavior) ((ActivityImpl) outActi).getActivityBehavior()).getTaskDefinition();
+				result = (ActivityImpl) outActi;
 
 			} else if("endEvent".equals(outActi.getProperty("type"))) {
-				
-				
+				result = (ActivityImpl) outActi;
+				/*
 				result=new TaskDefinition(null);
 				
 				result.setKey(EndTaskVariableNames.KEY);
@@ -141,7 +153,7 @@ public class ProcessDefinitionManager {
 				//ValueExpression valueExpression=ExpressionFactory.newInstance().createValueExpression("结束", String.class);
 				
 				result.setNameExpression(new JuelExpression(null, EndTaskVariableNames.NAME));
-				
+				*/
 			}
 			else {
 				System.out.println(outActi.getProperty("type"));
@@ -149,7 +161,7 @@ public class ProcessDefinitionManager {
 
 		} else if(outgoingTransitions.size()>1){
 
-			result = getNextTaskDefinition(outgoingTransitions, params);
+			result = getNextActivityImpl(outgoingTransitions, params);
 
 		}		
 		//System.out.println(result.getNameExpression().getExpressionText());
@@ -157,20 +169,20 @@ public class ProcessDefinitionManager {
 
 	}
 
-	private TaskDefinition getNextTaskDefinition(List<PvmTransition> outgoingTransitions,
+	private ActivityImpl getNextActivityImpl(List<PvmTransition> outgoingTransitions,
 			Map<String, Object> params) {
 
-		TaskDefinition result = null;
+		ActivityImpl result = null;
 
 		if (outgoingTransitions.size() == 1) {
 
 			ActivityImpl tempActivityImpl = (ActivityImpl) outgoingTransitions.get(0).getDestination();
 
 			if ("userTask".equals(tempActivityImpl.getProperty("type"))) {
-				return ((UserTaskActivityBehavior) tempActivityImpl.getActivityBehavior()).getTaskDefinition();
+				return  tempActivityImpl;
 
 			} else {
-				return getNextTaskDefinition(tempActivityImpl, params);
+				return getNextActivityImpl(tempActivityImpl, params);
 			}
 
 		} else if (outgoingTransitions.size() > 1) {
@@ -199,10 +211,10 @@ public class ProcessDefinitionManager {
 			if (correctGwOutTransi != null) {
 				ActivityImpl tempActivityImpl = (ActivityImpl) correctGwOutTransi.getDestination();
 				if ("userTask".equals(tempActivityImpl.getProperty("type"))) {
-					result = ((UserTaskActivityBehavior) tempActivityImpl.getActivityBehavior()).getTaskDefinition();
+					result = tempActivityImpl;
 
 				} else {
-					result = getNextTaskDefinition(tempActivityImpl, params);
+					result = getNextActivityImpl(tempActivityImpl, params);
 				}
 			}
 

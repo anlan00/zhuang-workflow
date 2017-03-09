@@ -323,7 +323,7 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 		if (processVariables.containsKey(ProcessMainVariableNames.PROC_CREATE_USERID)) {
 			flowInfoModel.setCreateUserId(processVariables.get(ProcessMainVariableNames.PROC_CREATE_USERID).toString());
 		}
-		if (processVariables.containsKey(ProcessMainVariableNames.PROC_CREATE_USER)) {
+		if (processVariables.containsKey(ProcessMainVariableNames.PROC_CREATE_USER) && processVariables.get(ProcessMainVariableNames.PROC_CREATE_USER)!=null) {
 			flowInfoModel.setCreateUser(processVariables.get(ProcessMainVariableNames.PROC_CREATE_USER).toString());
 		}
 

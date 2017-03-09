@@ -6,6 +6,8 @@ public class TaskDefModel {
 	
 	private String name;
 
+	private Boolean isCountersign;
+	
 	public String getKey() {
 		return key;
 	}
@@ -21,6 +23,13 @@ public class TaskDefModel {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
+	public Boolean getIsCountersign() {
+		return isCountersign;
+	}
+
+	public void setIsCountersign(Boolean isCountersign) {
+		this.isCountersign = isCountersign;
+	}
 	
 }

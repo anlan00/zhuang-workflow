@@ -1,8 +1,12 @@
 package com.zhuang.workflow.test;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.activiti.engine.impl.bpmn.behavior.ParallelMultiInstanceBehavior;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.junit.Test;
 
@@ -51,4 +55,13 @@ public class ProcessDefinitionManagerTest {
 		System.out.println("success!");
 	}
 	
+	@Test
+	public  void  testGetNextActivityImpl() {
+		String taskId="510010";
+		Map<String, Object> params =new HashMap<String, Object>();
+		
+		ActivityImpl activityImpl = WorkflowBeansFactory.getProcessDefinitionManager().getNextActivityImpl(taskId, params);
+	
+		System.out.println(activityImpl.getActivityBehavior().getClass()==ParallelMultiInstanceBehavior.class);
+	}
 }

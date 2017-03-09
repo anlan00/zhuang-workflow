@@ -19,6 +19,8 @@ import org.activiti.engine.delegate.Expression;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricVariableInstance;
+import org.activiti.engine.impl.bpmn.behavior.ParallelMultiInstanceBehavior;
+import org.activiti.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
 import org.activiti.engine.impl.bpmn.parser.BpmnParse;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
@@ -40,6 +42,7 @@ import com.zhuang.workflow.enums.ProcessMainVariableNames;
 import com.zhuang.workflow.activiti.ProcessVariablesManager;
 import com.zhuang.workflow.activiti.UserTaskManager;
 import com.zhuang.workflow.enums.CommonVariableNames;
+import com.zhuang.workflow.enums.EndTaskVariableNames;
 import com.zhuang.workflow.enums.FormDataVariableNames;
 import com.zhuang.workflow.exceptions.HandlerNotFoundException;
 import com.zhuang.workflow.models.NextTaskInfoModel;
@@ -469,12 +472,28 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 	private TaskDefModel getNextTaskDef(String taskId, Map<String, Object> params) {
 		TaskDefModel taskDefModel = new TaskDefModel();
 
-		TaskDefinition taskDefinition = processDefinitionManager.getNextTaskDefinition(taskId, params);
+		ActivityImpl activityImpl = processDefinitionManager.getNextActivityImpl(taskId, params);
 
+		TaskDefinition taskDefinition = ((UserTaskActivityBehavior) activityImpl.getActivityBehavior()).getTaskDefinition();
+		
 		if (taskDefinition != null) {
 
-			taskDefModel.setKey(taskDefinition.getKey());
-			taskDefModel.setName(taskDefinition.getNameExpression().toString());
+			if ("endEvent".equals(activityImpl.getProperty("type"))) {
+				taskDefModel.setKey(EndTaskVariableNames.KEY);
+				taskDefModel.setName(EndTaskVariableNames.NAME);
+
+			} else {
+				taskDefModel.setKey(taskDefinition.getKey());
+				taskDefModel.setName(taskDefinition.getNameExpression().toString());
+
+			}
+			
+			if (activityImpl.getActivityBehavior().getClass() == ParallelMultiInstanceBehavior.class) {
+				taskDefModel.setIsCountersign(true);
+			} else {
+				taskDefModel.setIsCountersign(false);
+			}
+			
 		} else {
 			taskDefModel = null;
 		}
