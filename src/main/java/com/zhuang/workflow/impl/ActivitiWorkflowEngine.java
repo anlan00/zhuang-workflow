@@ -299,25 +299,25 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		NextTaskInfoModel result=new NextTaskInfoModel();
 		List<UserInfoModel> userInfoModels = new ArrayList<UserInfoModel>();
 	
-		TaskDefinition taskDefinition = processDefinitionManager.getNextTaskDefinition(taskId,
-				getEnvVarFromFormData(formData));
-		
-		result.setTaskKey(taskDefinition.getKey());
-		result.setTaskName(taskDefinition.getNameExpression().toString());
+
+		TaskDefModel nextTaskDefModel = getNextTaskDef(taskId, getEnvVarFromFormData(formData));
+
+		result.setTaskKey(nextTaskDefModel.getKey());
+		result.setTaskName(nextTaskDefModel.getName());
 		
 		WorkflowEngineContext workflowEngineContext = new ActivitiWorkflowEngineContext(this);
 		workflowEngineContext.setTaskId(taskId);
 		workflowEngineContext.setFormData(formData);
 		workflowEngineContext.setCurrentTaskDef(getCurrentTaskDef(taskId));
-		workflowEngineContext.setNextTaskDef(getNextTaskDef(taskId, getEnvVarFromFormData(formData)));
+		workflowEngineContext.setNextTaskDef(nextTaskDefModel);
 		workflowEngineContext.setChoice(getChoiceFromFormData(formData));
 		
 		initNextTaskUsers(userInfoModels,taskId,workflowEngineContext);
-		
-		Expression expression = taskDefinition.getAssigneeExpression();
-		if (expression != null) {
 
-			String configValue = taskDefinition.getAssigneeExpression().toString();
+
+		if (nextTaskDefModel.getAssignee() != null) {
+
+			String configValue = nextTaskDefModel.getAssignee();
 
 			String[] arrConfigValue = configValue.split(CommonVariableNames.NAME_VALUE_SEPARATOR);
 			String handlerKey = arrConfigValue[0];
@@ -344,6 +344,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 			workflowActionListener.onRetrieveNextTaskUsers(userInfoModels, workflowEngineContext);
 		}
 		
+		result.setIsCountersign(nextTaskDefModel.getIsCountersign());
 		result.setUsers(userInfoModels);
 		
 		return result;
@@ -493,6 +494,9 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 			} else {
 				taskDefModel.setIsCountersign(false);
 			}
+			
+			Expression assigneeExpression = taskDefinition.getAssigneeExpression();
+			taskDefModel.setAssignee(assigneeExpression==null?null:assigneeExpression.toString());
 			
 		} else {
 			taskDefModel = null;

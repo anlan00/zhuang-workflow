@@ -8,6 +8,8 @@ public class NextTaskInfoModel {
 
 	private String taskName;
 
+	private Boolean isCountersign;
+
 	private List<UserInfoModel> users;
 
 	public String getTaskKey() {
@@ -32,6 +34,14 @@ public class NextTaskInfoModel {
 		{
 			this.taskName = taskName;
 		}
+	}	
+	
+	public Boolean getIsCountersign() {
+		return isCountersign;
+	}
+
+	public void setIsCountersign(Boolean isCountersign) {
+		this.isCountersign = isCountersign;
 	}
 
 	public List<UserInfoModel> getUsers() {
