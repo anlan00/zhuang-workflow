@@ -11,6 +11,7 @@ import org.activiti.engine.repository.ProcessDefinition;
 import org.junit.Test;
 
 import com.zhuang.workflow.WorkflowBeansFactory;
+import com.zhuang.workflow.models.TaskDefModel;
 
 public class ProcessDefinitionManagerTest {
 
@@ -64,4 +65,18 @@ public class ProcessDefinitionManagerTest {
 	
 		System.out.println(activityImpl.getActivityBehavior().getClass()==ParallelMultiInstanceBehavior.class);
 	}
+	
+	@Test
+	public  void  testConvertActivityImplToTaskDefModel() {
+		String taskId="510010";
+		Map<String, Object> params =new HashMap<String, Object>();
+		
+		ActivityImpl activityImpl = WorkflowBeansFactory.getProcessDefinitionManager().getNextActivityImpl(taskId, params);
+	
+		TaskDefModel taskDefModel=WorkflowBeansFactory.getProcessDefinitionManager().convertActivityImplToTaskDefModel(activityImpl);
+		
+		System.out.println(taskDefModel);
+	}
+	
+	
 }

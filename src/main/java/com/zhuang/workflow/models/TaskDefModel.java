@@ -41,5 +41,11 @@ public class TaskDefModel {
 	public void setIsCountersign(Boolean isCountersign) {
 		this.isCountersign = isCountersign;
 	}
+
+	@Override
+	public String toString() {
+		return "TaskDefModel [key=" + key + ", name=" + name + ", assignee=" + assignee + ", isCountersign="
+				+ isCountersign + "]";
+	}
 	
 }

@@ -11,6 +11,8 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
+import org.activiti.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior;
+import org.activiti.engine.impl.bpmn.behavior.ParallelMultiInstanceBehavior;
 import org.activiti.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
 import org.activiti.engine.impl.el.JuelExpression;
 import org.activiti.engine.impl.javax.el.ExpressionFactory;
@@ -19,15 +21,19 @@ import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.PvmActivity;
 import org.activiti.engine.impl.pvm.PvmTransition;
+import org.activiti.engine.impl.pvm.delegate.ActivityBehavior;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.impl.task.TaskDefinition;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.task.Task;
+import org.apache.tools.ant.taskdefs.Taskdef;
 import org.aspectj.apache.bcel.generic.AALOAD;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ResolvableType;
 
 import com.zhuang.workflow.exceptions.HistoricTaskNotFoundException;
 import com.zhuang.workflow.exceptions.RunningTaskNotFoundException;
+import com.zhuang.workflow.models.TaskDefModel;
 import com.zhuang.workflow.enums.EndTaskVariableNames;
 import com.zhuang.workflow.util.ActivitiJUELUtil;
 
@@ -268,5 +274,26 @@ public class ProcessDefinitionManager {
 		List<ProcessDefinition> processDefinitions = repositoryService.createProcessDefinitionQuery().active()
 				.latestVersion().list();
 		return processDefinitions;
+	}
+	
+	public TaskDefModel convertActivityImplToTaskDefModel(ActivityImpl activityImpl)
+	{
+		TaskDefModel result=new TaskDefModel();
+		
+		
+		TaskDefinition taskDefinition = (TaskDefinition)activityImpl.getProperty("taskDefinition");
+
+		result.setKey(taskDefinition.getKey());
+		result.setName(taskDefinition.getNameExpression().toString());
+		result.setAssignee(taskDefinition.getAssigneeExpression().toString());
+		
+		if(activityImpl.getActivityBehavior().getClass()==ParallelMultiInstanceBehavior.class)
+		{
+			result.setIsCountersign(true);
+		}else {
+			result.setIsCountersign(false);
+		}
+		
+		return result;
 	}
 }
