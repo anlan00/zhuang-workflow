@@ -282,8 +282,10 @@ public class ProcessDefinitionManager {
 		TaskDefinition taskDefinition = (TaskDefinition) activityImpl.getProperty("taskDefinition");
 
 		result.setKey(taskDefinition.getKey());
-		result.setName(taskDefinition.getNameExpression().toString());
-		result.setAssignee(taskDefinition.getAssigneeExpression().toString());
+		result.setName(taskDefinition.getNameExpression().toString() == null ? ""
+				: taskDefinition.getNameExpression().toString());
+		result.setAssignee(taskDefinition.getAssigneeExpression() == null ? ""
+				: taskDefinition.getAssigneeExpression().toString());
 
 		if (activityImpl.getActivityBehavior().getClass() == ParallelMultiInstanceBehavior.class) {
 			result.setIsCountersign(true);
