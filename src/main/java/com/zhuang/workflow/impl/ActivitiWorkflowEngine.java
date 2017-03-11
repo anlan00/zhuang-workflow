@@ -468,7 +468,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 	private TaskDefModel getNextTaskDef(String taskId, Map<String, Object> params) {
 
-		return getNextTaskDef(taskId, params);
+		return processDefinitionManager.getNextTaskDefModel(taskId, params);
 
 	}
 
