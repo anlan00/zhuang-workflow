@@ -86,13 +86,13 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 	@Autowired
 	private ProcessInstanceManager processInstanceManager;
-	
+
 	@Autowired
 	private UserTaskManager userTaskManager;
-	
+
 	@Autowired
 	private UserManagementService userManagementService;
-	
+
 	public static final String ACTIVITI_ENV_VAR_KEY_PREFIX = "env_";
 
 	public ProcessEngine getProcessEngine() {
@@ -160,16 +160,16 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 				.processDefinitionKey(processDefinitionKey).latestVersion().singleResult();
 
 		envVariables.put(ProcessMainVariableNames.PROC_DEF_KEY, processDefinition.getKey());
-		
+
 		envVariables.put(ProcessMainVariableNames.PROC_TYPE, processDefinition.getName());
-		
+
 		envVariables.put(ProcessMainVariableNames.PROC_CREATE_TIME, new Date());
 
 		envVariables.put(ProcessMainVariableNames.PROC_CREATE_USERID, userId);
-		
+
 		UserInfoModel userInfoModel = userManagementService.getUser(userId);
 		envVariables.put(ProcessMainVariableNames.PROC_CREATE_USER, userInfoModel.getUserName());
-		
+
 		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey, businessKey,
 				envVariables);
 
@@ -190,7 +190,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		formData = ensureFormDataNotNull(formData);
 
 		taskService.setVariables(taskId, getEnvVarFromFormData(formData));
-		
+
 		List<String> nextUsers = new ArrayList<String>();
 
 		WorkflowActionListener workflowActionListener = getWorkflowActionListenerByTaskId(taskId);
@@ -209,7 +209,8 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 	}
 
-	public void submit(String taskId,String userId, List<String> nextUsers, String comment, Map<String, Object> formData) {
+	public void submit(String taskId, String userId, List<String> nextUsers, String comment,
+			Map<String, Object> formData) {
 
 		formData = ensureFormDataNotNull(formData);
 
@@ -223,7 +224,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		workflowEngineContext.setCurrentTaskDef(getCurrentTaskDef(taskId));
 		workflowEngineContext.setNextTaskDef(getNextTaskDef(taskId, getEnvVarFromFormData(formData)));
 		workflowEngineContext.setChoice(getChoiceFromFormData(formData));
-		
+
 		if (workflowActionListener != null) {
 			if (workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.SUBMIT)) {
 				workflowActionListener.beforSubmit(workflowEngineContext);
@@ -232,10 +233,10 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 			} else if (workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.REJECT)) {
 				workflowActionListener.beforReject(workflowEngineContext);
 			}
-			
+
 		}
 
-		run(taskId,userId, nextUsers, comment, formData);
+		run(taskId, userId, nextUsers, comment, formData);
 
 		if (workflowActionListener != null) {
 			if (workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.SUBMIT)) {
@@ -246,7 +247,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 				workflowActionListener.afterReject(workflowEngineContext);
 			}
 		}
-		
+
 	}
 
 	public void delete(String taskId, String comment, Map<String, Object> formData) {
@@ -261,8 +262,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		workflowEngineContext.setFormData(formData);
 		workflowEngineContext.setCurrentTaskDef(getCurrentTaskDef(taskId));
 		workflowEngineContext.setChoice(getChoiceFromFormData(formData));
-		
-		
+
 		if (workflowActionListener != null) {
 			workflowActionListener.beforDelete(workflowEngineContext);
 		}
@@ -271,11 +271,12 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 		if (workflowActionListener != null) {
 			workflowActionListener.afterDelete(workflowEngineContext);
-		}		
-		
+		}
+
 	}
-	
-	public void run(String taskId,String userId, List<String> nextUsers, String comment, Map<String, Object> formData) {
+
+	public void run(String taskId, String userId, List<String> nextUsers, String comment,
+			Map<String, Object> formData) {
 
 		formData = ensureFormDataNotNull(formData);
 
@@ -295,25 +296,23 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 	}
 
 	public NextTaskInfoModel retrieveNextTaskInfo(String taskId, Map<String, Object> formData) {
-		
-		NextTaskInfoModel result=new NextTaskInfoModel();
+
+		NextTaskInfoModel result = new NextTaskInfoModel();
 		List<UserInfoModel> userInfoModels = new ArrayList<UserInfoModel>();
-	
 
 		TaskDefModel nextTaskDefModel = getNextTaskDef(taskId, getEnvVarFromFormData(formData));
 
 		result.setTaskKey(nextTaskDefModel.getKey());
 		result.setTaskName(nextTaskDefModel.getName());
-		
+
 		WorkflowEngineContext workflowEngineContext = new ActivitiWorkflowEngineContext(this);
 		workflowEngineContext.setTaskId(taskId);
 		workflowEngineContext.setFormData(formData);
 		workflowEngineContext.setCurrentTaskDef(getCurrentTaskDef(taskId));
 		workflowEngineContext.setNextTaskDef(nextTaskDefModel);
 		workflowEngineContext.setChoice(getChoiceFromFormData(formData));
-		
-		initNextTaskUsers(userInfoModels,taskId,workflowEngineContext);
 
+		initNextTaskUsers(userInfoModels, taskId, workflowEngineContext);
 
 		if (nextTaskDefModel.getAssignee() != null) {
 
@@ -343,43 +342,43 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		if (workflowActionListener != null) {
 			workflowActionListener.onRetrieveNextTaskUsers(userInfoModels, workflowEngineContext);
 		}
-		
+
 		result.setIsCountersign(nextTaskDefModel.getIsCountersign());
 		result.setUsers(userInfoModels);
-		
+
 		return result;
 	}
 
 	public Map<String, Object> retrieveFormData(String taskId) {
-		
-		Map<String, Object> formData=new HashMap<String, Object>();
-		
+
+		Map<String, Object> formData = new HashMap<String, Object>();
+
 		Map<String, Object> processVariables = processVariablesManager.getProcessVariablesByTaskId(taskId);
-		setEnvVarToFormData(processVariables,formData);
-		
+		setEnvVarToFormData(processVariables, formData);
+
 		TaskDefModel currentTaskDefModel = getCurrentTaskDef(taskId);
-	    ProcessDefinition processDefinition=processDefinitionManager.getProcessDefinitionEntityByTaskId(taskId);
-		
+		ProcessDefinition processDefinition = processDefinitionManager.getProcessDefinitionEntityByTaskId(taskId);
+
 		formData.put(FormDataVariableNames.IS_FIRST_TASK, processDefinitionManager.isFirstTask(taskId));
 		formData.put(FormDataVariableNames.CURRENT_TASK_KEY, currentTaskDefModel.getKey());
 		formData.put(FormDataVariableNames.CURRENT_TASK_NAME, currentTaskDefModel.getName());
 		formData.put(FormDataVariableNames.IS_RUNNING_TASK, userTaskManager.isRunningTask(taskId));
 		formData.put(FormDataVariableNames.PRO_DEF_KEY, processDefinition.getKey());
 		formData.put(FormDataVariableNames.PRO_DEF_NAME, processDefinition.getName());
-		
+
 		WorkflowActionListener workflowActionListener = getWorkflowActionListenerByTaskId(taskId);
-		if (workflowActionListener != null) {	
-			WorkflowEngineContext workflowEngineContext=new ActivitiWorkflowEngineContext(this);
+		if (workflowActionListener != null) {
+			WorkflowEngineContext workflowEngineContext = new ActivitiWorkflowEngineContext(this);
 			workflowEngineContext.setTaskId(taskId);
 			workflowEngineContext.setFormData(formData);
 			workflowEngineContext.setCurrentTaskDef(currentTaskDefModel);
 			workflowActionListener.onRetrieveFormData(workflowEngineContext);
 		}
-		
+
 		return formData;
-		
+
 	}
-	
+
 	public Map<String, Object> getEnvVarFromFormData(Map<String, Object> formData) {
 		Map<String, Object> result = new HashMap<String, Object>();
 
@@ -392,26 +391,24 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		return result;
 	}
 
-	public void setEnvVarToFormData(Map<String, Object> envVar,Map<String, Object> formData) {
+	public void setEnvVarToFormData(Map<String, Object> envVar, Map<String, Object> formData) {
 		for (Entry<String, Object> entry : envVar.entrySet()) {
-			formData.put(ACTIVITI_ENV_VAR_KEY_PREFIX+entry.getKey(), entry.getValue());
+			formData.put(ACTIVITI_ENV_VAR_KEY_PREFIX + entry.getKey(), entry.getValue());
 		}
 	}
 
-
-	private void initNextTaskUsers(List<UserInfoModel> userInfoModels,String taskId, WorkflowEngineContext workflowEngineContext)
-	{
-		if(workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.BACK))
-		{
-			String nextTaskUser = userTaskManager.getTaskAssignee(userTaskManager.getProcessInstanceId(taskId), workflowEngineContext.getNextTaskDef().getKey());
-			if(nextTaskUser!=null)
-			{
+	private void initNextTaskUsers(List<UserInfoModel> userInfoModels, String taskId,
+			WorkflowEngineContext workflowEngineContext) {
+		if (workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.BACK)) {
+			String nextTaskUser = userTaskManager.getTaskAssignee(userTaskManager.getProcessInstanceId(taskId),
+					workflowEngineContext.getNextTaskDef().getKey());
+			if (nextTaskUser != null) {
 				UserInfoModel userInfoModel = userManagementService.getUser(nextTaskUser);
 				userInfoModels.add(userInfoModel);
 			}
 		}
 	}
-	
+
 	private void setTaskUser(String preTaskId, List<String> users) {
 		HistoricTaskInstance historicTaskInstance = historyService.createHistoricTaskInstanceQuery().taskId(preTaskId)
 				.singleResult();
@@ -464,47 +461,15 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 		ActivityImpl activityImpl = processDefinitionManager.getActivityImpl(taskId);
 
-
 		taskDefModel = processDefinitionManager.convertActivityImplToTaskDefModel(activityImpl);
-		
+
 		return taskDefModel;
 	}
 
 	private TaskDefModel getNextTaskDef(String taskId, Map<String, Object> params) {
-		TaskDefModel taskDefModel = new TaskDefModel();
 
-		ActivityImpl activityImpl = processDefinitionManager.getNextActivityImpl(taskId, params);
+		return getNextTaskDef(taskId, params);
 
-		TaskDefinition taskDefinition = ((UserTaskActivityBehavior) activityImpl.getActivityBehavior()).getTaskDefinition();
-		
-		if (taskDefinition != null) {
-
-			if ("endEvent".equals(activityImpl.getProperty("type"))) {
-				taskDefModel.setKey(EndTaskVariableNames.KEY);
-				taskDefModel.setName(EndTaskVariableNames.NAME);
-
-			} else {
-				taskDefModel.setKey(taskDefinition.getKey());
-				taskDefModel.setName(taskDefinition.getNameExpression().toString());
-
-			}
-			
-			if (activityImpl.getActivityBehavior().getClass() == ParallelMultiInstanceBehavior.class) {
-				taskDefModel.setIsCountersign(true);
-			} else {
-				taskDefModel.setIsCountersign(false);
-			}
-			
-			Expression assigneeExpression = taskDefinition.getAssigneeExpression();
-			taskDefModel.setAssignee(assigneeExpression==null?null:assigneeExpression.toString());
-			
-		} else {
-			taskDefModel = null;
-		}
-
-		return taskDefModel;
 	}
-
-
 
 }

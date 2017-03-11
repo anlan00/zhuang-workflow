@@ -281,9 +281,17 @@ public class ProcessDefinitionManager {
 
 		TaskDefinition taskDefinition = (TaskDefinition) activityImpl.getProperty("taskDefinition");
 
-		result.setKey(taskDefinition.getKey());
-		result.setName(taskDefinition.getNameExpression().toString() == null ? ""
-				: taskDefinition.getNameExpression().toString());
+		if ("endEvent".equals(activityImpl.getProperty("type"))) {
+			result.setKey(EndTaskVariableNames.KEY);
+			result.setName(EndTaskVariableNames.NAME);
+
+		} else {
+			result.setKey(taskDefinition.getKey());
+			result.setName(taskDefinition.getNameExpression().toString() == null ? ""
+					: taskDefinition.getNameExpression().toString());
+
+		}
+
 		result.setAssignee(taskDefinition.getAssigneeExpression() == null ? ""
 				: taskDefinition.getAssigneeExpression().toString());
 
