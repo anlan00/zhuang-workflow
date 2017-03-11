@@ -11,7 +11,7 @@
 	<name>zhuang-workflow</name>
 	<url>http://maven.apache.org</url>
 
-<!-- 
+
 	<build>
 		<resources>
 			<resource>
@@ -23,7 +23,7 @@
 			</resource>
 		</resources>
 	</build>  
- -->
+
  
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

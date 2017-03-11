@@ -95,7 +95,7 @@ public class ProcessDefinitionManager {
 		return null;
 	}
 
-	public TaskDefinition getTaskDefinition(String taskId) {
+	private TaskDefinition getTaskDefinition(String taskId) {
 
 		ActivityImpl activityImpl = getActivityImpl(taskId);
 
@@ -106,18 +106,17 @@ public class ProcessDefinitionManager {
 		return null;
 	}
 
-	public TaskDefinition getNextTaskDefinition(String taskId, Map<String, Object> params) {
+	private TaskDefinition getNextTaskDefinition(String taskId, Map<String, Object> params) {
 
-		ActivityImpl activityImpl=getNextActivityImpl(taskId, params);
-		
-		if(activityImpl!=null)
-		{
-			return ((UserTaskActivityBehavior) activityImpl.getActivityBehavior()).getTaskDefinition();	
+		ActivityImpl activityImpl = getNextActivityImpl(taskId, params);
+
+		if (activityImpl != null) {
+			return ((UserTaskActivityBehavior) activityImpl.getActivityBehavior()).getTaskDefinition();
 		}
 
 		return null;
 	}
-	
+
 	public ActivityImpl getNextActivityImpl(String taskId, Map<String, Object> params) {
 
 		ActivityImpl activityImpl = getActivityImpl(taskId);
@@ -125,14 +124,14 @@ public class ProcessDefinitionManager {
 		if (activityImpl != null) {
 			return getNextActivityImpl(activityImpl, params);
 		}
-		
+
 		return null;
 	}
-	
+
 	private ActivityImpl getNextActivityImpl(ActivityImpl activityImpl, Map<String, Object> params) {
 
 		ActivityImpl result = null;
-		
+
 		List<PvmTransition> outgoingTransitions = activityImpl.getOutgoingTransitions();
 
 		if (outgoingTransitions.size() == 1) {
@@ -146,37 +145,38 @@ public class ProcessDefinitionManager {
 				result = getNextActivityImpl(gatewayOutgoingTransitions, params);
 
 			} else if ("userTask".equals(outActi.getProperty("type"))) {
-				
+
 				result = (ActivityImpl) outActi;
 
-			} else if("endEvent".equals(outActi.getProperty("type"))) {
+			} else if ("endEvent".equals(outActi.getProperty("type"))) {
 				result = (ActivityImpl) outActi;
 				/*
-				result=new TaskDefinition(null);
-				
-				result.setKey(EndTaskVariableNames.KEY);
-				
-				//ValueExpression valueExpression=ExpressionFactory.newInstance().createValueExpression("结束", String.class);
-				
-				result.setNameExpression(new JuelExpression(null, EndTaskVariableNames.NAME));
-				*/
-			}
-			else {
+				 * result=new TaskDefinition(null);
+				 * 
+				 * result.setKey(EndTaskVariableNames.KEY);
+				 * 
+				 * //ValueExpression
+				 * valueExpression=ExpressionFactory.newInstance().
+				 * createValueExpression("结束", String.class);
+				 * 
+				 * result.setNameExpression(new JuelExpression(null,
+				 * EndTaskVariableNames.NAME));
+				 */
+			} else {
 				System.out.println(outActi.getProperty("type"));
 			}
 
-		} else if(outgoingTransitions.size()>1){
+		} else if (outgoingTransitions.size() > 1) {
 
 			result = getNextActivityImpl(outgoingTransitions, params);
 
-		}		
-		//System.out.println(result.getNameExpression().getExpressionText());
+		}
+		// System.out.println(result.getNameExpression().getExpressionText());
 		return result;
 
 	}
 
-	private ActivityImpl getNextActivityImpl(List<PvmTransition> outgoingTransitions,
-			Map<String, Object> params) {
+	private ActivityImpl getNextActivityImpl(List<PvmTransition> outgoingTransitions, Map<String, Object> params) {
 
 		ActivityImpl result = null;
 
@@ -185,7 +185,7 @@ public class ProcessDefinitionManager {
 			ActivityImpl tempActivityImpl = (ActivityImpl) outgoingTransitions.get(0).getDestination();
 
 			if ("userTask".equals(tempActivityImpl.getProperty("type"))) {
-				return  tempActivityImpl;
+				return tempActivityImpl;
 
 			} else {
 				return getNextActivityImpl(tempActivityImpl, params);
@@ -269,31 +269,38 @@ public class ProcessDefinitionManager {
 
 		return result;
 	}
-	
+
 	public List<ProcessDefinition> getProcessDefinitionList() {
 		List<ProcessDefinition> processDefinitions = repositoryService.createProcessDefinitionQuery().active()
 				.latestVersion().list();
 		return processDefinitions;
 	}
-	
-	public TaskDefModel convertActivityImplToTaskDefModel(ActivityImpl activityImpl)
-	{
-		TaskDefModel result=new TaskDefModel();
-		
-		
-		TaskDefinition taskDefinition = (TaskDefinition)activityImpl.getProperty("taskDefinition");
+
+	public TaskDefModel convertActivityImplToTaskDefModel(ActivityImpl activityImpl) {
+		TaskDefModel result = new TaskDefModel();
+
+		TaskDefinition taskDefinition = (TaskDefinition) activityImpl.getProperty("taskDefinition");
 
 		result.setKey(taskDefinition.getKey());
 		result.setName(taskDefinition.getNameExpression().toString());
 		result.setAssignee(taskDefinition.getAssigneeExpression().toString());
-		
-		if(activityImpl.getActivityBehavior().getClass()==ParallelMultiInstanceBehavior.class)
-		{
+
+		if (activityImpl.getActivityBehavior().getClass() == ParallelMultiInstanceBehavior.class) {
 			result.setIsCountersign(true);
-		}else {
+		} else {
 			result.setIsCountersign(false);
 		}
-		
+
 		return result;
 	}
+
+	public TaskDefModel getNextTaskDefModel(String taskId, Map<String, Object> params) {
+		TaskDefModel result = null;
+
+		ActivityImpl activityImpl = getNextActivityImpl(taskId, params);
+		result = convertActivityImplToTaskDefModel(activityImpl);
+
+		return result;
+	}
+
 }

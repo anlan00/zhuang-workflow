@@ -462,11 +462,11 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 	private TaskDefModel getCurrentTaskDef(String taskId) {
 		TaskDefModel taskDefModel = new TaskDefModel();
 
-		TaskDefinition taskDefinition = processDefinitionManager.getTaskDefinition(taskId);
+		ActivityImpl activityImpl = processDefinitionManager.getActivityImpl(taskId);
 
-		taskDefModel.setKey(taskDefinition.getKey());
-		taskDefModel.setName(taskDefinition.getNameExpression().toString());
 
+		taskDefModel = processDefinitionManager.convertActivityImplToTaskDefModel(activityImpl);
+		
 		return taskDefModel;
 	}
 
