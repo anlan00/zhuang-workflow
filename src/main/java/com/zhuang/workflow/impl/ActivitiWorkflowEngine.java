@@ -282,7 +282,8 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 		Map<String, Object> envVariables = getEnvVarFromFormData(formData);
 
-		Boolean isCountersign = workflowEngineContext.getNextTaskDef().getIsCountersign();
+		Boolean isCountersign4Next = workflowEngineContext.getNextTaskDef().getIsCountersign();
+		Boolean isCountersign4Current = workflowEngineContext.getCurrentTaskDef().getIsCountersign();
 		
 		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
 
@@ -291,7 +292,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		}
 
 
-		if(isCountersign)
+		if(isCountersign4Next)
 		{
 			envVariables.put(CommonVariableNames.COUNTERSIGN_USERS, nextUsers);
 		}
@@ -299,7 +300,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		taskService.setAssignee(taskId, userId);
 		taskService.complete(taskId, envVariables);
 
-		if (!isCountersign) {
+		if (!(isCountersign4Next || isCountersign4Current)) {
 			setTaskUser(taskId, nextUsers);
 		}
 	}
