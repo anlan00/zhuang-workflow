@@ -236,7 +236,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 		}
 
-		run(taskId, userId, nextUsers, comment, formData);
+		run(taskId, userId, nextUsers, comment, workflowEngineContext);
 
 		if (workflowActionListener != null) {
 			if (workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.SUBMIT)) {
@@ -276,23 +276,32 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 	}
 
 	public void run(String taskId, String userId, List<String> nextUsers, String comment,
-			Map<String, Object> formData) {
+			WorkflowEngineContext workflowEngineContext) {
 
-		formData = ensureFormDataNotNull(formData);
+		Map<String, Object> formData = ensureFormDataNotNull(workflowEngineContext.getFormData());
 
 		Map<String, Object> envVariables = getEnvVarFromFormData(formData);
 
+		Boolean isCountersign = workflowEngineContext.getNextTaskDef().getIsCountersign();
+		
 		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
 
 		if (comment != null) {
 			taskService.addComment(taskId, task.getProcessInstanceId(), comment);
 		}
 
+
+		if(isCountersign)
+		{
+			envVariables.put(CommonVariableNames.COUNTERSIGN_USERS, nextUsers);
+		}
+
 		taskService.setAssignee(taskId, userId);
 		taskService.complete(taskId, envVariables);
 
-		setTaskUser(taskId, nextUsers);
-
+		if (!isCountersign) {
+			setTaskUser(taskId, nextUsers);
+		}
 	}
 
 	public NextTaskInfoModel retrieveNextTaskInfo(String taskId, Map<String, Object> formData) {

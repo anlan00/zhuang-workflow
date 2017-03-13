@@ -51,10 +51,10 @@ public interface WorkflowEngine {
 	 *            下一步处理人
 	 * @param comment
 	 *            备注（审批意见）
-	 * @param formData
-	 *            业务表单数据
+	 * @param workflowEngineContext
+	 *            流程上下文
 	 */
-	void run(String taskId,String userId, List<String> nextUsers, String comment, Map<String, Object> formData);
+	void run(String taskId,String userId, List<String> nextUsers, String comment,WorkflowEngineContext workflowEngineContext);
 
 	/**
 	 * 提交
