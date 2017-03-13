@@ -441,7 +441,8 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 	private String getChoiceFromFormData(Map<String, Object> formData) {
 
-		return formData.get(ACTIVITI_ENV_VAR_KEY_PREFIX + WorkflowChoiceOptions.getStoreKey()).toString();
+		Object objChoice = formData.get(ACTIVITI_ENV_VAR_KEY_PREFIX + WorkflowChoiceOptions.getStoreKey());
+		return objChoice == null ? "" : objChoice.toString();
 	}
 
 	private Map<String, Object> ensureFormDataNotNull(Map<String, Object> formData) {

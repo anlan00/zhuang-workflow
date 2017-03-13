@@ -9,6 +9,7 @@ import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.delegate.Expression;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior;
@@ -295,10 +296,12 @@ public class ProcessDefinitionManager {
 		result.setAssignee(taskDefinition.getAssigneeExpression() == null ? ""
 				: taskDefinition.getAssigneeExpression().toString());
 
-
-		result.setCandidateUser(taskDefinition.getCandidateUserIdExpressions() == null ? ""
-				: taskDefinition.getCandidateUserIdExpressions().toString());
-
+		if(taskDefinition.getCandidateUserIdExpressions()!=null)
+		{
+			for (Expression expression : taskDefinition.getCandidateUserIdExpressions()) {
+				result.setCandidateUser(expression.getExpressionText());
+			}
+		}
 		
 		if (activityImpl.getActivityBehavior().getClass() == ParallelMultiInstanceBehavior.class) {
 			result.setIsCountersign(true);
