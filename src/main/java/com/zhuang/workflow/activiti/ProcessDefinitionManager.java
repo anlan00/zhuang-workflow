@@ -285,24 +285,27 @@ public class ProcessDefinitionManager {
 		if ("endEvent".equals(activityImpl.getProperty("type"))) {
 			result.setKey(EndTaskVariableNames.KEY);
 			result.setName(EndTaskVariableNames.NAME);
+			
+			result.setAssignee("");
+			result.setCandidateUser("");
+			
 
 		} else {
 			result.setKey(taskDefinition.getKey());
 			result.setName(taskDefinition.getNameExpression().toString() == null ? ""
 					: taskDefinition.getNameExpression().toString());
 
-		}
+			result.setAssignee(taskDefinition.getAssigneeExpression() == null ? ""
+					: taskDefinition.getAssigneeExpression().toString());
 
-		result.setAssignee(taskDefinition.getAssigneeExpression() == null ? ""
-				: taskDefinition.getAssigneeExpression().toString());
-
-		if(taskDefinition.getCandidateUserIdExpressions()!=null)
-		{
-			for (Expression expression : taskDefinition.getCandidateUserIdExpressions()) {
-				result.setCandidateUser(expression.getExpressionText());
+			if(taskDefinition.getCandidateUserIdExpressions()!=null)
+			{
+				for (Expression expression : taskDefinition.getCandidateUserIdExpressions()) {
+					result.setCandidateUser(expression.getExpressionText());
+				}
 			}
 		}
-		
+
 		if (activityImpl.getActivityBehavior().getClass() == ParallelMultiInstanceBehavior.class) {
 			result.setIsCountersign(true);
 		} else {

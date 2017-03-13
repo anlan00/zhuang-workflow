@@ -69,7 +69,7 @@ public class ActivitiWorkflowEngineTest {
 		//formData.put("env_choice", "提交");
 		
 		// 370003 375012
-		NextTaskInfoModel nextTaskInfoModel = WorkflowBeansFactory.getWorkflowEngine().retrieveNextTaskInfo("517535", formData);
+		NextTaskInfoModel nextTaskInfoModel = WorkflowBeansFactory.getWorkflowEngine().retrieveNextTaskInfo("522530", formData);
 
 		System.out.println(nextTaskInfoModel.getTaskKey());
 		System.out.println(nextTaskInfoModel.getTaskName());
