@@ -295,6 +295,11 @@ public class ProcessDefinitionManager {
 		result.setAssignee(taskDefinition.getAssigneeExpression() == null ? ""
 				: taskDefinition.getAssigneeExpression().toString());
 
+
+		result.setCandidateUser(taskDefinition.getCandidateUserIdExpressions() == null ? ""
+				: taskDefinition.getCandidateUserIdExpressions().toString());
+
+		
 		if (activityImpl.getActivityBehavior().getClass() == ParallelMultiInstanceBehavior.class) {
 			result.setIsCountersign(true);
 		} else {

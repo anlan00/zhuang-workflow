@@ -314,30 +314,35 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 		initNextTaskUsers(userInfoModels, taskId, workflowEngineContext);
 
-		if (nextTaskDefModel.getAssignee() != null) {
 
-			String configValue = nextTaskDefModel.getAssignee();
+		String configValue = null;
 
-			String[] arrConfigValue = configValue.split(CommonVariableNames.NAME_VALUE_SEPARATOR);
-			String handlerKey = arrConfigValue[0];
-			String handlerParams = arrConfigValue.length > 1 ? arrConfigValue[1] : null;
+		if (nextTaskDefModel.getIsCountersign()) {
+			configValue = nextTaskDefModel.getCandidateUser();
 
-			if (handlerKey.startsWith(CommonVariableNames.HANDLER_NAME_PREFIX)) {
-				handlerKey = handlerKey.replace(CommonVariableNames.HANDLER_NAME_PREFIX, "");
-				NextTaskUsersHandler nextTaskUsersHandler = nextTaskUsersHandlers.get(handlerKey);
+		} else {
+			configValue = nextTaskDefModel.getAssignee();
+		}
+		
+		String[] arrConfigValue = configValue.split(CommonVariableNames.NAME_VALUE_SEPARATOR);
+		String handlerKey = arrConfigValue[0];
+		String handlerParams = arrConfigValue.length > 1 ? arrConfigValue[1] : null;
 
-				if (nextTaskUsersHandler == null) {
-					throw new HandlerNotFoundException(
-							"在“nextTaskUsersHandlers”中找不到key为“" + handlerKey + "”的NextTaskUsersHandler！");
-				} else {
-					workflowEngineContext.setComment(handlerParams);
-					userInfoModels.addAll(nextTaskUsersHandler.execute(workflowEngineContext));
-				}
+		if (handlerKey.startsWith(CommonVariableNames.HANDLER_NAME_PREFIX)) {
+			handlerKey = handlerKey.replace(CommonVariableNames.HANDLER_NAME_PREFIX, "");
+			NextTaskUsersHandler nextTaskUsersHandler = nextTaskUsersHandlers.get(handlerKey);
 
+			if (nextTaskUsersHandler == null) {
+				throw new HandlerNotFoundException(
+						"在“nextTaskUsersHandlers”中找不到key为“" + handlerKey + "”的NextTaskUsersHandler！");
+			} else {
+				workflowEngineContext.setComment(handlerParams);
+				userInfoModels.addAll(nextTaskUsersHandler.execute(workflowEngineContext));
 			}
 
 		}
 
+		
 		WorkflowActionListener workflowActionListener = getWorkflowActionListenerByTaskId(taskId);
 		if (workflowActionListener != null) {
 			workflowActionListener.onRetrieveNextTaskUsers(userInfoModels, workflowEngineContext);
