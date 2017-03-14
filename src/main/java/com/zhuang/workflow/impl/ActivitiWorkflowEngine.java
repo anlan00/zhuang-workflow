@@ -301,8 +301,15 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 		NextTaskInfoModel result = new NextTaskInfoModel();
 		List<UserInfoModel> userInfoModels = new ArrayList<UserInfoModel>();
+		String choice = getChoiceFromFormData(formData);
+		Map<String, Object> envVariables=getEnvVarFromFormData(formData);
+		TaskDefModel currentTaskDef = getCurrentTaskDef(taskId);
+		
+		if (currentTaskDef.getIsCountersign()) {
+			calcCountersignVariables(taskId, envVariables, choice);
+		}
 
-		TaskDefModel nextTaskDefModel = getNextTaskDef(taskId, getEnvVarFromFormData(formData));
+		TaskDefModel nextTaskDefModel = getNextTaskDef(taskId, envVariables);
 
 		result.setTaskKey(nextTaskDefModel.getKey());
 		result.setTaskName(nextTaskDefModel.getName());
@@ -310,9 +317,9 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		WorkflowEngineContext workflowEngineContext = new ActivitiWorkflowEngineContext(this);
 		workflowEngineContext.setTaskId(taskId);
 		workflowEngineContext.setFormData(formData);
-		workflowEngineContext.setCurrentTaskDef(getCurrentTaskDef(taskId));
+		workflowEngineContext.setCurrentTaskDef(currentTaskDef);
 		workflowEngineContext.setNextTaskDef(nextTaskDefModel);
-		workflowEngineContext.setChoice(getChoiceFromFormData(formData));
+		workflowEngineContext.setChoice(choice);
 
 		initNextTaskUsers(userInfoModels, taskId, workflowEngineContext);
 
