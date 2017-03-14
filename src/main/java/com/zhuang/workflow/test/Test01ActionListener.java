@@ -20,27 +20,6 @@ public class Test01ActionListener implements WorkflowActionListener {
 		System.out.println("afterSubmit--------------------"+context.getChoice());
 	}
 
-
-	public void beforBack(WorkflowEngineContext context) {
-		System.out.println("beforBack--------------------");
-		
-	}
-
-	public void afterBack(WorkflowEngineContext context) {
-		System.out.println("afterBack--------------------");
-		
-	}
-
-	public void beforReject(WorkflowEngineContext context) {
-		System.out.println("beforReject--------------------");
-		
-	}
-
-	public void afterReject(WorkflowEngineContext context) {
-		System.out.println("afterReject--------------------");
-		
-	}
-
 	public void onSave(WorkflowEngineContext context) {
 		System.out.println("onSave--------------------");
 		

@@ -227,26 +227,13 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		workflowEngineContext.setChoice(getChoiceFromFormData(formData));
 
 		if (workflowActionListener != null) {
-			if (workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.SUBMIT)) {
-				workflowActionListener.beforSubmit(workflowEngineContext);
-			} else if (workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.BACK)) {
-				workflowActionListener.beforBack(workflowEngineContext);
-			} else if (workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.REJECT)) {
-				workflowActionListener.beforReject(workflowEngineContext);
-			}
-
+			workflowActionListener.beforSubmit(workflowEngineContext);
 		}
 
 		run(taskId, userId, nextUsers, comment, workflowEngineContext);
 
 		if (workflowActionListener != null) {
-			if (workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.SUBMIT)) {
-				workflowActionListener.afterSubmit(workflowEngineContext);
-			} else if (workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.BACK)) {
-				workflowActionListener.afterBack(workflowEngineContext);
-			} else if (workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.REJECT)) {
-				workflowActionListener.afterReject(workflowEngineContext);
-			}
+			workflowActionListener.afterSubmit(workflowEngineContext);
 		}
 
 	}
