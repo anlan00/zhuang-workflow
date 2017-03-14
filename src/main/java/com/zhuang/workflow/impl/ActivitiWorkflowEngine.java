@@ -1,5 +1,7 @@
 package com.zhuang.workflow.impl;
 
+import static org.hamcrest.CoreMatchers.nullValue;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -279,10 +281,14 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 			taskService.addComment(taskId, task.getProcessInstanceId(), comment);
 		}
 
-
 		if(isCountersign4Next)
 		{
 			envVariables.put(CountersignVariableNames.COUNTERSIGN_USERS, nextUsers);
+		}
+		
+		if(isCountersign4Current)
+		{
+			calcCountersignVariables(envVariables,workflowEngineContext.getChoice());
 		}
 
 		taskService.setAssignee(taskId, userId);
@@ -476,4 +482,33 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 	}
 
+	private void calcCountersignVariables(Map<String, Object> envVariables, String choice) {
+		if(choice.equals(WorkflowChoiceOptions.APPROVE))
+		{
+			Object objCountersignApprovedCount = envVariables
+					.get(CountersignVariableNames.COUNTERSIGN_APPROVED_COUNT);
+			Integer countersignApprovedCount = null;
+			if (objCountersignApprovedCount == null) {
+				countersignApprovedCount = new Integer(0);
+				envVariables.put(CountersignVariableNames.COUNTERSIGN_APPROVED_COUNT, countersignApprovedCount);
+			} else {
+				countersignApprovedCount = (Integer) objCountersignApprovedCount;
+			}
+			countersignApprovedCount++;
+			
+		}else if(choice.equals(WorkflowChoiceOptions.REJECT))
+		{
+			Object objCountersignRejectedCount = envVariables
+					.get(CountersignVariableNames.COUNTERSIGN_REJECTED_COUNT);
+			Integer countersignRejectedCount = null;
+			if (objCountersignRejectedCount == null) {
+				countersignRejectedCount = new Integer(0);
+				envVariables.put(CountersignVariableNames.COUNTERSIGN_REJECTED_COUNT, countersignRejectedCount);
+			} else {
+				countersignRejectedCount = (Integer) objCountersignRejectedCount;
+			}
+			countersignRejectedCount++;
+		}
+
+	}
 }
