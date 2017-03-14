@@ -11,6 +11,8 @@ public class WorkflowChoiceOptions {
 	public static final String BACK = "退回";
 
 	public static final String REJECT = "驳回";
+	
+	public static final String APPROVE = "批准";
 
 	public static final String SUBMIT = "提交";
 
