@@ -83,7 +83,6 @@ public interface WorkflowEngine {
 	 */
 	void delete(String taskId, String comment, Map<String, Object> formData);
 	
-
 	/**
 	 * 计算下一步处理人
 	 * @param taskId
@@ -92,5 +91,10 @@ public interface WorkflowEngine {
 	 */
 	NextTaskInfoModel retrieveNextTaskInfo(String taskId, Map<String, Object> formData);
 	
+	/***
+	 * 获取表单数据
+	 * @param taskId
+	 * @return
+	 */
 	Map<String, Object> retrieveFormData(String taskId);
 }
