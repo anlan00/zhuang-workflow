@@ -281,14 +281,12 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 			taskService.addComment(taskId, task.getProcessInstanceId(), comment);
 		}
 
-		if(isCountersign4Next)
-		{
+		if (isCountersign4Next) {
 			envVariables.put(CountersignVariableNames.COUNTERSIGN_USERS, nextUsers);
 		}
-		
-		if(isCountersign4Current)
-		{
-			calcCountersignVariables(envVariables,workflowEngineContext.getChoice());
+
+		if (isCountersign4Current) {
+			calcCountersignVariables(taskId, envVariables, workflowEngineContext.getChoice());
 		}
 
 		taskService.setAssignee(taskId, userId);
@@ -482,32 +480,33 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 	}
 
-	private void calcCountersignVariables(Map<String, Object> envVariables, String choice) {
+	private void calcCountersignVariables(String taskId, Map<String, Object> envVariables, String choice) {
 		if(choice.equals(WorkflowChoiceOptions.APPROVE))
 		{
-			Object objCountersignApprovedCount = envVariables
-					.get(CountersignVariableNames.COUNTERSIGN_APPROVED_COUNT);
+			Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+			
+			Object objCountersignApprovedCount = runtimeService.getVariable(task.getProcessInstanceId(), CountersignVariableNames.COUNTERSIGN_APPROVED_COUNT);
 			Integer countersignApprovedCount = null;
 			if (objCountersignApprovedCount == null) {
 				countersignApprovedCount = new Integer(0);
-				envVariables.put(CountersignVariableNames.COUNTERSIGN_APPROVED_COUNT, countersignApprovedCount);
 			} else {
-				countersignApprovedCount = (Integer) objCountersignApprovedCount;
+				countersignApprovedCount = (Integer)objCountersignApprovedCount;
 			}
-			countersignApprovedCount++;
+			envVariables.put(CountersignVariableNames.COUNTERSIGN_APPROVED_COUNT, ++countersignApprovedCount);
 			
 		}else if(choice.equals(WorkflowChoiceOptions.REJECT))
 		{
-			Object objCountersignRejectedCount = envVariables
-					.get(CountersignVariableNames.COUNTERSIGN_REJECTED_COUNT);
+			Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+			
+			Object objCountersignRejectedCount = runtimeService.getVariable(task.getProcessInstanceId(), CountersignVariableNames.COUNTERSIGN_REJECTED_COUNT);
 			Integer countersignRejectedCount = null;
 			if (objCountersignRejectedCount == null) {
 				countersignRejectedCount = new Integer(0);
-				envVariables.put(CountersignVariableNames.COUNTERSIGN_REJECTED_COUNT, countersignRejectedCount);
 			} else {
 				countersignRejectedCount = (Integer) objCountersignRejectedCount;
 			}
-			countersignRejectedCount++;
+			envVariables.put(CountersignVariableNames.COUNTERSIGN_REJECTED_COUNT, ++countersignRejectedCount);
+			
 		}
 
 	}
