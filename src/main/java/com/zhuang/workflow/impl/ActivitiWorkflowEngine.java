@@ -42,6 +42,7 @@ import com.zhuang.workflow.enums.ProcessMainVariableNames;
 import com.zhuang.workflow.activiti.ProcessVariablesManager;
 import com.zhuang.workflow.activiti.UserTaskManager;
 import com.zhuang.workflow.enums.CommonVariableNames;
+import com.zhuang.workflow.enums.CountersignVariableNames;
 import com.zhuang.workflow.enums.EndTaskVariableNames;
 import com.zhuang.workflow.enums.FormDataVariableNames;
 import com.zhuang.workflow.exceptions.HandlerNotFoundException;
@@ -294,7 +295,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 		if(isCountersign4Next)
 		{
-			envVariables.put(CommonVariableNames.COUNTERSIGN_USERS, nextUsers);
+			envVariables.put(CountersignVariableNames.COUNTERSIGN_USERS, nextUsers);
 		}
 
 		taskService.setAssignee(taskId, userId);
