@@ -220,6 +220,8 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		Map<String, Object> envVariables=getEnvVarFromFormData(formData);
 		String choice=getChoiceFromFormData(formData);
 		
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+		
 		if (currentTaskDef.getIsCountersign()) {
 			calcCountersignVariables(taskId, envVariables, choice);
 		}
@@ -239,7 +241,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 			workflowActionListener.beforSubmit(workflowEngineContext);
 		}
 
-		run(taskId, userId, nextUsers, comment,envVariables, workflowEngineContext);
+		run(task, userId, nextUsers, comment, envVariables, workflowEngineContext);
 
 		if (workflowActionListener != null) {
 			workflowActionListener.afterSubmit(workflowEngineContext);
@@ -272,27 +274,38 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 	}
 
-	private void run(String taskId, String userId, List<String> nextUsers, String comment,
+	private void run(Task task, String userId, List<String> nextUsers, String comment,
 			Map<String, Object> envVariables, WorkflowEngineContext workflowEngineContext) {
 
 		Boolean isCountersign4Next = workflowEngineContext.getNextTaskDef().getIsCountersign();
 		Boolean isCountersign4Current = workflowEngineContext.getCurrentTaskDef().getIsCountersign();
 		
-		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-
 		if (comment != null) {
-			taskService.addComment(taskId, task.getProcessInstanceId(), comment);
+			taskService.addComment(task.getId(), task.getProcessInstanceId(), comment);
 		}
 
 		if (isCountersign4Next) {
 			envVariables.put(CountersignVariableNames.COUNTERSIGN_USERS, nextUsers);
 		}
 
-		taskService.setAssignee(taskId, userId);
-		taskService.complete(taskId, envVariables);
+		taskService.setAssignee(task.getId(), userId);
+		taskService.complete(task.getId(), envVariables);
 
 		if (!(isCountersign4Next || isCountersign4Current)) {
-			setTaskUser(taskId, nextUsers);
+			setTaskUser(task.getId(), nextUsers);
+		}
+	
+		if(isCountersign4Current)
+		{
+		 	List<Task> tasks = taskService.createTaskQuery().processInstanceId(task.getProcessInstanceId()).list();
+			if (tasks.size() >= 0) {
+				TaskDefModel newTaskDefModel = processDefinitionManager.convertActivityImplToTaskDefModel(
+						processDefinitionManager.getActivityImpl(tasks.get(0).getId()));
+				if(newTaskDefModel.getIsCountersign()==false)
+				{
+					setTaskUser(task.getId(), nextUsers);
+				}
+			}
 		}
 	}
 
