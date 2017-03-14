@@ -11,9 +11,9 @@
       </multiInstanceLoopCharacteristics>
     </userTask>
     <sequenceFlow id="flow3" sourceRef="usertask1" targetRef="usertask2"></sequenceFlow>
-    <userTask id="usertask3" name="会签通过"></userTask>
+    <userTask id="usertask3" name="会签通过" activiti:assignee="$roleIds:mgr"></userTask>
     <sequenceFlow id="flow4" sourceRef="usertask2" targetRef="usertask3"></sequenceFlow>
-    <userTask id="usertask4" name="会签不通过"></userTask>
+    <userTask id="usertask4" name="会签不通过" activiti:assignee="$createUser"></userTask>
     <sequenceFlow id="flow5" sourceRef="usertask2" targetRef="usertask4">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${countersignRejectedCount>0}]]></conditionExpression>
     </sequenceFlow>

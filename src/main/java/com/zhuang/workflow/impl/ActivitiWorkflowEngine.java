@@ -488,33 +488,34 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 	}
 
 	private void calcCountersignVariables(String taskId, Map<String, Object> envVariables, String choice) {
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+		
+		Object objCountersignApprovedCount = runtimeService.getVariable(task.getProcessInstanceId(), CountersignVariableNames.COUNTERSIGN_APPROVED_COUNT);
+		Integer countersignApprovedCount = null;
+		if (objCountersignApprovedCount == null) {
+			countersignApprovedCount = new Integer(0);
+		} else {
+			countersignApprovedCount = (Integer)objCountersignApprovedCount;
+		}
+		
+		Object objCountersignRejectedCount = runtimeService.getVariable(task.getProcessInstanceId(), CountersignVariableNames.COUNTERSIGN_REJECTED_COUNT);
+		Integer countersignRejectedCount = null;
+		if (objCountersignRejectedCount == null) {
+			countersignRejectedCount = new Integer(0);
+		} else {
+			countersignRejectedCount = (Integer) objCountersignRejectedCount;
+		}
+		
 		if(choice.equals(WorkflowChoiceOptions.APPROVE))
-		{
-			Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-			
-			Object objCountersignApprovedCount = runtimeService.getVariable(task.getProcessInstanceId(), CountersignVariableNames.COUNTERSIGN_APPROVED_COUNT);
-			Integer countersignApprovedCount = null;
-			if (objCountersignApprovedCount == null) {
-				countersignApprovedCount = new Integer(0);
-			} else {
-				countersignApprovedCount = (Integer)objCountersignApprovedCount;
-			}
-			envVariables.put(CountersignVariableNames.COUNTERSIGN_APPROVED_COUNT, ++countersignApprovedCount);
-			
+		{	
+			++countersignApprovedCount;
 		}else if(choice.equals(WorkflowChoiceOptions.REJECT))
 		{
-			Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-			
-			Object objCountersignRejectedCount = runtimeService.getVariable(task.getProcessInstanceId(), CountersignVariableNames.COUNTERSIGN_REJECTED_COUNT);
-			Integer countersignRejectedCount = null;
-			if (objCountersignRejectedCount == null) {
-				countersignRejectedCount = new Integer(0);
-			} else {
-				countersignRejectedCount = (Integer) objCountersignRejectedCount;
-			}
-			envVariables.put(CountersignVariableNames.COUNTERSIGN_REJECTED_COUNT, ++countersignRejectedCount);
-			
+			 ++countersignRejectedCount;
 		}
-
+		
+		envVariables.put(CountersignVariableNames.COUNTERSIGN_APPROVED_COUNT, countersignApprovedCount);
+		envVariables.put(CountersignVariableNames.COUNTERSIGN_REJECTED_COUNT,countersignRejectedCount);	
+		
 	}
 }
