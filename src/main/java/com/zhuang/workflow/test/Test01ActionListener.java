@@ -40,6 +40,16 @@ public class Test01ActionListener implements WorkflowActionListener {
 				context.getFormData().put(WorkflowChoiceOptions.BACK, true);
 			}
 		}
+		
+		if(context.getCurrentTaskDef().getIsCountersign())
+		{
+			if((Boolean)context.getFormData().get(FormDataVariableNames.IS_RUNNING_TASK))
+			{
+				context.getFormData().put(WorkflowChoiceOptions.APPROVE, true);
+				context.getFormData().put(WorkflowChoiceOptions.REJECT, true);
+				context.getFormData().put(WorkflowChoiceOptions.SUBMIT, false);
+			}	
+		}
 	}
 
 	public void beforDelete(WorkflowEngineContext context) {
