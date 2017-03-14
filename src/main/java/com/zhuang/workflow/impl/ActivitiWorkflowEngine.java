@@ -216,7 +216,14 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 			Map<String, Object> formData) {
 
 		formData = ensureFormDataNotNull(formData);
-
+		TaskDefModel currentTaskDef = getCurrentTaskDef(taskId);
+		Map<String, Object> envVariables=getEnvVarFromFormData(formData);
+		String choice=getChoiceFromFormData(formData);
+		
+		if (currentTaskDef.getIsCountersign()) {
+			calcCountersignVariables(taskId, envVariables, choice);
+		}
+		
 		WorkflowActionListener workflowActionListener = getWorkflowActionListenerByTaskId(taskId);
 
 		WorkflowEngineContext workflowEngineContext = new ActivitiWorkflowEngineContext(this);
@@ -224,9 +231,9 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		workflowEngineContext.setComment(comment);
 		workflowEngineContext.setNextUsers(nextUsers);
 		workflowEngineContext.setFormData(formData);
-		workflowEngineContext.setCurrentTaskDef(getCurrentTaskDef(taskId));
-		workflowEngineContext.setNextTaskDef(getNextTaskDef(taskId, getEnvVarFromFormData(formData)));
-		workflowEngineContext.setChoice(getChoiceFromFormData(formData));
+		workflowEngineContext.setCurrentTaskDef(currentTaskDef);
+		workflowEngineContext.setNextTaskDef(getNextTaskDef(taskId, envVariables));
+		workflowEngineContext.setChoice(choice);
 
 		if (workflowActionListener != null) {
 			workflowActionListener.beforSubmit(workflowEngineContext);
@@ -283,10 +290,6 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 		if (isCountersign4Next) {
 			envVariables.put(CountersignVariableNames.COUNTERSIGN_USERS, nextUsers);
-		}
-
-		if (isCountersign4Current) {
-			calcCountersignVariables(taskId, envVariables, workflowEngineContext.getChoice());
 		}
 
 		taskService.setAssignee(taskId, userId);
