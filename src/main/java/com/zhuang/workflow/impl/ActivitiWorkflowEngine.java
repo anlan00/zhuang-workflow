@@ -239,7 +239,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 			workflowActionListener.beforSubmit(workflowEngineContext);
 		}
 
-		run(taskId, userId, nextUsers, comment, workflowEngineContext);
+		run(taskId, userId, nextUsers, comment,envVariables, workflowEngineContext);
 
 		if (workflowActionListener != null) {
 			workflowActionListener.afterSubmit(workflowEngineContext);
@@ -272,12 +272,8 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 	}
 
-	public void run(String taskId, String userId, List<String> nextUsers, String comment,
-			WorkflowEngineContext workflowEngineContext) {
-
-		Map<String, Object> formData = ensureFormDataNotNull(workflowEngineContext.getFormData());
-
-		Map<String, Object> envVariables = getEnvVarFromFormData(formData);
+	private void run(String taskId, String userId, List<String> nextUsers, String comment,
+			Map<String, Object> envVariables, WorkflowEngineContext workflowEngineContext) {
 
 		Boolean isCountersign4Next = workflowEngineContext.getNextTaskDef().getIsCountersign();
 		Boolean isCountersign4Current = workflowEngineContext.getCurrentTaskDef().getIsCountersign();

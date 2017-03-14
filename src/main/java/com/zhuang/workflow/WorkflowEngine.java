@@ -41,22 +41,6 @@ public interface WorkflowEngine {
 	void save(String taskId, String comment, Map<String, Object> formData);
 
 	/**
-	 * 运转流程实例
-	 * 
-	 * @param taskId
-	 *            任务ID
-	 * @param userId
-	 *            用户ID
-	 * @param nextUsers
-	 *            下一步处理人
-	 * @param comment
-	 *            备注（审批意见）
-	 * @param workflowEngineContext
-	 *            流程上下文
-	 */
-	void run(String taskId,String userId, List<String> nextUsers, String comment,WorkflowEngineContext workflowEngineContext);
-
-	/**
 	 * 提交
 	 * 
 	 * @param taskId
