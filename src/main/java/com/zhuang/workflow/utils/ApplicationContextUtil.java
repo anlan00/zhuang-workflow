@@ -1,4 +1,4 @@
-package com.zhuang.workflow.util;
+package com.zhuang.workflow.utils;
 
 
 import org.springframework.context.ApplicationContext;

@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Component;
 
-import com.zhuang.workflow.util.ApplicationContextUtil;
+import com.zhuang.workflow.utils.ApplicationContextUtil;
 
 
 @Component

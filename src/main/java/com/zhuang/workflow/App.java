@@ -4,7 +4,7 @@ import java.text.ParseException;
 import org.springframework.context.ApplicationContext;
 
 import com.zhuang.workflow.impl.ActivitiWorkflowEngine;
-import com.zhuang.workflow.util.ApplicationContextUtil;
+import com.zhuang.workflow.utils.ApplicationContextUtil;
 
 /**
  * Hello world!

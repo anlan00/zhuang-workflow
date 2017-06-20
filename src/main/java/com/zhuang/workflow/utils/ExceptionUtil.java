@@ -1,4 +1,4 @@
-package com.zhuang.workflow.util;
+package com.zhuang.workflow.utils;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

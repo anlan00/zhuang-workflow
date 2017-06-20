@@ -5,7 +5,7 @@ import com.zhuang.workflow.activiti.ProcessDefinitionManager;
 import com.zhuang.workflow.activiti.ProcessInstanceManager;
 import com.zhuang.workflow.activiti.ProcessVariablesManager;
 import com.zhuang.workflow.activiti.UserTaskManager;
-import com.zhuang.workflow.util.ApplicationContextUtil;
+import com.zhuang.workflow.utils.ApplicationContextUtil;
 
 public class WorkflowBeansFactory {
 

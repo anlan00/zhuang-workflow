@@ -35,8 +35,8 @@ import org.springframework.core.ResolvableType;
 import com.zhuang.workflow.exceptions.HistoricTaskNotFoundException;
 import com.zhuang.workflow.exceptions.RunningTaskNotFoundException;
 import com.zhuang.workflow.models.TaskDefModel;
+import com.zhuang.workflow.utils.ActivitiJUELUtil;
 import com.zhuang.workflow.enums.EndTaskVariableNames;
-import com.zhuang.workflow.util.ActivitiJUELUtil;
 
 public class ProcessDefinitionManager {
 

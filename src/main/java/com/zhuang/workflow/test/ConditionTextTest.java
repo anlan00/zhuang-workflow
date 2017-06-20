@@ -9,7 +9,7 @@ import org.activiti.engine.impl.juel.ExpressionFactoryImpl;
 import org.activiti.engine.impl.juel.SimpleContext;
 import org.junit.Test;
 
-import com.zhuang.workflow.util.ActivitiJUELUtil;
+import com.zhuang.workflow.utils.ActivitiJUELUtil;
 
 public class ConditionTextTest {
 
