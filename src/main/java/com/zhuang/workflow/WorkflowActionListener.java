@@ -12,8 +12,6 @@ import com.zhuang.workflow.models.UserInfoModel;
  */
 public interface WorkflowActionListener {
 
-
-
 	/**
 	 * 提交前调用
 	 * @param context
@@ -27,30 +25,6 @@ public interface WorkflowActionListener {
 	void afterSubmit(WorkflowEngineContext context);
 
 	/**
-	 * 退回前调用
-	 * @param context
-	 */
-	void beforBack(WorkflowEngineContext context);
-	
-	/**
-	 * 退回后调用
-	 * @param context
-	 */
-	void afterBack(WorkflowEngineContext context);
-
-	/**
-	 * 驳回前调用
-	 * @param context
-	 */
-	void beforReject(WorkflowEngineContext context);
-	
-	/**
-	 * 驳回后调用
-	 * @param context
-	 */
-	void afterReject(WorkflowEngineContext context);
-
-	/**
 	 * 刪除前调用
 	 * @param context
 	 */
@@ -61,7 +35,6 @@ public interface WorkflowActionListener {
 	 * @param context
 	 */
 	void afterDelete(WorkflowEngineContext context);
-
 	
 	/**
 	 * 保存操作
@@ -74,6 +47,10 @@ public interface WorkflowActionListener {
 	 * @param nextTaskUsers
 	 */
 	void onRetrieveNextTaskUsers(List<UserInfoModel> nextTaskUsers, WorkflowEngineContext context);
-	
+
+	/***
+	 * 加载表单数据
+	 * @param context
+	 */
 	void onRetrieveFormData(WorkflowEngineContext context);
 }

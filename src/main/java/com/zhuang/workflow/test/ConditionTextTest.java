@@ -20,7 +20,7 @@ public class ConditionTextTest {
 		
 		map.put("count", 1000);
 		
-		System.out.println(ActivitiJUELUtil.evaluateBooleanResult("${count>1000}", map));
+		System.out.println(ActivitiJUELUtil.evaluateBooleanResult("${count>1000 || 1==1}", map));
 		
 	}
 	

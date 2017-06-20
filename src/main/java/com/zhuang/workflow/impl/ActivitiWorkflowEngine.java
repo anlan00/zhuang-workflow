@@ -1,5 +1,7 @@
 package com.zhuang.workflow.impl;
 
+import static org.hamcrest.CoreMatchers.nullValue;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -42,6 +44,7 @@ import com.zhuang.workflow.enums.ProcessMainVariableNames;
 import com.zhuang.workflow.activiti.ProcessVariablesManager;
 import com.zhuang.workflow.activiti.UserTaskManager;
 import com.zhuang.workflow.enums.CommonVariableNames;
+import com.zhuang.workflow.enums.CountersignVariableNames;
 import com.zhuang.workflow.enums.EndTaskVariableNames;
 import com.zhuang.workflow.enums.FormDataVariableNames;
 import com.zhuang.workflow.exceptions.HandlerNotFoundException;
@@ -213,7 +216,16 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 			Map<String, Object> formData) {
 
 		formData = ensureFormDataNotNull(formData);
-
+		TaskDefModel currentTaskDef = getCurrentTaskDef(taskId);
+		Map<String, Object> envVariables=getEnvVarFromFormData(formData);
+		String choice=getChoiceFromFormData(formData);
+		
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+		
+		if (currentTaskDef.getIsCountersign()) {
+			calcCountersignVariables(taskId, envVariables, choice);
+		}
+		
 		WorkflowActionListener workflowActionListener = getWorkflowActionListenerByTaskId(taskId);
 
 		WorkflowEngineContext workflowEngineContext = new ActivitiWorkflowEngineContext(this);
@@ -221,31 +233,18 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		workflowEngineContext.setComment(comment);
 		workflowEngineContext.setNextUsers(nextUsers);
 		workflowEngineContext.setFormData(formData);
-		workflowEngineContext.setCurrentTaskDef(getCurrentTaskDef(taskId));
-		workflowEngineContext.setNextTaskDef(getNextTaskDef(taskId, getEnvVarFromFormData(formData)));
-		workflowEngineContext.setChoice(getChoiceFromFormData(formData));
+		workflowEngineContext.setCurrentTaskDef(currentTaskDef);
+		workflowEngineContext.setNextTaskDef(getNextTaskDef(taskId, envVariables));
+		workflowEngineContext.setChoice(choice);
 
 		if (workflowActionListener != null) {
-			if (workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.SUBMIT)) {
-				workflowActionListener.beforSubmit(workflowEngineContext);
-			} else if (workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.BACK)) {
-				workflowActionListener.beforBack(workflowEngineContext);
-			} else if (workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.REJECT)) {
-				workflowActionListener.beforReject(workflowEngineContext);
-			}
-
+			workflowActionListener.beforSubmit(workflowEngineContext);
 		}
 
-		run(taskId, userId, nextUsers, comment, workflowEngineContext);
+		run(task, userId, nextUsers, comment, envVariables, workflowEngineContext);
 
 		if (workflowActionListener != null) {
-			if (workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.SUBMIT)) {
-				workflowActionListener.afterSubmit(workflowEngineContext);
-			} else if (workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.BACK)) {
-				workflowActionListener.afterBack(workflowEngineContext);
-			} else if (workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.REJECT)) {
-				workflowActionListener.afterReject(workflowEngineContext);
-			}
+			workflowActionListener.afterSubmit(workflowEngineContext);
 		}
 
 	}
@@ -275,33 +274,38 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 	}
 
-	public void run(String taskId, String userId, List<String> nextUsers, String comment,
-			WorkflowEngineContext workflowEngineContext) {
-
-		Map<String, Object> formData = ensureFormDataNotNull(workflowEngineContext.getFormData());
-
-		Map<String, Object> envVariables = getEnvVarFromFormData(formData);
+	private void run(Task task, String userId, List<String> nextUsers, String comment,
+			Map<String, Object> envVariables, WorkflowEngineContext workflowEngineContext) {
 
 		Boolean isCountersign4Next = workflowEngineContext.getNextTaskDef().getIsCountersign();
 		Boolean isCountersign4Current = workflowEngineContext.getCurrentTaskDef().getIsCountersign();
 		
-		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-
 		if (comment != null) {
-			taskService.addComment(taskId, task.getProcessInstanceId(), comment);
+			taskService.addComment(task.getId(), task.getProcessInstanceId(), comment);
 		}
 
-
-		if(isCountersign4Next)
-		{
-			envVariables.put(CommonVariableNames.COUNTERSIGN_USERS, nextUsers);
+		if (isCountersign4Next) {
+			envVariables.put(CountersignVariableNames.COUNTERSIGN_USERS, nextUsers);
 		}
 
-		taskService.setAssignee(taskId, userId);
-		taskService.complete(taskId, envVariables);
+		taskService.setAssignee(task.getId(), userId);
+		taskService.complete(task.getId(), envVariables);
 
 		if (!(isCountersign4Next || isCountersign4Current)) {
-			setTaskUser(taskId, nextUsers);
+			setTaskUser(task.getId(), nextUsers);
+		}
+	
+		if(isCountersign4Current)
+		{
+		 	List<Task> tasks = taskService.createTaskQuery().processInstanceId(task.getProcessInstanceId()).list();
+			if (tasks.size() >= 0) {
+				TaskDefModel newTaskDefModel = processDefinitionManager.convertActivityImplToTaskDefModel(
+						processDefinitionManager.getActivityImpl(tasks.get(0).getId()));
+				if(newTaskDefModel.getIsCountersign()==false)
+				{
+					setTaskUser(task.getId(), nextUsers);
+				}
+			}
 		}
 	}
 
@@ -309,8 +313,15 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 		NextTaskInfoModel result = new NextTaskInfoModel();
 		List<UserInfoModel> userInfoModels = new ArrayList<UserInfoModel>();
+		String choice = getChoiceFromFormData(formData);
+		Map<String, Object> envVariables=getEnvVarFromFormData(formData);
+		TaskDefModel currentTaskDef = getCurrentTaskDef(taskId);
+		
+		if (currentTaskDef.getIsCountersign()) {
+			calcCountersignVariables(taskId, envVariables, choice);
+		}
 
-		TaskDefModel nextTaskDefModel = getNextTaskDef(taskId, getEnvVarFromFormData(formData));
+		TaskDefModel nextTaskDefModel = getNextTaskDef(taskId, envVariables);
 
 		result.setTaskKey(nextTaskDefModel.getKey());
 		result.setTaskName(nextTaskDefModel.getName());
@@ -318,9 +329,9 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		WorkflowEngineContext workflowEngineContext = new ActivitiWorkflowEngineContext(this);
 		workflowEngineContext.setTaskId(taskId);
 		workflowEngineContext.setFormData(formData);
-		workflowEngineContext.setCurrentTaskDef(getCurrentTaskDef(taskId));
+		workflowEngineContext.setCurrentTaskDef(currentTaskDef);
 		workflowEngineContext.setNextTaskDef(nextTaskDefModel);
-		workflowEngineContext.setChoice(getChoiceFromFormData(formData));
+		workflowEngineContext.setChoice(choice);
 
 		initNextTaskUsers(userInfoModels, taskId, workflowEngineContext);
 
@@ -488,4 +499,35 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 	}
 
+	private void calcCountersignVariables(String taskId, Map<String, Object> envVariables, String choice) {
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+		
+		Object objCountersignApprovedCount = runtimeService.getVariable(task.getProcessInstanceId(), CountersignVariableNames.COUNTERSIGN_APPROVED_COUNT);
+		Integer countersignApprovedCount = null;
+		if (objCountersignApprovedCount == null) {
+			countersignApprovedCount = new Integer(0);
+		} else {
+			countersignApprovedCount = (Integer)objCountersignApprovedCount;
+		}
+		
+		Object objCountersignRejectedCount = runtimeService.getVariable(task.getProcessInstanceId(), CountersignVariableNames.COUNTERSIGN_REJECTED_COUNT);
+		Integer countersignRejectedCount = null;
+		if (objCountersignRejectedCount == null) {
+			countersignRejectedCount = new Integer(0);
+		} else {
+			countersignRejectedCount = (Integer) objCountersignRejectedCount;
+		}
+		
+		if(choice.equals(WorkflowChoiceOptions.APPROVE))
+		{	
+			++countersignApprovedCount;
+		}else if(choice.equals(WorkflowChoiceOptions.REJECT))
+		{
+			 ++countersignRejectedCount;
+		}
+		
+		envVariables.put(CountersignVariableNames.COUNTERSIGN_APPROVED_COUNT, countersignApprovedCount);
+		envVariables.put(CountersignVariableNames.COUNTERSIGN_REJECTED_COUNT,countersignRejectedCount);	
+		
+	}
 }
