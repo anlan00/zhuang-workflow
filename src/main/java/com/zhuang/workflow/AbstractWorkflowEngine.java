@@ -4,10 +4,11 @@ import java.util.Map;
 
 /**
  * 工作流引擎抽象基类
+ * 
  * @author zwb
  *
  */
-public abstract class AbstractWorkflowEngine implements WorkflowEngine{
+public abstract class AbstractWorkflowEngine implements WorkflowEngine {
 
 	/**
 	 * 工作流动作监听器集合
@@ -16,8 +17,8 @@ public abstract class AbstractWorkflowEngine implements WorkflowEngine{
 
 	protected Map<String, NextTaskUsersHandler> nextTaskUsersHandlers;
 
-	
 	public Map<String, WorkflowActionListener> getWorkflowActionListeners() {
+
 		return workflowActionListeners;
 	}
 
@@ -32,6 +33,5 @@ public abstract class AbstractWorkflowEngine implements WorkflowEngine{
 	public void setNextTaskUsersHandlers(Map<String, NextTaskUsersHandler> nextTaskUsersHandlers) {
 		this.nextTaskUsersHandlers = nextTaskUsersHandlers;
 	}
-	
-	
+
 }
