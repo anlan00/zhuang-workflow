@@ -1,1 +1,6 @@
 /target/*
+*.iml
+.bpmn
+.classpath
+.project
+.settings
