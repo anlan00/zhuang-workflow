@@ -17,82 +17,80 @@ import com.zhuang.workflow.common.PageModel;
 import com.zhuang.workflow.enums.DeploymentInfoNames;
 import com.zhuang.workflow.model.DeploymentInfoModel;
 
-public class ActivitiWorkflowDeployment implements WorkflowDeployment{
+public class ActivitiWorkflowDeployment implements WorkflowDeployment {
 
-	@Autowired
-	private DeploymentManager deploymentManager;
-	
-	@Autowired
-	private RepositoryService repositoryService;
-	
-	public void deployByInputStream(String resourceName, InputStream inputStream) {
-		deploymentManager.deployByInputStream(resourceName, inputStream);
-	}
+    @Autowired
+    private DeploymentManager deploymentManager;
 
-	public PageModel<DeploymentInfoModel> getDeploymentInfoPage(int pageNo, int pageSize,
-			Map<String, Object> conditions) {
+    @Autowired
+    private RepositoryService repositoryService;
 
-		DeploymentQuery deploymentQuery = repositoryService.createDeploymentQuery();
-		deploymentQuery.orderByDeploymenTime().desc();
-		
-		
-		List<DeploymentInfoModel> deploymentInfoList = new ArrayList<DeploymentInfoModel>();
-		
-		PageModel<DeploymentInfoModel> result = new PageModel<DeploymentInfoModel>(pageNo, pageSize, new Long(deploymentQuery.count()).intValue(),
-				deploymentInfoList);
-		
-		
-		
-		setDeploymentQueryConditions(deploymentQuery,conditions);
-	
-		
-		//得到分页记录
-		List<Deployment> deployments = deploymentQuery.listPage(result.getPageStartRow() - 1, result.getPageSize());
+    public void deployByInputStream(String resourceName, InputStream inputStream) {
+        deploymentManager.deployByInputStream(resourceName, inputStream);
+    }
 
-		for (Deployment deployment : deployments) {
-			
-			DeploymentInfoModel deploymentInfoModel=new DeploymentInfoModel();
-			
-			deploymentInfoModel.setDeployId(deployment.getId());
-			deploymentInfoModel.setDeployName(deployment.getName());
-			deploymentInfoModel.setDeployCategory(deployment.getCategory());
-			deploymentInfoModel.setDeployTime(deployment.getDeploymentTime());
-			
-			
-			ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deployment.getId()).singleResult();
-			deploymentInfoModel.setProcDefKey(processDefinition.getKey());
-			deploymentInfoModel.setProcDefName(processDefinition.getName());
-			deploymentInfoModel.setProcDefVersion(processDefinition.getVersion());
-			deploymentInfoModel.setProcDefDescription(processDefinition.getDescription());
-			
-			deploymentInfoList.add(deploymentInfoModel);
-		}
-		
-		return result;
-	}
+    public PageModel<DeploymentInfoModel> getDeploymentInfoPage(int pageNo, int pageSize,
+                                                                Map<String, Object> conditions) {
+
+        DeploymentQuery deploymentQuery = repositoryService.createDeploymentQuery();
+        deploymentQuery.orderByDeploymenTime().desc();
 
 
-	
-	private void setDeploymentQueryConditions(DeploymentQuery deploymentQuery, Map<String, Object> conditions) {
-		
-		if (conditions != null) {
-			
-			if (conditions.containsKey(DeploymentInfoNames.PROC_DEF_KEY)) {
-				Object objProcDefKey = conditions.get(DeploymentInfoNames.PROC_DEF_KEY);
-				if (objProcDefKey != null && objProcDefKey.toString().trim() != "") {
-					deploymentQuery.processDefinitionKey(objProcDefKey.toString().trim());
-				}
-			}
+        List<DeploymentInfoModel> deploymentInfoList = new ArrayList<DeploymentInfoModel>();
 
-			if (conditions.containsKey(DeploymentInfoNames.DEPLOY_NAME)) {
-				Object objDeployName = conditions.get(DeploymentInfoNames.DEPLOY_NAME);
-				if (objDeployName != null && objDeployName.toString().trim() != "") {
-					deploymentQuery.deploymentNameLike("%" +objDeployName.toString() +"%");
-				}
-			}
+        PageModel<DeploymentInfoModel> result = new PageModel<DeploymentInfoModel>(pageNo, pageSize, new Long(deploymentQuery.count()).intValue(),
+                deploymentInfoList);
 
-		}
 
-	}
-	
+        setDeploymentQueryConditions(deploymentQuery, conditions);
+
+
+        //得到分页记录
+        List<Deployment> deployments = deploymentQuery.listPage(result.getPageStartRow() - 1, result.getPageSize());
+
+        for (Deployment deployment : deployments) {
+
+            DeploymentInfoModel deploymentInfoModel = new DeploymentInfoModel();
+
+            deploymentInfoModel.setDeployId(deployment.getId());
+            deploymentInfoModel.setDeployName(deployment.getName());
+            deploymentInfoModel.setDeployCategory(deployment.getCategory());
+            deploymentInfoModel.setDeployTime(deployment.getDeploymentTime());
+
+
+            ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deployment.getId()).singleResult();
+            deploymentInfoModel.setProcDefKey(processDefinition.getKey());
+            deploymentInfoModel.setProcDefName(processDefinition.getName());
+            deploymentInfoModel.setProcDefVersion(processDefinition.getVersion());
+            deploymentInfoModel.setProcDefDescription(processDefinition.getDescription());
+
+            deploymentInfoList.add(deploymentInfoModel);
+        }
+
+        return result;
+    }
+
+
+    private void setDeploymentQueryConditions(DeploymentQuery deploymentQuery, Map<String, Object> conditions) {
+
+        if (conditions != null) {
+
+            if (conditions.containsKey(DeploymentInfoNames.PROC_DEF_KEY)) {
+                Object objProcDefKey = conditions.get(DeploymentInfoNames.PROC_DEF_KEY);
+                if (objProcDefKey != null && !objProcDefKey.toString().trim().isEmpty()) {
+                    deploymentQuery.processDefinitionKey(objProcDefKey.toString().trim());
+                }
+            }
+
+            if (conditions.containsKey(DeploymentInfoNames.DEPLOY_NAME)) {
+                Object objDeployName = conditions.get(DeploymentInfoNames.DEPLOY_NAME);
+                if (objDeployName != null && !objDeployName.toString().trim().isEmpty()) {
+                    deploymentQuery.deploymentNameLike("%" + objDeployName.toString() + "%");
+                }
+            }
+
+        }
+
+    }
+
 }
