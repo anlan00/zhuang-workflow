@@ -6,13 +6,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.history.HistoricProcessInstance;
-import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricTaskInstanceQuery;
 import org.activiti.engine.repository.ProcessDefinition;
@@ -29,12 +26,12 @@ import com.zhuang.workflow.activiti.ProcessDefinitionManager;
 import com.zhuang.workflow.activiti.ProcessInstanceManager;
 import com.zhuang.workflow.enums.ProcessMainVariableNames;
 import com.zhuang.workflow.activiti.ProcessVariablesManager;
-import com.zhuang.workflow.commons.PageModel;
+import com.zhuang.workflow.common.PageModel;
 import com.zhuang.workflow.enums.EndTaskVariableNames;
-import com.zhuang.workflow.models.FlowInfoModel;
-import com.zhuang.workflow.models.ProcDefModel;
-import com.zhuang.workflow.models.TaskInfoModel;
-import com.zhuang.workflow.services.UserManagementService;
+import com.zhuang.workflow.model.FlowInfoModel;
+import com.zhuang.workflow.model.ProcDefModel;
+import com.zhuang.workflow.model.TaskInfoModel;
+import com.zhuang.workflow.service.UserManagementService;
 
 public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 

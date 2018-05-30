@@ -3,10 +3,10 @@ package com.zhuang.workflow;
 import java.util.List;
 import java.util.Map;
 
-import com.zhuang.workflow.commons.PageModel;
-import com.zhuang.workflow.models.FlowInfoModel;
-import com.zhuang.workflow.models.ProcDefModel;
-import com.zhuang.workflow.models.TaskInfoModel;
+import com.zhuang.workflow.common.PageModel;
+import com.zhuang.workflow.model.FlowInfoModel;
+import com.zhuang.workflow.model.ProcDefModel;
+import com.zhuang.workflow.model.TaskInfoModel;
 
 /**
  * 工作流查询管理器接口

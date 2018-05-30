@@ -1,4 +1,4 @@
-package com.zhuang.workflow.exceptions;
+package com.zhuang.workflow.exception;
 
 /**
  * 自定义校验异常

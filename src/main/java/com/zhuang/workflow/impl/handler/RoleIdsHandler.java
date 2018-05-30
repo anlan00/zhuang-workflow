@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhuang.workflow.NextTaskUsersHandler;
 import com.zhuang.workflow.WorkflowEngineContext;
-import com.zhuang.workflow.models.UserInfoModel;
-import com.zhuang.workflow.services.UserManagementService;
+import com.zhuang.workflow.model.UserInfoModel;
+import com.zhuang.workflow.service.UserManagementService;
 
 public class RoleIdsHandler implements NextTaskUsersHandler {
 

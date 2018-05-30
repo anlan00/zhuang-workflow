@@ -1,9 +1,9 @@
-package com.zhuang.workflow.utils;
+package com.zhuang.workflow.util;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-public class ExceptionUtil {
+public class ExceptionUtils {
 
 	public static String getStackTrace(Exception e) {
 		

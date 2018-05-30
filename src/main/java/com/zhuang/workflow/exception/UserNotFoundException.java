@@ -1,4 +1,4 @@
-package com.zhuang.workflow.exceptions;
+package com.zhuang.workflow.exception;
 
 /**
  * 没有找到用户导常

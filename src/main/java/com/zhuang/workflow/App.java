@@ -4,7 +4,7 @@ import java.text.ParseException;
 import org.springframework.context.ApplicationContext;
 
 import com.zhuang.workflow.impl.ActivitiWorkflowEngine;
-import com.zhuang.workflow.utils.ApplicationContextUtil;
+import com.zhuang.workflow.util.ApplicationContextUtils;
 
 /**
  * Hello world!
@@ -14,7 +14,7 @@ public class App {
 
 	public static void main(String[] args) throws ParseException {
 
-		ApplicationContext applicationContext = ApplicationContextUtil.GetApplicationContext();
+		ApplicationContext applicationContext = ApplicationContextUtils.GetApplicationContext();
 		ActivitiWorkflowEngine activitiWorkflowEngine = applicationContext.getBean("workflowEngine",
 				ActivitiWorkflowEngine.class);
 

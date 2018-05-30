@@ -1,4 +1,4 @@
-package com.zhuang.workflow.utils;
+package com.zhuang.workflow.util;
 
 import java.util.Map;
 import java.util.Map.Entry;
@@ -8,7 +8,7 @@ import org.activiti.engine.impl.javax.el.ValueExpression;
 import org.activiti.engine.impl.juel.ExpressionFactoryImpl;
 import org.activiti.engine.impl.juel.SimpleContext;
 
-public class ActivitiJUELUtil {
+public class ActivitiJUELUtils {
 
 	public static boolean evaluateBooleanResult(String expression, Map<String, Object> params) {
 		ExpressionFactory factory = new ExpressionFactoryImpl();

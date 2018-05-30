@@ -10,8 +10,8 @@ import org.junit.Test;
 
 import com.zhuang.workflow.WorkflowBeansFactory;
 import com.zhuang.workflow.enums.ProcessMainVariableNames;
-import com.zhuang.workflow.models.NextTaskInfoModel;
-import com.zhuang.workflow.models.UserInfoModel;
+import com.zhuang.workflow.model.NextTaskInfoModel;
+import com.zhuang.workflow.model.UserInfoModel;
 
 public class ActivitiWorkflowEngineTest {
 	

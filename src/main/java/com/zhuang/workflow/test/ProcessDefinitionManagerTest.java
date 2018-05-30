@@ -11,7 +11,7 @@ import org.activiti.engine.repository.ProcessDefinition;
 import org.junit.Test;
 
 import com.zhuang.workflow.WorkflowBeansFactory;
-import com.zhuang.workflow.models.TaskDefModel;
+import com.zhuang.workflow.model.TaskDefModel;
 
 public class ProcessDefinitionManagerTest {
 

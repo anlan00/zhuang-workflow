@@ -17,21 +17,12 @@ import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.delegate.Expression;
-import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
-import org.activiti.engine.history.HistoricVariableInstance;
-import org.activiti.engine.impl.bpmn.behavior.ParallelMultiInstanceBehavior;
-import org.activiti.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
-import org.activiti.engine.impl.bpmn.parser.BpmnParse;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
-import org.activiti.engine.impl.task.TaskDefinition;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
-import org.apache.log4j.or.ThreadGroupRenderer;
-import org.aspectj.apache.bcel.generic.NEW;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhuang.workflow.AbstractWorkflowEngine;
@@ -45,15 +36,13 @@ import com.zhuang.workflow.activiti.ProcessVariablesManager;
 import com.zhuang.workflow.activiti.UserTaskManager;
 import com.zhuang.workflow.enums.CommonVariableNames;
 import com.zhuang.workflow.enums.CountersignVariableNames;
-import com.zhuang.workflow.enums.EndTaskVariableNames;
 import com.zhuang.workflow.enums.FormDataVariableNames;
-import com.zhuang.workflow.exceptions.HandlerNotFoundException;
-import com.zhuang.workflow.models.NextTaskInfoModel;
-import com.zhuang.workflow.models.TaskDefModel;
-import com.zhuang.workflow.models.TaskInfoModel;
-import com.zhuang.workflow.models.UserInfoModel;
+import com.zhuang.workflow.exception.HandlerNotFoundException;
+import com.zhuang.workflow.model.NextTaskInfoModel;
+import com.zhuang.workflow.model.TaskDefModel;
+import com.zhuang.workflow.model.UserInfoModel;
 import com.zhuang.workflow.enums.WorkflowChoiceOptions;
-import com.zhuang.workflow.services.UserManagementService;
+import com.zhuang.workflow.service.UserManagementService;
 
 public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 

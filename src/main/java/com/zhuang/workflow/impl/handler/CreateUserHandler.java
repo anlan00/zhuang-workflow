@@ -6,15 +6,14 @@ import java.util.List;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
-import org.aspectj.internal.lang.annotation.ajcDeclareAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhuang.workflow.NextTaskUsersHandler;
 import com.zhuang.workflow.WorkflowEngineContext;
 import com.zhuang.workflow.activiti.ProcessInstanceManager;
 import com.zhuang.workflow.enums.ProcessMainVariableNames;
-import com.zhuang.workflow.models.UserInfoModel;
-import com.zhuang.workflow.services.UserManagementService;
+import com.zhuang.workflow.model.UserInfoModel;
+import com.zhuang.workflow.service.UserManagementService;
 
 public class CreateUserHandler implements NextTaskUsersHandler {
 

@@ -2,7 +2,7 @@ package com.zhuang.workflow;
 
 import java.util.List;
 
-import com.zhuang.workflow.models.UserInfoModel;
+import com.zhuang.workflow.model.UserInfoModel;
 
 public interface NextTaskUsersHandler {
 	

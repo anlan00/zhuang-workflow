@@ -1,9 +1,8 @@
 package com.zhuang.workflow;
 
 import java.util.List;
-import java.util.Map;
 
-import com.zhuang.workflow.models.UserInfoModel;
+import com.zhuang.workflow.model.UserInfoModel;
 
 /**
  * 工作流动作监听接口

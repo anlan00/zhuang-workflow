@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.zhuang.workflow.WorkflowActionListener;
 import com.zhuang.workflow.WorkflowEngineContext;
-import com.zhuang.workflow.models.UserInfoModel;
+import com.zhuang.workflow.model.UserInfoModel;
 import com.zhuang.workflow.enums.FormDataVariableNames;
 import com.zhuang.workflow.enums.WorkflowChoiceOptions;
 

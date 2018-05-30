@@ -3,8 +3,8 @@ package com.zhuang.workflow;
 import java.io.InputStream;
 import java.util.Map;
 
-import com.zhuang.workflow.commons.PageModel;
-import com.zhuang.workflow.models.DeploymentInfoModel;
+import com.zhuang.workflow.common.PageModel;
+import com.zhuang.workflow.model.DeploymentInfoModel;
 
 public interface WorkflowDeployment {
 	

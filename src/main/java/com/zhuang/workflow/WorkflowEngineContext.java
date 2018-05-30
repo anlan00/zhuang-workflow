@@ -3,8 +3,7 @@ package com.zhuang.workflow;
 import java.util.List;
 import java.util.Map;
 
-import com.zhuang.workflow.models.TaskDefModel;
-import com.zhuang.workflow.models.TaskInfoModel;
+import com.zhuang.workflow.model.TaskDefModel;
 
 public abstract class WorkflowEngineContext {
 	

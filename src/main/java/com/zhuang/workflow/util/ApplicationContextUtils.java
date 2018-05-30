@@ -1,10 +1,10 @@
-package com.zhuang.workflow.utils;
+package com.zhuang.workflow.util;
 
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class ApplicationContextUtil {
+public class ApplicationContextUtils {
 
 	private static ApplicationContext applicationContext;
 	

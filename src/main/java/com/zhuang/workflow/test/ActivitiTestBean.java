@@ -8,17 +8,10 @@ import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration;
-import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.activiti.engine.impl.pvm.process.ActivityImpl;
-import org.activiti.engine.repository.ProcessDefinition;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Component;
 
-import com.zhuang.workflow.utils.ApplicationContextUtil;
+import com.zhuang.workflow.util.ApplicationContextUtils;
 
 
 @Component
@@ -114,7 +107,7 @@ public class ActivitiTestBean {
 
 	public static ActivitiTestBean getActivitiTestBean() {
 		
-		return ApplicationContextUtil.GetApplicationContext().getBean("activitiTestBean",ActivitiTestBean.class);
+		return ApplicationContextUtils.GetApplicationContext().getBean("activitiTestBean",ActivitiTestBean.class);
 	}
 	
 }

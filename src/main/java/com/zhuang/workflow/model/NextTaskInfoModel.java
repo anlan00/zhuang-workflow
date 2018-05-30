@@ -1,4 +1,4 @@
-package com.zhuang.workflow.models;
+package com.zhuang.workflow.model;
 
 import java.util.List;
 
