@@ -12,7 +12,7 @@
 	<url>http://maven.apache.org</url>
 
 	<build>
-		<resources>
+		<!--<resources>
 			<resource>
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
@@ -20,7 +20,7 @@
 					<exclude>**/*.*</exclude>
 				</excludes>
 			</resource>
-		</resources>
+		</resources>-->
 
 		<plugins>
 			<!--排除执行测试代码-->
