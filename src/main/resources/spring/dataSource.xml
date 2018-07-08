@@ -14,12 +14,9 @@
 		http://www.springframework.org/schema/data/jpa
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
-    <context:property-placeholder ignore-unresolvable="true" local-override="true"
-                                  location="classpath*:config/jdbc.properties"/>
 
-
+    <context:property-placeholder ignore-unresolvable="true" local-override="true" location="classpath*:config/jdbc.properties"/>
     <util:properties id="JDBC_PROPERTIES" location="classpath:config/jdbc.properties" local-override="true"/>
-
 
     <!-- 数据源定义,使用Apache DBCP 连接池 -->
     <bean id="dataSource" name="dataSource"
