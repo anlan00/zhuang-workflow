@@ -10,9 +10,9 @@ import com.zhuang.workflow.enums.WorkflowChoiceOptions;
 
 public class Test01ActionListener implements WorkflowActionListener {
 
-	public void beforSubmit(WorkflowEngineContext context) {
+	public void beforeSubmit(WorkflowEngineContext context) {
 
-		System.out.println("beforSubmit--------------------"+context.getChoice());
+		System.out.println("beforeSubmit--------------------"+context.getChoice());
 	}
 
 	public void afterSubmit(WorkflowEngineContext context) {
@@ -52,8 +52,8 @@ public class Test01ActionListener implements WorkflowActionListener {
 		}
 	}
 
-	public void beforDelete(WorkflowEngineContext context) {
-		System.out.println("beforDelete--------------------");
+	public void beforeDelete(WorkflowEngineContext context) {
+		System.out.println("beforeDelete--------------------");
 	}
 
 	public void afterDelete(WorkflowEngineContext context) {

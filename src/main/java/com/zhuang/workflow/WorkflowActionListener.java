@@ -15,7 +15,7 @@ public interface WorkflowActionListener {
 	 * 提交前调用
 	 * @param context
 	 */
-	void beforSubmit(WorkflowEngineContext context);
+	void beforeSubmit(WorkflowEngineContext context);
 	
 	/**
 	 * 提交后调用
@@ -27,7 +27,7 @@ public interface WorkflowActionListener {
 	 * 刪除前调用
 	 * @param context
 	 */
-	void beforDelete(WorkflowEngineContext context);
+	void beforeDelete(WorkflowEngineContext context);
 	
 	/**
 	 * 刪除后调用

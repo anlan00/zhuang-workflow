@@ -227,7 +227,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		workflowEngineContext.setChoice(choice);
 
 		if (workflowActionListener != null) {
-			workflowActionListener.beforSubmit(workflowEngineContext);
+			workflowActionListener.beforeSubmit(workflowEngineContext);
 		}
 
 		run(task, userId, nextUsers, comment, envVariables, workflowEngineContext);
@@ -252,7 +252,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		workflowEngineContext.setChoice(getChoiceFromFormData(formData));
 
 		if (workflowActionListener != null) {
-			workflowActionListener.beforDelete(workflowEngineContext);
+			workflowActionListener.beforeDelete(workflowEngineContext);
 		}
 
 		processInstanceManager.deleteProcessInstanceByTaskId(taskId, comment);
