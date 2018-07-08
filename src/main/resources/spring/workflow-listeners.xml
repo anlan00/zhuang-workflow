@@ -14,7 +14,7 @@
 	<bean id="test01ActionListener" class="com.zhuang.workflow.test.Test01ActionListener">	
 	</bean>
 	
-	<bean id="workflowActionListeners" class="java.util.HashMap">
+	<bean id="workflowActionListeners" class="com.zhuang.workflow.AbstractWorkflowEngine.WorkflowActionListenerMap">
 		<constructor-arg>
 			<map>
 				<entry key="test01" value-ref="test01ActionListener"></entry>

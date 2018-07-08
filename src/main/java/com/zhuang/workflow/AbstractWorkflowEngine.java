@@ -1,5 +1,7 @@
 package com.zhuang.workflow;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -13,25 +15,40 @@ public abstract class AbstractWorkflowEngine implements WorkflowEngine {
 	/**
 	 * 工作流动作监听器集合
 	 */
-	protected Map<String, WorkflowActionListener> workflowActionListeners;
+	protected WorkflowActionListenerMap workflowActionListeners;
 
-	protected Map<String, NextTaskUsersHandler> nextTaskUsersHandlers;
+	protected NextTaskUsersHandlerMap nextTaskUsersHandlers;
 
-	public Map<String, WorkflowActionListener> getWorkflowActionListeners() {
+	public WorkflowActionListenerMap getWorkflowActionListeners() {
 
 		return workflowActionListeners;
 	}
 
-	public void setWorkflowActionListeners(Map<String, WorkflowActionListener> workflowActionListeners) {
+	public void setWorkflowActionListeners(WorkflowActionListenerMap workflowActionListeners) {
 		this.workflowActionListeners = workflowActionListeners;
 	}
 
-	public Map<String, NextTaskUsersHandler> getNextTaskUsersHandlers() {
+	public NextTaskUsersHandlerMap getNextTaskUsersHandlers() {
 		return nextTaskUsersHandlers;
 	}
 
-	public void setNextTaskUsersHandlers(Map<String, NextTaskUsersHandler> nextTaskUsersHandlers) {
+	public void setNextTaskUsersHandlers(NextTaskUsersHandlerMap nextTaskUsersHandlers) {
 		this.nextTaskUsersHandlers = nextTaskUsersHandlers;
 	}
 
+	public static class NextTaskUsersHandlerMap extends LinkedHashMap<String,NextTaskUsersHandler>
+	{
+		public NextTaskUsersHandlerMap(Map<String, NextTaskUsersHandler> map)
+		{
+			super(map);
+		}
+	}
+
+	public static class WorkflowActionListenerMap extends LinkedHashMap<String,WorkflowActionListener>
+	{
+		public WorkflowActionListenerMap(Map<String, WorkflowActionListener> map)
+		{
+			super(map);
+		}
+	}
 }

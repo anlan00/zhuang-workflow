@@ -17,7 +17,7 @@
 	<bean id="createUserHandler" class="com.zhuang.workflow.impl.handler.CreateUserHandler">
 	</bean>
 
-	<bean id="nextTaskUsersHandlers" class="java.util.HashMap">
+	<bean id="nextTaskUsersHandlers" class="com.zhuang.workflow.AbstractWorkflowEngine.NextTaskUsersHandlerMap">
 		<constructor-arg>
 			<map>
 				<entry key="roleIds" value-ref="roleIdsHandler"></entry>
