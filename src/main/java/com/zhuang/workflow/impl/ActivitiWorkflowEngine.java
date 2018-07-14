@@ -123,22 +123,6 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
         return processDefinitionManager;
     }
 
-    public void test() {
-        /*
-         * for (Execution execution :
-         * runtimeService.createExecutionQuery().list()) {
-         * runtimeService.deleteProcessInstance(execution.getProcessInstanceId()
-         * , ""); }
-         */
-        ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) repositoryService
-                .getProcessDefinition(
-                        taskService.createTaskQuery().taskId("75003").singleResult().getProcessDefinitionId());
-
-        for (ActivityImpl activityImpl : processDefinitionEntity.getActivities()) {
-            System.out.println(activityImpl.getProperty("name"));
-        }
-    }
-
     public String startNew(String processDefinitionKey, String userId, String businessKey, Map<String, Object> formData) {
 
         formData = ensureFormDataNotNull(formData);
