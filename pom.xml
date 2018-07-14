@@ -100,7 +100,8 @@
 		<dependency>
 			<groupId>org.activiti</groupId>
 			<artifactId>activiti-engine</artifactId>
-			<version>5.19.0</version>
+			<!--<version>5.19.0</version>-->
+			<version>5.22.0</version>
 		</dependency>
 
 <!-- 		<dependency>
