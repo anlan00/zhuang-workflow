@@ -56,9 +56,7 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
     @Autowired
     ProcessDefinitionManager processDefinitionManager;
 
-    public PageInfo<FlowInfo> getMyTodoListPage(String userId, int pageNo, int pageSize,
-
-                                                Map<String, Object> conditions) {
+    public PageInfo<FlowInfo> getMyTodoListPage(String userId, int pageNo, int pageSize, Map<String, Object> conditions) {
 
         //总记录查询
         TaskQuery taskQuery = taskService.createTaskQuery().taskCandidateOrAssigned(userId);
@@ -92,8 +90,7 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
         return result;
     }
 
-    public PageInfo<FlowInfo> getMyDoneListPage(String userId, int pageNo, int pageSize,
-                                                Map<String, Object> conditions) {
+    public PageInfo<FlowInfo> getMyDoneListPage(String userId, int pageNo, int pageSize, Map<String, Object> conditions) {
 
         //总记录查询
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
