@@ -1,17 +1,15 @@
 package com.zhuang.workflow.impl;
 
 import com.zhuang.workflow.WorkflowBeansFactory;
-import com.zhuang.workflow.common.PageModel;
-import com.zhuang.workflow.model.FlowInfoModel;
+import com.zhuang.workflow.model.PageInfo;
+import com.zhuang.workflow.model.FlowInfo;
 import com.zhuang.workflow.model.ProcDefModel;
-import com.zhuang.workflow.model.TaskInfoModel;
+import com.zhuang.workflow.model.TaskInfo;
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.Assert.*;
 
 public class ActivitiWorkflowQueryManagerTest {
 
@@ -19,17 +17,17 @@ public class ActivitiWorkflowQueryManagerTest {
     public void getMyTodoListPage() {
         Map<String, Object> map =new HashMap<String, Object>();
         //map.put(ProcessMainVariableNames.PROC_TITLE, "%20170112");
-        PageModel<FlowInfoModel> pageModel = WorkflowBeansFactory.getWorkflowQueryManager()
+        PageInfo<FlowInfo> pageInfo = WorkflowBeansFactory.getWorkflowQueryManager()
                 .getMyTodoListPage("user1",1, 10, map );
 
-        System.out.println(pageModel.getList().size());
-        System.out.println(pageModel.getTotalRows());
-        System.out.println(pageModel.getPageStartRow());
-        System.out.println(pageModel.getHasPreviousPage());
-        System.out.println(pageModel.getHasNextPage());
+        System.out.println(pageInfo.getList().size());
+        System.out.println(pageInfo.getTotalRows());
+        System.out.println(pageInfo.getPageStartRow());
+        System.out.println(pageInfo.getHasPreviousPage());
+        System.out.println(pageInfo.getHasNextPage());
 
-        for (FlowInfoModel flowInfoModel : pageModel.getList()) {
-            System.out.println(flowInfoModel);
+        for (FlowInfo flowInfo : pageInfo.getList()) {
+            System.out.println(flowInfo);
         }
     }
 
@@ -39,27 +37,27 @@ public class ActivitiWorkflowQueryManagerTest {
 
         Map<String, Object> map =new HashMap<String, Object>();
         //map.put(ProcessMainVariableNames.PROC_TITLE, "%20170112");
-        PageModel<FlowInfoModel> pageModel = WorkflowBeansFactory.getWorkflowQueryManager()
+        PageInfo<FlowInfo> pageInfo = WorkflowBeansFactory.getWorkflowQueryManager()
                 .getMyDoneListPage("zwb",1, 10, map );
 
-        System.out.println(pageModel.getList().size());
-        System.out.println(pageModel.getTotalRows());
-        System.out.println(pageModel.getPageStartRow());
-        System.out.println(pageModel.getHasPreviousPage());
-        System.out.println(pageModel.getHasNextPage());
+        System.out.println(pageInfo.getList().size());
+        System.out.println(pageInfo.getTotalRows());
+        System.out.println(pageInfo.getPageStartRow());
+        System.out.println(pageInfo.getHasPreviousPage());
+        System.out.println(pageInfo.getHasNextPage());
 
-        for (FlowInfoModel flowInfoModel : pageModel.getList()) {
-            System.out.println(flowInfoModel);
+        for (FlowInfo flowInfo : pageInfo.getList()) {
+            System.out.println(flowInfo);
         }
         System.out.println("<<<<<<<testGetMyDoneListPage");
     }
 
     @Test
     public void getHistoryTaskInfoList() {
-        List<TaskInfoModel> taskInfoModels = WorkflowBeansFactory.getWorkflowQueryManager()
+        List<TaskInfo> taskInfos = WorkflowBeansFactory.getWorkflowQueryManager()
                 .getHistoryTaskInfoList("425037");
-        for (TaskInfoModel taskInfoModel :taskInfoModels) {
-            System.out.println(taskInfoModel.toString());
+        for (TaskInfo taskInfo : taskInfos) {
+            System.out.println(taskInfo.toString());
         }
         System.out.println("success!");
     }

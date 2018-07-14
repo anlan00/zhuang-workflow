@@ -2,14 +2,14 @@ package com.zhuang.workflow.service;
 
 import java.util.List;
 
-import com.zhuang.workflow.model.UserInfoModel;
+import com.zhuang.workflow.model.UserInfo;
 
 public interface UserManagementService {
 	
-	UserInfoModel getUser(String userId);
+	UserInfo getUser(String userId);
 	
-	List<UserInfoModel> getUsersByRoleId(String roleId);
+	List<UserInfo> getUsersByRoleId(String roleId);
 	
-	List<UserInfoModel> getUsersByRoleName(String roleName);
+	List<UserInfo> getUsersByRoleName(String roleName);
 	
 }

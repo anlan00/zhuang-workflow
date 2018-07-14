@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.zhuang.workflow.model.FlowInfo;
+import com.zhuang.workflow.model.TaskInfo;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
@@ -26,11 +28,9 @@ import com.zhuang.workflow.activiti.ProcessDefinitionManager;
 import com.zhuang.workflow.activiti.ProcessInstanceManager;
 import com.zhuang.workflow.enums.ProcessMainVariableNames;
 import com.zhuang.workflow.activiti.ProcessVariablesManager;
-import com.zhuang.workflow.common.PageModel;
+import com.zhuang.workflow.model.PageInfo;
 import com.zhuang.workflow.enums.EndTaskVariableNames;
-import com.zhuang.workflow.model.FlowInfoModel;
 import com.zhuang.workflow.model.ProcDefModel;
-import com.zhuang.workflow.model.TaskInfoModel;
 import com.zhuang.workflow.service.UserManagementService;
 
 public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
@@ -56,14 +56,14 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
     @Autowired
     ProcessDefinitionManager processDefinitionManager;
 
-    public PageModel<FlowInfoModel> getMyTodoListPage(String userId, int pageNo, int pageSize,
+    public PageInfo<FlowInfo> getMyTodoListPage(String userId, int pageNo, int pageSize,
 
-                                                      Map<String, Object> conditions) {
+                                                Map<String, Object> conditions) {
 
         //总记录查询
         TaskQuery taskQuery = taskService.createTaskQuery().taskCandidateOrAssigned(userId);
 
-        List<FlowInfoModel> flowInfoList = new ArrayList<FlowInfoModel>();
+        List<FlowInfo> flowInfoList = new ArrayList<FlowInfo>();
 
         //设置查询筛选条件
         setTaskQueryConditions(taskQuery, conditions);
@@ -71,7 +71,7 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
         //设置排序
         taskQuery.orderByTaskCreateTime().desc();
 
-        PageModel<FlowInfoModel> result = new PageModel<FlowInfoModel>(pageNo, pageSize, new Long(taskQuery.count()).intValue(),
+        PageInfo<FlowInfo> result = new PageInfo<FlowInfo>(pageNo, pageSize, new Long(taskQuery.count()).intValue(),
                 flowInfoList);
 
         //得到分页记录
@@ -80,26 +80,26 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
         //设置流程信息实体值
         for (Task task : taskList) {
 
-            FlowInfoModel flowInfoModel = new FlowInfoModel();
-            flowInfoModel.setTaskId(task.getId());
-            flowInfoModel.setCurrentActivityName(task.getName());
+            FlowInfo flowInfo = new FlowInfo();
+            flowInfo.setTaskId(task.getId());
+            flowInfo.setCurrentActivityName(task.getName());
 
             Map<String, Object> processVariables = runtimeService.getVariables(task.getExecutionId());
-            fillFlowInfoModel(flowInfoModel, processVariables);
-            flowInfoList.add(flowInfoModel);
+            fillFlowInfoModel(flowInfo, processVariables);
+            flowInfoList.add(flowInfo);
         }
 
         return result;
     }
 
-    public PageModel<FlowInfoModel> getMyDoneListPage(String userId, int pageNo, int pageSize,
-                                                      Map<String, Object> conditions) {
+    public PageInfo<FlowInfo> getMyDoneListPage(String userId, int pageNo, int pageSize,
+                                                Map<String, Object> conditions) {
 
         //总记录查询
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
                 .taskAssignee(userId).finished();
 
-        List<FlowInfoModel> flowInfoList = new ArrayList<FlowInfoModel>();
+        List<FlowInfo> flowInfoList = new ArrayList<FlowInfo>();
 
         //设置查询筛选条件
         setTaskQueryConditions(historicTaskInstanceQuery, conditions);
@@ -107,7 +107,7 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
         //设置排序
         historicTaskInstanceQuery.orderByTaskCreateTime().desc();
 
-        PageModel<FlowInfoModel> result = new PageModel<FlowInfoModel>(pageNo, pageSize, new Long(historicTaskInstanceQuery.count()).intValue(),
+        PageInfo<FlowInfo> result = new PageInfo<FlowInfo>(pageNo, pageSize, new Long(historicTaskInstanceQuery.count()).intValue(),
                 flowInfoList);
 
         //得到分页记录
@@ -116,8 +116,8 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
         //设置流程信息实体值
         for (HistoricTaskInstance historicTaskInstance : historicTaskInstances) {
 
-            FlowInfoModel flowInfoModel = new FlowInfoModel();
-            flowInfoModel.setTaskId(historicTaskInstance.getId());
+            FlowInfo flowInfo = new FlowInfo();
+            flowInfo.setTaskId(historicTaskInstance.getId());
 
 
             String currentActivityName = "";
@@ -131,51 +131,51 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
                 }
             }
 
-            flowInfoModel.setCurrentActivityName(currentActivityName);
+            flowInfo.setCurrentActivityName(currentActivityName);
 
             Map<String, Object> processVariables = processVariablesManager.getProcessVariablesByTaskId(historicTaskInstance.getId());
-            fillFlowInfoModel(flowInfoModel, processVariables);
-            flowInfoList.add(flowInfoModel);
+            fillFlowInfoModel(flowInfo, processVariables);
+            flowInfoList.add(flowInfo);
         }
 
         return result;
 
     }
 
-    public List<TaskInfoModel> getHistoryTaskInfoList(String taskId) {
+    public List<TaskInfo> getHistoryTaskInfoList(String taskId) {
 
         HistoricTaskInstance historicTaskInstance = historyService.createHistoricTaskInstanceQuery().taskId(taskId).singleResult();
 
         String instanceId = historicTaskInstance.getProcessInstanceId();
 
-        List<TaskInfoModel> taskInfoModels = getHistoryTaskInfoListByInstanceId(instanceId);
+        List<TaskInfo> taskInfos = getHistoryTaskInfoListByInstanceId(instanceId);
 
-        return taskInfoModels;
+        return taskInfos;
     }
 
-    private List<TaskInfoModel> getHistoryTaskInfoListByInstanceId(String instanceId) {
-        List<TaskInfoModel> taskInfoModels = new ArrayList<TaskInfoModel>();
+    private List<TaskInfo> getHistoryTaskInfoListByInstanceId(String instanceId) {
+        List<TaskInfo> taskInfos = new ArrayList<TaskInfo>();
 
         List<HistoricTaskInstance> historicTaskInstances = historyService.createHistoricTaskInstanceQuery()
                 .processInstanceId(instanceId).orderByTaskCreateTime().asc().list();
 
         for (HistoricTaskInstance historicTaskInstance : historicTaskInstances) {
 
-            TaskInfoModel taskInfoModel = new TaskInfoModel();
+            TaskInfo taskInfo = new TaskInfo();
 
-            taskInfoModel.setId(historicTaskInstance.getId());
-            taskInfoModel.setKey(historicTaskInstance.getTaskDefinitionKey());
-            taskInfoModel.setName(historicTaskInstance.getName());
+            taskInfo.setId(historicTaskInstance.getId());
+            taskInfo.setKey(historicTaskInstance.getTaskDefinitionKey());
+            taskInfo.setName(historicTaskInstance.getName());
 
-            taskInfoModel.setUserId(historicTaskInstance.getAssignee());
-            taskInfoModel.setUserName(userManagementService.getUser(taskInfoModel.getUserId()).getUserName());
+            taskInfo.setUserId(historicTaskInstance.getAssignee());
+            taskInfo.setUserName(userManagementService.getUser(taskInfo.getUserId()).getUserName());
 
 
-            if (taskInfoModel.getUserId() == null) {
+            if (taskInfo.getUserId() == null) {
                 List<String> userIds = new ArrayList<String>();
                 List<String> userNames = new ArrayList<String>();
 
-                List<IdentityLink> identityLinks = taskService.getIdentityLinksForTask(taskInfoModel.getId());
+                List<IdentityLink> identityLinks = taskService.getIdentityLinksForTask(taskInfo.getId());
 
                 for (IdentityLink identityLink : identityLinks) {
                     if (!identityLink.getType().equals("candidate")) {
@@ -186,42 +186,42 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
                     userNames.add(userManagementService.getUser(identityLink.getUserId()).getUserName());
                 }
 
-                taskInfoModel.setUserId(StringUtils.join(userIds.toArray(new String[userIds.size()]), ","));
-                taskInfoModel.setUserName(StringUtils.join(userNames.toArray(new String[userNames.size()]), ","));
+                taskInfo.setUserId(StringUtils.join(userIds.toArray(new String[userIds.size()]), ","));
+                taskInfo.setUserName(StringUtils.join(userNames.toArray(new String[userNames.size()]), ","));
             }
 
-            taskInfoModel.setStartTime(historicTaskInstance.getStartTime());
-            taskInfoModel.setEndTime(historicTaskInstance.getEndTime());
+            taskInfo.setStartTime(historicTaskInstance.getStartTime());
+            taskInfo.setEndTime(historicTaskInstance.getEndTime());
             List<Comment> comments = taskService.getTaskComments(historicTaskInstance.getId());
             if (comments.size() > 0) {
-                taskInfoModel.setComment(comments.get(0).getFullMessage());
+                taskInfo.setComment(comments.get(0).getFullMessage());
             }
-            taskInfoModels.add(taskInfoModel);
+            taskInfos.add(taskInfo);
         }
 
-        if (taskInfoModels.size() > 0) {
-            TaskInfoModel lastTask = taskInfoModels.get(taskInfoModels.size() - 1);
+        if (taskInfos.size() > 0) {
+            TaskInfo lastTask = taskInfos.get(taskInfos.size() - 1);
             if (lastTask.getEndTime() != null) {
                 boolean isEndTask = processDefinitionManager.isEndTask(lastTask.getId());
                 if (isEndTask) {
-                    TaskInfoModel taskInfoModel = new TaskInfoModel();
+                    TaskInfo taskInfo = new TaskInfo();
 
-                    taskInfoModel.setId(EndTaskVariableNames.ID);
-                    taskInfoModel.setKey(EndTaskVariableNames.KEY);
-                    taskInfoModel.setName(EndTaskVariableNames.NAME);
-                    taskInfoModel.setUserId(EndTaskVariableNames.USERID);
-                    taskInfoModel.setUserName(EndTaskVariableNames.USERNAME);
-                    taskInfoModel.setStartTime(lastTask.getEndTime());
-                    taskInfoModel.setEndTime(lastTask.getEndTime());
-                    taskInfoModel.setComment(EndTaskVariableNames.COMMENT);
+                    taskInfo.setId(EndTaskVariableNames.ID);
+                    taskInfo.setKey(EndTaskVariableNames.KEY);
+                    taskInfo.setName(EndTaskVariableNames.NAME);
+                    taskInfo.setUserId(EndTaskVariableNames.USERID);
+                    taskInfo.setUserName(EndTaskVariableNames.USERNAME);
+                    taskInfo.setStartTime(lastTask.getEndTime());
+                    taskInfo.setEndTime(lastTask.getEndTime());
+                    taskInfo.setComment(EndTaskVariableNames.COMMENT);
 
-                    taskInfoModels.add(taskInfoModel);
+                    taskInfos.add(taskInfo);
 
                 }
             }
         }
 
-        return taskInfoModels;
+        return taskInfos;
     }
 
     private void setTaskQueryConditions(TaskInfoQuery taskInfoQuery, Map<String, Object> conditions) {
@@ -296,25 +296,25 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
 
     }
 
-    private void fillFlowInfoModel(FlowInfoModel flowInfoModel, Map<String, Object> processVariables) {
+    private void fillFlowInfoModel(FlowInfo flowInfo, Map<String, Object> processVariables) {
 
         if (processVariables.containsKey(ProcessMainVariableNames.PROC_DEF_KEY)) {
-            flowInfoModel.setDefKey(processVariables.get(ProcessMainVariableNames.PROC_DEF_KEY).toString());
+            flowInfo.setDefKey(processVariables.get(ProcessMainVariableNames.PROC_DEF_KEY).toString());
         }
         if (processVariables.containsKey(ProcessMainVariableNames.PROC_TITLE)) {
-            flowInfoModel.setTitle(processVariables.get(ProcessMainVariableNames.PROC_TITLE).toString());
+            flowInfo.setTitle(processVariables.get(ProcessMainVariableNames.PROC_TITLE).toString());
         }
         if (processVariables.containsKey(ProcessMainVariableNames.PROC_TYPE)) {
-            flowInfoModel.setType(processVariables.get(ProcessMainVariableNames.PROC_TYPE).toString());
+            flowInfo.setType(processVariables.get(ProcessMainVariableNames.PROC_TYPE).toString());
         }
         if (processVariables.containsKey(ProcessMainVariableNames.PROC_CREATE_TIME)) {
-            flowInfoModel.setCreateTime((Date) processVariables.get(ProcessMainVariableNames.PROC_CREATE_TIME));
+            flowInfo.setCreateTime((Date) processVariables.get(ProcessMainVariableNames.PROC_CREATE_TIME));
         }
         if (processVariables.containsKey(ProcessMainVariableNames.PROC_CREATE_USERID)) {
-            flowInfoModel.setCreateUserId(processVariables.get(ProcessMainVariableNames.PROC_CREATE_USERID).toString());
+            flowInfo.setCreateUserId(processVariables.get(ProcessMainVariableNames.PROC_CREATE_USERID).toString());
         }
         if (processVariables.containsKey(ProcessMainVariableNames.PROC_CREATE_USER) && processVariables.get(ProcessMainVariableNames.PROC_CREATE_USER) != null) {
-            flowInfoModel.setCreateUser(processVariables.get(ProcessMainVariableNames.PROC_CREATE_USER).toString());
+            flowInfo.setCreateUser(processVariables.get(ProcessMainVariableNames.PROC_CREATE_USER).toString());
         }
 
     }

@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhuang.workflow.WorkflowDeployment;
 import com.zhuang.workflow.activiti.DeploymentManager;
-import com.zhuang.workflow.common.PageModel;
+import com.zhuang.workflow.model.PageInfo;
 import com.zhuang.workflow.enums.DeploymentInfoNames;
-import com.zhuang.workflow.model.DeploymentInfoModel;
+import com.zhuang.workflow.model.DeploymentInfo;
 
 public class ActivitiWorkflowDeployment implements WorkflowDeployment {
 
@@ -29,16 +29,16 @@ public class ActivitiWorkflowDeployment implements WorkflowDeployment {
         deploymentManager.deployByInputStream(resourceName, inputStream);
     }
 
-    public PageModel<DeploymentInfoModel> getDeploymentInfoPage(int pageNo, int pageSize,
-                                                                Map<String, Object> conditions) {
+    public PageInfo<DeploymentInfo> getDeploymentInfoPage(int pageNo, int pageSize,
+                                                          Map<String, Object> conditions) {
 
         DeploymentQuery deploymentQuery = repositoryService.createDeploymentQuery();
         deploymentQuery.orderByDeploymenTime().desc();
 
 
-        List<DeploymentInfoModel> deploymentInfoList = new ArrayList<DeploymentInfoModel>();
+        List<DeploymentInfo> deploymentInfoList = new ArrayList<DeploymentInfo>();
 
-        PageModel<DeploymentInfoModel> result = new PageModel<DeploymentInfoModel>(pageNo, pageSize, new Long(deploymentQuery.count()).intValue(),
+        PageInfo<DeploymentInfo> result = new PageInfo<DeploymentInfo>(pageNo, pageSize, new Long(deploymentQuery.count()).intValue(),
                 deploymentInfoList);
 
 
@@ -50,21 +50,21 @@ public class ActivitiWorkflowDeployment implements WorkflowDeployment {
 
         for (Deployment deployment : deployments) {
 
-            DeploymentInfoModel deploymentInfoModel = new DeploymentInfoModel();
+            DeploymentInfo deploymentInfo = new DeploymentInfo();
 
-            deploymentInfoModel.setDeployId(deployment.getId());
-            deploymentInfoModel.setDeployName(deployment.getName());
-            deploymentInfoModel.setDeployCategory(deployment.getCategory());
-            deploymentInfoModel.setDeployTime(deployment.getDeploymentTime());
+            deploymentInfo.setDeployId(deployment.getId());
+            deploymentInfo.setDeployName(deployment.getName());
+            deploymentInfo.setDeployCategory(deployment.getCategory());
+            deploymentInfo.setDeployTime(deployment.getDeploymentTime());
 
 
             ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deployment.getId()).singleResult();
-            deploymentInfoModel.setProcDefKey(processDefinition.getKey());
-            deploymentInfoModel.setProcDefName(processDefinition.getName());
-            deploymentInfoModel.setProcDefVersion(processDefinition.getVersion());
-            deploymentInfoModel.setProcDefDescription(processDefinition.getDescription());
+            deploymentInfo.setProcDefKey(processDefinition.getKey());
+            deploymentInfo.setProcDefName(processDefinition.getName());
+            deploymentInfo.setProcDefVersion(processDefinition.getVersion());
+            deploymentInfo.setProcDefDescription(processDefinition.getDescription());
 
-            deploymentInfoList.add(deploymentInfoModel);
+            deploymentInfoList.add(deploymentInfo);
         }
 
         return result;

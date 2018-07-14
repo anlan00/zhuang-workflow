@@ -2,7 +2,7 @@ package com.zhuang.workflow.model;
 
 import java.util.Date;
 
-public class FlowInfoModel {
+public class FlowInfo {
 	
 	private String taskId;
 	
@@ -97,7 +97,7 @@ public class FlowInfoModel {
 
 	@Override
 	public String toString() {
-		return "FlowInfoModel [taskId=" + taskId + ", businessKey=" + businessKey + ", title=" + title + ", createUser="
+		return "FlowInfo [taskId=" + taskId + ", businessKey=" + businessKey + ", title=" + title + ", createUser="
 				+ createUser + ", createUserId=" + createUserId + ", createTime=" + createTime
 				+ ", currentActivityName=" + currentActivityName + ", type=" + type + ", defKey=" + defKey + "]";
 	}

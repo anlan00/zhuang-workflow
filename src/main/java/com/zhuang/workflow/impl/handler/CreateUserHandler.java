@@ -3,6 +3,7 @@ package com.zhuang.workflow.impl.handler;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.zhuang.workflow.model.UserInfo;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
@@ -12,7 +13,6 @@ import com.zhuang.workflow.NextTaskUsersHandler;
 import com.zhuang.workflow.WorkflowEngineContext;
 import com.zhuang.workflow.activiti.ProcessInstanceManager;
 import com.zhuang.workflow.enums.ProcessMainVariableNames;
-import com.zhuang.workflow.model.UserInfoModel;
 import com.zhuang.workflow.service.UserManagementService;
 
 public class CreateUserHandler implements NextTaskUsersHandler {
@@ -29,19 +29,19 @@ public class CreateUserHandler implements NextTaskUsersHandler {
 	@Autowired
 	TaskService taskService;
 	
-	public List<UserInfoModel> execute(WorkflowEngineContext workflowEngineContext) {
+	public List<UserInfo> execute(WorkflowEngineContext workflowEngineContext) {
 
-		List<UserInfoModel> result = new ArrayList<UserInfoModel>();
+		List<UserInfo> result = new ArrayList<UserInfo>();
 
-		UserInfoModel userInfoModel = new UserInfoModel();
+		UserInfo userInfo = new UserInfo();
 
 		Task task = taskService.createTaskQuery().taskId(workflowEngineContext.getTaskId()).singleResult();
 		
 		Object objCreateUserId = runtimeService.getVariable(task.getExecutionId(), ProcessMainVariableNames.PROC_CREATE_USERID);
 
-		userInfoModel = userManagementService.getUser(objCreateUserId.toString());
+		userInfo = userManagementService.getUser(objCreateUserId.toString());
 
-		result.add(userInfoModel);
+		result.add(userInfo);
 
 		return result;
 	}

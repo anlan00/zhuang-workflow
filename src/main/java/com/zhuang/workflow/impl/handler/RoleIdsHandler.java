@@ -3,11 +3,11 @@ package com.zhuang.workflow.impl.handler;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.zhuang.workflow.model.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhuang.workflow.NextTaskUsersHandler;
 import com.zhuang.workflow.WorkflowEngineContext;
-import com.zhuang.workflow.model.UserInfoModel;
 import com.zhuang.workflow.service.UserManagementService;
 
 public class RoleIdsHandler implements NextTaskUsersHandler {
@@ -15,9 +15,9 @@ public class RoleIdsHandler implements NextTaskUsersHandler {
 	@Autowired
 	private UserManagementService userManagementService;
 	
-	public List<UserInfoModel> execute(WorkflowEngineContext workflowEngineContext) {
+	public List<UserInfo> execute(WorkflowEngineContext workflowEngineContext) {
 
-		List<UserInfoModel> result = new ArrayList<UserInfoModel>();
+		List<UserInfo> result = new ArrayList<UserInfo>();
 		
 		String roleId = workflowEngineContext.getComment();
 

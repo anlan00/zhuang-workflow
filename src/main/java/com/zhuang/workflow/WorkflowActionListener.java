@@ -2,7 +2,7 @@ package com.zhuang.workflow;
 
 import java.util.List;
 
-import com.zhuang.workflow.model.UserInfoModel;
+import com.zhuang.workflow.model.UserInfo;
 
 /**
  * 工作流动作监听接口
@@ -45,7 +45,7 @@ public interface WorkflowActionListener {
 	 * 处理下一步处理人
 	 * @param nextTaskUsers
 	 */
-	void onRetrieveNextTaskUsers(List<UserInfoModel> nextTaskUsers, WorkflowEngineContext context);
+	void onRetrieveNextTaskUsers(List<UserInfo> nextTaskUsers, WorkflowEngineContext context);
 
 	/***
 	 * 加载表单数据

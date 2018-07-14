@@ -3,10 +3,10 @@ package com.zhuang.workflow;
 import java.util.List;
 import java.util.Map;
 
-import com.zhuang.workflow.common.PageModel;
-import com.zhuang.workflow.model.FlowInfoModel;
+import com.zhuang.workflow.model.PageInfo;
+import com.zhuang.workflow.model.FlowInfo;
 import com.zhuang.workflow.model.ProcDefModel;
-import com.zhuang.workflow.model.TaskInfoModel;
+import com.zhuang.workflow.model.TaskInfo;
 
 /**
  * 工作流查询管理器接口
@@ -29,7 +29,7 @@ public interface WorkflowQueryManager {
 	 *            查询筛选条件
 	 * @return
 	 */
-	PageModel<FlowInfoModel> getMyTodoListPage(String userId, int pageNo, int pageSize, Map<String, Object> conditions);
+	PageInfo<FlowInfo> getMyTodoListPage(String userId, int pageNo, int pageSize, Map<String, Object> conditions);
 
 	/**
 	 * 我的已办分页查询
@@ -44,14 +44,14 @@ public interface WorkflowQueryManager {
 	 *            查询筛选条件
 	 * @return
 	 */
-	PageModel<FlowInfoModel> getMyDoneListPage(String userId, int pageNo, int pageSize, Map<String, Object> conditions);
+	PageInfo<FlowInfo> getMyDoneListPage(String userId, int pageNo, int pageSize, Map<String, Object> conditions);
 
 	/**
 	 * 获取历史审批任务信息列表
 	 * @param instanceId
 	 * @return
 	 */
-	List<TaskInfoModel> getHistoryTaskInfoList(String instanceId);
+	List<TaskInfo> getHistoryTaskInfoList(String instanceId);
 
 	/***
 	 * 获取流程定义信息列表

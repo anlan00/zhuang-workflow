@@ -2,7 +2,7 @@ package com.zhuang.workflow.model;
 
 import java.util.List;
 
-public class NextTaskInfoModel {
+public class NextTaskInfo {
 	
 	private String taskKey;
 
@@ -10,7 +10,7 @@ public class NextTaskInfoModel {
 
 	private Boolean isCountersign;
 
-	private List<UserInfoModel> users;
+	private List<UserInfo> users;
 
 	public String getTaskKey() {
 		return taskKey;
@@ -44,11 +44,11 @@ public class NextTaskInfoModel {
 		this.isCountersign = isCountersign;
 	}
 
-	public List<UserInfoModel> getUsers() {
+	public List<UserInfo> getUsers() {
 		return users;
 	}
 
-	public void setUsers(List<UserInfoModel> users) {
+	public void setUsers(List<UserInfo> users) {
 		this.users = users;
 	}
 	

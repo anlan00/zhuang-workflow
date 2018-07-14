@@ -2,7 +2,7 @@ package com.zhuang.workflow.model;
 
 import java.util.Date;
 
-public class DeploymentInfoModel {
+public class DeploymentInfo {
 
 	private String deployId;
 	

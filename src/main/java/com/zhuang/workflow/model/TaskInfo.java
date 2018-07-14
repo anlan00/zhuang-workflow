@@ -2,7 +2,7 @@ package com.zhuang.workflow.model;
 
 import java.util.Date;
 
-public class TaskInfoModel {
+public class TaskInfo {
 
 	private String id;
 
@@ -84,17 +84,17 @@ public class TaskInfoModel {
 		this.comment = comment;
 	}
 
-	public TaskInfoModel(String id) {
+	public TaskInfo(String id) {
 		this.id = id;
 	}
 
-	public TaskInfoModel() {
+	public TaskInfo() {
 		
 	}
 
 	@Override
 	public String toString() {
-		return "TaskInfoModel [id=" + id + ", name=" + name + ", key=" + key + ", userId=" + userId + ", userName="
+		return "TaskInfo [id=" + id + ", name=" + name + ", key=" + key + ", userId=" + userId + ", userName="
 				+ userName + ", startTime=" + startTime + ", endTime=" + endTime + ", comment=" + comment + "]";
 	}
 

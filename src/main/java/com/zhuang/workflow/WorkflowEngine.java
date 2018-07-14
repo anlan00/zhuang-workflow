@@ -3,7 +3,7 @@ package com.zhuang.workflow;
 import java.util.List;
 import java.util.Map;
 
-import com.zhuang.workflow.model.NextTaskInfoModel;
+import com.zhuang.workflow.model.NextTaskInfo;
 
 /**
  * 工作流引擎接口
@@ -72,7 +72,7 @@ public interface WorkflowEngine {
 	 * @param formData
 	 * @return
 	 */
-	NextTaskInfoModel retrieveNextTaskInfo(String taskId, Map<String, Object> formData);
+	NextTaskInfo retrieveNextTaskInfo(String taskId, Map<String, Object> formData);
 	
 	/***
 	 * 获取表单数据

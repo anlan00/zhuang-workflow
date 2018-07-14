@@ -3,95 +3,95 @@ package com.zhuang.workflow.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.zhuang.workflow.model.UserInfoModel;
+import com.zhuang.workflow.model.UserInfo;
 import com.zhuang.workflow.service.UserManagementService;
 
 public class DefaultUserManagementService implements UserManagementService{
 
-	public UserInfoModel getUser(String userId) {
-		UserInfoModel userInfoModel=new UserInfoModel();
-		userInfoModel.setUserId(userId);
+	public UserInfo getUser(String userId) {
+		UserInfo userInfo =new UserInfo();
+		userInfo.setUserId(userId);
 		
 		if(userId==null)
 		{
-			userInfoModel.setUserName("");
+			userInfo.setUserName("");
 			
 		} else if(userId.equals("zwb"))
 		{
-			userInfoModel.setUserName("庄伟斌");
+			userInfo.setUserName("庄伟斌");
 			
 		}
 		else if(userId.equals("admin"))
 		{
-			userInfoModel.setUserName("管理员");			
+			userInfo.setUserName("管理员");
 		}
 		else if(userId.equals("zs"))
 		{
-			userInfoModel.setUserName("张三");			
+			userInfo.setUserName("张三");
 		}else if(userId.equals("ls"))
 		{
-			userInfoModel.setUserName("李四");			
+			userInfo.setUserName("李四");
 		}else if(userId.equals("wb"))
 		{
-			userInfoModel.setUserName("王五");			
+			userInfo.setUserName("王五");
 		}else if(userId.equals("zl"))
 		{
-			userInfoModel.setUserName("赵六");			
+			userInfo.setUserName("赵六");
 		}
 	
-		return userInfoModel;
+		return userInfo;
 		
 	}
 	
-	public List<UserInfoModel> getUsersByRoleId(String roleId) {
+	public List<UserInfo> getUsersByRoleId(String roleId) {
 
-		List<UserInfoModel> userInfoModels=new ArrayList<UserInfoModel>();
+		List<UserInfo> userInfos =new ArrayList<UserInfo>();
 
 
 		if(roleId.equals("sys"))
 		{
-			UserInfoModel userInfoModel=new UserInfoModel();
-			userInfoModel.setUserId("admin");
-			userInfoModel.setUserName("管理员");
-			userInfoModels.add(userInfoModel);
+			UserInfo userInfo =new UserInfo();
+			userInfo.setUserId("admin");
+			userInfo.setUserName("管理员");
+			userInfos.add(userInfo);
 
-			userInfoModel=new UserInfoModel();
-			userInfoModel.setUserId("zwb");
-			userInfoModel.setUserName("庄伟斌");
-			userInfoModels.add(userInfoModel);
+			userInfo =new UserInfo();
+			userInfo.setUserId("zwb");
+			userInfo.setUserName("庄伟斌");
+			userInfos.add(userInfo);
 			
 		}else if(roleId.equals("mgr"))
 		{
-			UserInfoModel userInfoModel=new UserInfoModel();
-			userInfoModel.setUserId("zs");
-			userInfoModel.setUserName("张三");
-			userInfoModels.add(userInfoModel);
+			UserInfo userInfo =new UserInfo();
+			userInfo.setUserId("zs");
+			userInfo.setUserName("张三");
+			userInfos.add(userInfo);
 			
 		}else if(roleId.equals("def"))
 		{
-			UserInfoModel userInfoModel=new UserInfoModel();
-			userInfoModel.setUserId("ls");
-			userInfoModel.setUserName("李四");
-			userInfoModels.add(userInfoModel);
+			UserInfo userInfo =new UserInfo();
+			userInfo.setUserId("ls");
+			userInfo.setUserName("李四");
+			userInfos.add(userInfo);
 			
-			userInfoModel=new UserInfoModel();
-			userInfoModel.setUserId("wb");
-			userInfoModel.setUserName("王五");
-			userInfoModels.add(userInfoModel);
+			userInfo =new UserInfo();
+			userInfo.setUserId("wb");
+			userInfo.setUserName("王五");
+			userInfos.add(userInfo);
 			
-			userInfoModel=new UserInfoModel();
-			userInfoModel.setUserId("zl");
-			userInfoModel.setUserName("赵六");
-			userInfoModels.add(userInfoModel);
+			userInfo =new UserInfo();
+			userInfo.setUserId("zl");
+			userInfo.setUserName("赵六");
+			userInfos.add(userInfo);
 		}
-		return userInfoModels;
+		return userInfos;
 	}
 	
-	public List<UserInfoModel> getUsersByRoleName(String roleName) {
+	public List<UserInfo> getUsersByRoleName(String roleName) {
 
-		List<UserInfoModel> userInfoModels=new ArrayList<UserInfoModel>();
+		List<UserInfo> userInfos =new ArrayList<UserInfo>();
 		
-		return userInfoModels;
+		return userInfos;
 	}
 
 }

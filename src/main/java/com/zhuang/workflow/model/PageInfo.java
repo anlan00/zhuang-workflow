@@ -1,8 +1,8 @@
-package com.zhuang.workflow.common;
+package com.zhuang.workflow.model;
 
 import java.util.List;
 
-public class PageModel<T> {
+public class PageInfo<T> {
 
 	List<T> list;
 
@@ -22,11 +22,11 @@ public class PageModel<T> {
 
 	private boolean hasPreviousPage;
 
-	public PageModel() {
+	public PageInfo() {
 
 	}
 
-	public PageModel(int pageNo, int pageSize, int totalRows, List<T> list) {
+	public PageInfo(int pageNo, int pageSize, int totalRows, List<T> list) {
 
 		this.totalRows = totalRows;
 		this.pageNo = pageNo;

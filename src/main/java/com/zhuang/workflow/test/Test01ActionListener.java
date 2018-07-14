@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.zhuang.workflow.WorkflowActionListener;
 import com.zhuang.workflow.WorkflowEngineContext;
-import com.zhuang.workflow.model.UserInfoModel;
+import com.zhuang.workflow.model.UserInfo;
 import com.zhuang.workflow.enums.FormDataVariableNames;
 import com.zhuang.workflow.enums.WorkflowChoiceOptions;
 
@@ -25,7 +25,7 @@ public class Test01ActionListener implements WorkflowActionListener {
 		
 	}
 
-	public void onRetrieveNextTaskUsers(List<UserInfoModel> nextTaskUsers, WorkflowEngineContext context) {
+	public void onRetrieveNextTaskUsers(List<UserInfo> nextTaskUsers, WorkflowEngineContext context) {
 		System.out.println("onRetrieveNextTaskUsers--------------------");
 		
 	}

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.zhuang.workflow.model.UserInfo;
 import org.activiti.engine.FormService;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.IdentityService;
@@ -38,9 +39,8 @@ import com.zhuang.workflow.enums.CommonVariableNames;
 import com.zhuang.workflow.enums.CountersignVariableNames;
 import com.zhuang.workflow.enums.FormDataVariableNames;
 import com.zhuang.workflow.exception.HandlerNotFoundException;
-import com.zhuang.workflow.model.NextTaskInfoModel;
+import com.zhuang.workflow.model.NextTaskInfo;
 import com.zhuang.workflow.model.TaskDefModel;
-import com.zhuang.workflow.model.UserInfoModel;
 import com.zhuang.workflow.enums.WorkflowChoiceOptions;
 import com.zhuang.workflow.service.UserManagementService;
 
@@ -159,8 +159,8 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
 		envVariables.put(ProcessMainVariableNames.PROC_CREATE_USERID, userId);
 
-		UserInfoModel userInfoModel = userManagementService.getUser(userId);
-		envVariables.put(ProcessMainVariableNames.PROC_CREATE_USER, userInfoModel.getUserName());
+		UserInfo userInfo = userManagementService.getUser(userId);
+		envVariables.put(ProcessMainVariableNames.PROC_CREATE_USER, userInfo.getUserName());
 
 		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey, businessKey,
 				envVariables);
@@ -298,10 +298,10 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		}
 	}
 
-	public NextTaskInfoModel retrieveNextTaskInfo(String taskId, Map<String, Object> formData) {
+	public NextTaskInfo retrieveNextTaskInfo(String taskId, Map<String, Object> formData) {
 
-		NextTaskInfoModel result = new NextTaskInfoModel();
-		List<UserInfoModel> userInfoModels = new ArrayList<UserInfoModel>();
+		NextTaskInfo result = new NextTaskInfo();
+		List<UserInfo> userInfos = new ArrayList<UserInfo>();
 		String choice = getChoiceFromFormData(formData);
 		Map<String, Object> envVariables=getEnvVarFromFormData(formData);
 		TaskDefModel currentTaskDef = getCurrentTaskDef(taskId);
@@ -322,7 +322,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		workflowEngineContext.setNextTaskDef(nextTaskDefModel);
 		workflowEngineContext.setChoice(choice);
 
-		initNextTaskUsers(userInfoModels, taskId, workflowEngineContext);
+		initNextTaskUsers(userInfos, taskId, workflowEngineContext);
 
 
 		String configValue = null;
@@ -347,7 +347,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 						"在“nextTaskUsersHandlers”中找不到key为“" + handlerKey + "”的NextTaskUsersHandler！");
 			} else {
 				workflowEngineContext.setComment(handlerParams);
-				userInfoModels.addAll(nextTaskUsersHandler.execute(workflowEngineContext));
+				userInfos.addAll(nextTaskUsersHandler.execute(workflowEngineContext));
 			}
 
 		}
@@ -355,11 +355,11 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		
 		WorkflowActionListener workflowActionListener = getWorkflowActionListenerByTaskId(taskId);
 		if (workflowActionListener != null) {
-			workflowActionListener.onRetrieveNextTaskUsers(userInfoModels, workflowEngineContext);
+			workflowActionListener.onRetrieveNextTaskUsers(userInfos, workflowEngineContext);
 		}
 
 		result.setIsCountersign(nextTaskDefModel.getIsCountersign());
-		result.setUsers(userInfoModels);
+		result.setUsers(userInfos);
 
 		return result;
 	}
@@ -412,14 +412,14 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 		}
 	}
 
-	private void initNextTaskUsers(List<UserInfoModel> userInfoModels, String taskId,
-			WorkflowEngineContext workflowEngineContext) {
+	private void initNextTaskUsers(List<UserInfo> userInfos, String taskId,
+								   WorkflowEngineContext workflowEngineContext) {
 		if (workflowEngineContext.getChoice().equals(WorkflowChoiceOptions.BACK)) {
 			String nextTaskUser = userTaskManager.getTaskAssignee(userTaskManager.getProcessInstanceId(taskId),
 					workflowEngineContext.getNextTaskDef().getKey());
 			if (nextTaskUser != null) {
-				UserInfoModel userInfoModel = userManagementService.getUser(nextTaskUser);
-				userInfoModels.add(userInfoModel);
+				UserInfo userInfo = userManagementService.getUser(nextTaskUser);
+				userInfos.add(userInfo);
 			}
 		}
 	}

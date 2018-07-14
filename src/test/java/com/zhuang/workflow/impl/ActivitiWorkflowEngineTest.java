@@ -2,16 +2,14 @@ package com.zhuang.workflow.impl;
 
 import com.zhuang.workflow.WorkflowBeansFactory;
 import com.zhuang.workflow.enums.ProcessMainVariableNames;
-import com.zhuang.workflow.model.NextTaskInfoModel;
-import com.zhuang.workflow.model.UserInfoModel;
+import com.zhuang.workflow.model.NextTaskInfo;
+import com.zhuang.workflow.model.UserInfo;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.Assert.*;
 
 public class ActivitiWorkflowEngineTest {
 
@@ -102,13 +100,13 @@ public class ActivitiWorkflowEngineTest {
         //formData.put("env_choice", "提交");
 
         // 370003 375012
-        NextTaskInfoModel nextTaskInfoModel = WorkflowBeansFactory.getWorkflowEngine().retrieveNextTaskInfo("522530", formData);
+        NextTaskInfo nextTaskInfo = WorkflowBeansFactory.getWorkflowEngine().retrieveNextTaskInfo("522530", formData);
 
-        System.out.println(nextTaskInfoModel.getTaskKey());
-        System.out.println(nextTaskInfoModel.getTaskName());
+        System.out.println(nextTaskInfo.getTaskKey());
+        System.out.println(nextTaskInfo.getTaskName());
 
-        for (UserInfoModel userInfoModel : nextTaskInfoModel.getUsers()) {
-            System.out.println(userInfoModel.toString());
+        for (UserInfo userInfo : nextTaskInfo.getUsers()) {
+            System.out.println(userInfo.toString());
         }
 
         System.out.println("success!");
