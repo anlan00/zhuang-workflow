@@ -107,7 +107,7 @@ public class ActivitiTestBean {
 
 	public static ActivitiTestBean getActivitiTestBean() {
 		
-		return ApplicationContextUtils.GetApplicationContext().getBean("activitiTestBean",ActivitiTestBean.class);
+		return ApplicationContextUtils.getApplicationContext().getBean("activitiTestBean",ActivitiTestBean.class);
 	}
 	
 }

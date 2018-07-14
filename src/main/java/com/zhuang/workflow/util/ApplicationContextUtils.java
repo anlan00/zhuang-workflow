@@ -6,20 +6,22 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class ApplicationContextUtils {
 
-	private static ApplicationContext applicationContext;
-	
-	static{
-		
-		if (applicationContext == null) {
-			
-			applicationContext = new ClassPathXmlApplicationContext(new String[]{"spring/applicationContext.xml"});
-		}
-	}
-	
-	public static ApplicationContext GetApplicationContext() {
-	
-		return applicationContext;
-		
-	}
-	
+    private volatile static ApplicationContext applicationContext;
+
+    public static ApplicationContext getApplicationContext() {
+
+        if (applicationContext == null) {
+            synchronized (ApplicationContextUtils.class) {
+                if (applicationContext == null) {
+                    applicationContext = new ClassPathXmlApplicationContext(new String[]{"spring/applicationContext.xml"});
+                }
+            }
+        }
+
+        return applicationContext;
+    }
+
+    public static void setApplicationContext(ApplicationContext applicationContext) {
+        ApplicationContextUtils.applicationContext = applicationContext;
+    }
 }

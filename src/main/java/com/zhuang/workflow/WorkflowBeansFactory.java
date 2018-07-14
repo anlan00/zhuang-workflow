@@ -10,40 +10,40 @@ import com.zhuang.workflow.util.ApplicationContextUtils;
 public class WorkflowBeansFactory {
 
 	public static WorkflowEngine getWorkflowEngine() {
-		return ApplicationContextUtils.GetApplicationContext().getBean("workflowEngine", WorkflowEngine.class);
+		return ApplicationContextUtils.getApplicationContext().getBean("workflowEngine", WorkflowEngine.class);
 	}
 
 	public static WorkflowDeployment getWorkflowDeployment() {
-		return ApplicationContextUtils.GetApplicationContext().getBean("workflowDeployment", WorkflowDeployment.class);
+		return ApplicationContextUtils.getApplicationContext().getBean("workflowDeployment", WorkflowDeployment.class);
 	}
 
 	public static DeploymentManager getDeploymentManager() {
-		return ApplicationContextUtils.GetApplicationContext().getBean("deploymentManager", DeploymentManager.class);
+		return ApplicationContextUtils.getApplicationContext().getBean("deploymentManager", DeploymentManager.class);
 
 	}
 
 	public static ProcessDefinitionManager getProcessDefinitionManager() {
-		return ApplicationContextUtils.GetApplicationContext().getBean("processDefinitionManager",
+		return ApplicationContextUtils.getApplicationContext().getBean("processDefinitionManager",
 				ProcessDefinitionManager.class);
 
 	}
 
 	public static WorkflowQueryManager getWorkflowQueryManager() {
-		return ApplicationContextUtils.GetApplicationContext().getBean("workflowQueryManager",
+		return ApplicationContextUtils.getApplicationContext().getBean("workflowQueryManager",
 				WorkflowQueryManager.class);
 	}
 
 	public static ProcessVariablesManager getProcessVariablesManager() {
-		return ApplicationContextUtils.GetApplicationContext().getBean("processVariablesManager",
+		return ApplicationContextUtils.getApplicationContext().getBean("processVariablesManager",
 				ProcessVariablesManager.class);
 	}
 
 	public static UserTaskManager getUserTaskManager() {
-		return ApplicationContextUtils.GetApplicationContext().getBean("userTaskManager", UserTaskManager.class);
+		return ApplicationContextUtils.getApplicationContext().getBean("userTaskManager", UserTaskManager.class);
 	}
 
 	public static ProcessInstanceManager getProcessInstanceManager() {
-		return ApplicationContextUtils.GetApplicationContext().getBean("processInstanceManager",
+		return ApplicationContextUtils.getApplicationContext().getBean("processInstanceManager",
 				ProcessInstanceManager.class);
 	}
 
