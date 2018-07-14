@@ -1,10 +1,16 @@
 package com.zhuang.workflow.test;
 
+import com.zhuang.workflow.util.ApplicationContextUtils;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.junit.Test;
 
 public class ActivitiTest {
+
+	public static ActivitiTestBean getActivitiTestBean() {
+
+		return ApplicationContextUtils.GetApplicationContext().getBean("activitiTestBean",ActivitiTestBean.class);
+	}
 
 	@Test
 	public void testProcessDefinitionEntity() {
