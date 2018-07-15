@@ -278,7 +278,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
 
     public NextTaskInfo retrieveNextTaskInfo(String taskId, Map<String, Object> formData) {
         NextTaskInfo result = new NextTaskInfo();
-        List<UserInfo> userInfos = new ArrayList<UserInfo>();
+        List<UserInfo> userInfoList = new ArrayList<UserInfo>();
         String choice = getChoiceFromFormData(formData);
         Map<String, Object> envVariables = getEnvVarFromFormData(formData);
         TaskDefModel currentTaskDef = getCurrentTaskDef(taskId);
@@ -297,7 +297,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
         workflowEngineContext.setCurrentTaskDef(currentTaskDef);
         workflowEngineContext.setNextTaskDef(nextTaskDefModel);
         workflowEngineContext.setChoice(choice);
-        initNextTaskUsers(userInfos, taskId, workflowEngineContext);
+        initNextTaskUsers(userInfoList, taskId, workflowEngineContext);
         String configValue = null;
         if (nextTaskDefModel.getIsCountersign()) {
             configValue = nextTaskDefModel.getCandidateUser();
@@ -316,15 +316,15 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
                 throw new HandlerNotFoundException("在“nextTaskUsersHandlers”中找不到key为“" + handlerKey + "”的NextTaskUsersHandler！");
             } else {
                 workflowEngineContext.setComment(handlerParams);
-                userInfos.addAll(nextTaskUsersHandler.execute(workflowEngineContext));
+                userInfoList.addAll(nextTaskUsersHandler.execute(workflowEngineContext));
             }
         }
         WorkflowActionListener workflowActionListener = getWorkflowActionListenerByTaskId(taskId);
         if (workflowActionListener != null) {
-            workflowActionListener.onRetrieveNextTaskUsers(userInfos, workflowEngineContext);
+            workflowActionListener.onRetrieveNextTaskUsers(userInfoList, workflowEngineContext);
         }
         result.setIsCountersign(nextTaskDefModel.getIsCountersign());
-        result.setUsers(userInfos);
+        result.setUsers(userInfoList);
         return result;
     }
 
