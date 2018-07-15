@@ -17,7 +17,7 @@ public class DeploymentManagerTest {
 
     @Test
     public void deployByClasspathResource() {
-        WorkflowBeansFactory.getDeploymentManager().deployByClasspathResource("test02.bpmn", "test02");
+        WorkflowBeansFactory.getDeploymentManager().deployByClasspathResource("test01.bpmn", "test01");
         System.out.println("success!");
     }
 

@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.zhuang.workflow.model.FlowInfo;
 import com.zhuang.workflow.model.TaskInfo;
+import com.zhuang.workflow.util.DateUtils;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
@@ -257,19 +258,12 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
                 }
             }
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
             String proCreateTimeStart = ProcessMainVariableNames.PROC_CREATE_TIME + "_START";
             if (conditions.containsKey(proCreateTimeStart)) {
                 Object objProcCreateTimeStart = conditions.get(proCreateTimeStart);
                 if (objProcCreateTimeStart != null && !objProcCreateTimeStart.toString().trim().isEmpty()) {
                     Date dProcCreateTimeStart = null;
-                    try {
-                        dProcCreateTimeStart = sdf.parse(objProcCreateTimeStart.toString() + " 00:00:00");
-                    } catch (ParseException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+                    dProcCreateTimeStart = DateUtils.parseDate(objProcCreateTimeStart.toString() + " 00:00:00");
                     taskInfoQuery.processVariableValueGreaterThanOrEqual(ProcessMainVariableNames.PROC_CREATE_TIME, dProcCreateTimeStart);
                 }
             }
@@ -279,12 +273,7 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
                 Object objProcCreateTimeEnd = conditions.get(proCreateTimeEnd);
                 if (objProcCreateTimeEnd != null && !objProcCreateTimeEnd.toString().trim().isEmpty()) {
                     Date dProcCreateTimeEnd = null;
-                    try {
-                        dProcCreateTimeEnd = sdf.parse(objProcCreateTimeEnd.toString() + " 23:59:59");
-                    } catch (ParseException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+                    dProcCreateTimeEnd = DateUtils.parseDate(objProcCreateTimeEnd.toString() + " 23:59:59");
                     taskInfoQuery.processVariableValueLessThanOrEqual(ProcessMainVariableNames.PROC_CREATE_TIME, dProcCreateTimeEnd);
                 }
             }
