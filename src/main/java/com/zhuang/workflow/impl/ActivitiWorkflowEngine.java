@@ -313,8 +313,7 @@ public class ActivitiWorkflowEngine extends AbstractWorkflowEngine {
             NextTaskUsersHandler nextTaskUsersHandler = nextTaskUsersHandlers.get(handlerKey);
 
             if (nextTaskUsersHandler == null) {
-                throw new HandlerNotFoundException(
-                        "在“nextTaskUsersHandlers”中找不到key为“" + handlerKey + "”的NextTaskUsersHandler！");
+                throw new HandlerNotFoundException("在“nextTaskUsersHandlers”中找不到key为“" + handlerKey + "”的NextTaskUsersHandler！");
             } else {
                 workflowEngineContext.setComment(handlerParams);
                 userInfos.addAll(nextTaskUsersHandler.execute(workflowEngineContext));
