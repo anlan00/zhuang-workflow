@@ -291,7 +291,8 @@ public class ActivitiWorkflowQueryManager implements WorkflowQueryManager {
             flowInfo.setTitle(processVariables.get(ProcessMainVariableNames.PROC_TITLE).toString());
         }
         if (processVariables.containsKey(ProcessMainVariableNames.PROC_TYPE)) {
-            flowInfo.setType(processVariables.get(ProcessMainVariableNames.PROC_TYPE).toString());
+            Object objProcType = processVariables.get(ProcessMainVariableNames.PROC_TYPE);
+            flowInfo.setType(objProcType == null ? "" : objProcType.toString());
         }
         if (processVariables.containsKey(ProcessMainVariableNames.PROC_CREATE_TIME)) {
             flowInfo.setCreateTime((Date) processVariables.get(ProcessMainVariableNames.PROC_CREATE_TIME));
